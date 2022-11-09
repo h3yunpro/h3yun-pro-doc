@@ -12,6 +12,7 @@
 
 <body>
     <div id="app">文档加载中，饮茶先啦...</div>
+
     <script>
         //docsify配置
         window.$docsify = {
@@ -27,7 +28,7 @@
                 function (hook, vm) {
                     hook.beforeEach(function (html) {
                         var url =
-                            "https://gitee.com/h3yun-pro-public/h3yun-pro-doc/blob/main/" +
+                            "https://gitee.com/h3yun-pro-public/h3yun-pro-doc/blob/master/" +
                             vm.route.file;
                         var editHtml = "[📝 编辑本文档](" + url + ") - {docsify-updated} \n";
 
@@ -37,8 +38,20 @@
                         );
                     });
                 }
-            ]
-
+            ],
+            search: {
+                maxAge: 86400000, // 过期时间，单位毫秒，默认一天
+                paths: "auto",
+                placeholder: "搜索",
+                noData: "找不到结果",
+                depth: 6,// 搜索标题的最大层级, 1 - 6
+                hideOtherSidebarContent: false, // 是否隐藏其他侧边栏内容
+            },
+            copyCode: {
+                buttonText: '复制到粘贴板',
+                errorText: '复制失败',
+                successText: '已到达粘贴板'
+            }
         };
 
         //文档离线化（本地预览环境不开启）
@@ -48,8 +61,13 @@
             }
         }
     </script>
+
+
     <script src="//cdn.jsdelivr.net/npm/docsify@4.13.0/lib/docsify.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/docsify@4.13.0/lib/plugins/search.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-csharp.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/docsify@4.13.0/lib/plugins/zoom-image.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/docsify-copy-code@2.1.1/dist/docsify-copy-code.min.js"></script>
 </body>
 
 </html>
