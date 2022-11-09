@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>氚专开发者共创文档</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4.13.0/lib/themes/vue.css">
+</head>
+
+<body>
+    <div id="app">文档加载中，饮茶先啦...</div>
+    <script>
+        //docsify配置
+        window.$docsify = {
+            name: "氚专开发者共创文档",
+            // repo: "https://gitee.com/h3yun-pro-public/h3yun-pro-doc", //页面右上角github仓库标
+            loadSidebar: true, // 开启侧边导航栏
+            // autoHeader: true, // 自动为文档添加标题
+            auto2top: true, // 切换文档自动跳转到顶部
+            alias: {
+                "/doc/_sidebar.md": "/_sidebar.md" //将doc目录下的sidebar导航会主sidebar
+            },
+            plugins: [
+                function (hook, vm) {
+                    hook.beforeEach(function (html) {
+                        var url =
+                            "https://gitee.com/h3yun-pro-public/h3yun-pro-doc/blob/main/" +
+                            vm.route.file;
+                        var editHtml = "[📝 编辑本文档](" + url + ") - {docsify-updated} \n";
+
+                        return (
+                            editHtml +
+                            html
+                        );
+                    });
+                }
+            ]
+
+        };
+
+        //文档离线化（本地预览环境不开启）
+        if (location.hostname && location.hostname.indexOf("127.0.0.1") < 0) {
+            if (typeof navigator.serviceWorker !== "undefined") {
+                navigator.serviceWorker.register("./sw.js");
+            }
+        }
+    </script>
+    <script src="//cdn.jsdelivr.net/npm/docsify@4.13.0/lib/docsify.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-csharp.min.js"></script>
+</body>
+
+</html>
