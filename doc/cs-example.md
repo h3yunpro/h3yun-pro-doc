@@ -56,3 +56,17 @@ out string workItemId, //返回的流程项Id
 out string errorMessage //创建流程实例失败的异常信息
 )
 ```
+
+### 正则
+
+可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
+
+~~~ cs
+string input = "1851 1999 1958 1905 2003";
+string pattern = @"(?<=19)\d{2}\b";
+
+foreach(System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(input, pattern))
+{
+	string a = match.Value.ToString();
+}
+~~~
