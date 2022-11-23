@@ -6,9 +6,27 @@
 
 ## 概述
 
-此文档库创立，是希望以另一种编排方式，引导开发者上手氚云专业版。并且欢迎所有开发人员参与进来，一起补充、完善文档，互帮互助。
+此文档库创立，是希望以另一种编排方式，引导开发者上手氚云专业版。并且欢迎所有开发人员参与进来，一起补充、完善文档，互帮互助。后续本文档将会作为群机器人训练数据。
 
-如您想要为本文档做出贡献，可以前往 [文档仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc) 提交 pr 和 issus 。
+## 如何做出贡献
+
+如您想要为本文档做出贡献，可以前往 [文档仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc) 提交 PR 和 ISSUE 。
+
+提交pr的操作：
+
+1、首先将仓库clone到本地
+
+2、创建并切换到自己独有的分支**xxx** 
+
+```git checkout -b xxx```
+
+3、在**xxx**分支下，编写文档内容
+
+4、push **xxx**分支 
+
+```git push origin xxx```
+
+5、在gitee上发起 Pull Requests
 
 ## 本地预览
 

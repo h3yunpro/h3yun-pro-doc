@@ -1,7 +1,7 @@
 
 ## 技术栈
 
-氚云是一款Web端的 ```APaaS``` 平台，通过 ```.NET core``` + ```MySQL``` + ```JavaScript``` 开发实现。
+氚云是一款Web端的 ```aPaaS``` 平台，通过 ```.NET core``` + ```MySQL``` + ```JavaScript``` 开发实现。
 
 氚云专业版相对于标准版，通过解锁 在线编程、OpenAPI、第三方连接 模块，
 
