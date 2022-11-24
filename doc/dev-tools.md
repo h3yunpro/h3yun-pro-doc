@@ -45,7 +45,8 @@
 
 ### 代码调试器
 
-1. 列表、表单后端代码调试：
+#### 列表、表单后端代码调试
+
 - 在列表界面中，F12可以调出代码调试工具（若一直按无反应，可以刷新页面后重试）
 
 - Mac 电脑通过 fn+相应的功能键，例如 ```**fn + F12**```  来调出调试工具
@@ -62,22 +63,62 @@
 
 - F9  加入/取消断点
 
-1. 列表、表单前端代码调试：
+#### 列表、表单前端代码调试
 
 氚云使用的是浏览器自带的开发者工具进行前端代码的调试，在调试之前，需要在前端代码里单独一行加入debugger标记。例：
+
 ``` js
-// 加载事件
-OnLoad: function() {
-    var that = this;
+//表单设计前端代码
+$.extend($.JForm,{
+    // 加载事件
+    OnLoad:function(){
+        //单独一行加入此标记
+        debugger
 
-    debugger //单独一行加入此标记
+        /**********以下代码为业务代码示例，此示例只需关注上面这个 debugger 这个标记如何添加**********/
 
-    that.F0000001.SetValue("test");
-},
+        //由于会在回调函数里用到this，而回调函数内直接用this会导致指向错误，所以要在此处先用一个变量存储
+        var that = this;
+        //设置一个文本框控件值为 test
+        that.F0000001.SetValue("test");
+    },
+    // 按钮事件
+    OnLoadActions:function(actions){
+    },
+    // 提交校验
+    OnValidate:function(actionControl){
+        //单独一行加入此标记
+        debugger
+
+        return true;
+    },
+    // 提交前事件
+    BeforeSubmit:function(action, postValue){
+        //单独一行加入此标记
+        debugger
+    },
+    // 提交后事件
+    AfterSubmit:function(action, responseValue){
+        //单独一行加入此标记
+        debugger
+    }
+});
+```
+
+``` js
+//列表设计前端代码
+$.ListView.ActionPreDo = function( actionCode ) {
+    if( actionCode == "按钮编码" ) {
+        //单独一行加入此标记
+        debugger
+    }
+};
 ```
 
 之后回到列表页面，通过快捷键 ```**Ctrl + Shift + I**``` 调出开发者工具。当js引擎执行到debugger标记处，就会自动跳到代码块。
 
-> 注：不同电脑和浏览器，调出开发者工具的快捷键会不一样，不清楚的话，可以百度一下。
->
-> 前端代码调试，推荐使用Chrome浏览器（开发者调试工具比较全面）。
+> 注：不同电脑和浏览器，调出开发者工具的快捷键会不一样，不清楚的话，可以百度一下
+
+> 未使用过浏览器开发者工具的同学，推荐阅读：[浏览器开发者工具打开与使用](https://developer.mozilla.org/zh-CN/docs/Learn/Common_questions/What_are_browser_developer_tools) 
+
+> 前端代码调试，推荐使用Chrome浏览器（开发者调试工具比较全面）

@@ -7,10 +7,19 @@
 ``` javascript
 // 加载事件
 OnLoad: function() {
+	/*
+		本示例实现效果：
+			子表D154601Fd2d12b143fae4419a2d3e8380d78ad1b 新增、删除等按钮的事件绑定
+		注：行数据的类型和值请自行通过debugger调试查看，本处不列出
+	*/
+
+	//由于会在回调函数里用到this，而回调函数内直接用this会导致指向错误，所以要在此处先用一个变量存储
 	var that = this;
+
+	//给 子表D154601Fd2d12b143fae4419a2d3e8380d78ad1b 绑定 值变化BindChange 函数
 	that.D154601Fd2d12b143fae4419a2d3e8380d78ad1b.BindChange( $.IGuid(), function( data ) {
 		if( data && data.length >= 2 ) {
-			var btnCode = data[ 1 ];
+			var btnCode = data[ 1 ];//取得子表按钮代码
 			debugger
 			if( btnCode == "add" ) {//点击 新增/在上面添加行/在下面添加行 按钮
 				var rowData = data[ 0 ];//所添加的行数据
