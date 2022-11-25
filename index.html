@@ -10,8 +10,16 @@
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4.13.0/lib/themes/vue.css">
 
     <style type="text/css">
+        /* 默认样式修整 */
+        .markdown-section ol,
+        .markdown-section p,
+        .markdown-section ul {
+            line-height: 2rem;
+            word-spacing: 0.05rem;
+        }
+
         /* 隐藏页面右上角github仓库标 */
-        .github-corner{
+        .github-corner {
             display: none;
         }
     </style>
@@ -39,7 +47,7 @@
                     hook.beforeEach(function (html) {
                         var url = repo + "/blob/master/" + vm.route.file;
                         var editHtml = "[📝 编辑本文档](" + url + ") - {docsify-updated} \n";
-                        var powered = '\n\n----\n\n<a href="'+ repo +'" target="_blank" style="color: inherit; font-weight: normal; text-decoration: none;">Powered by h3yun-pro-doc</a>\n\n';
+                        var powered = '\n\n----\n\n<a href="' + repo + '" target="_blank" style="color: inherit; font-weight: normal; text-decoration: none;">Powered by h3yun-pro-doc</a>\n\n';
 
                         return (
                             editHtml +
@@ -58,7 +66,7 @@
                 hideOtherSidebarContent: false, // 是否隐藏其他侧边栏内容
             },
             copyCode: {
-                buttonText: '点击复制',
+                buttonText: '一键复制',
                 errorText: '复制失败',
                 successText: '复制完成'
             }

@@ -8,10 +8,7 @@
     * [代码编辑器](/doc/dev-tools?id=代码编辑器)
     * [代码调试器](/doc/dev-tools?id=代码调试器)
 
-  * [应用/表单编码查看](/doc/check-code)
-    * [应用编码查看](/doc/check-code?id=应用编码查看)
-    * [表单编码查看](/doc/check-code?id=表单编码查看)
-    * [子表编码查看](/doc/check-code?id=子表编码查看)
+  * [应用/表单/控件编码查看](/doc/check-code)
 
   * [列表事件](/doc/list-events)
     * [前端事件](/doc/list-events?id=前端事件)
@@ -21,10 +18,7 @@
     * [前端事件](/doc/form-events?id=前端事件)
     * [后端事件](/doc/form-events?id=后端事件)
   
-  * 用户代码执行原理
-    * 前端代码执行原理
-    * 后端代码执行原理
-
+  * [定时器](/doc/timer)
 
 * 常用实例
   
@@ -49,3 +43,7 @@
   * [前端](/doc/js-example)
   * [后端](/doc/cs-example)
   * [数据库](/doc/sql-example)
+
+* 纯净版代码示例
+  * [前端]()
+  * [后端](/doc/cs-pure)

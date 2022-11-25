@@ -1,10 +1,10 @@
-## 前端代码示例
+# 前端代码示例
 
-### 表单前端子表按钮点击事件
+## 表单前端子表按钮点击事件
 
 可用位置：✔表单 / ✘列表
 
-``` javascript
+``` js
 // 加载事件
 OnLoad: function() {
 	/*
@@ -42,12 +42,12 @@ OnLoad: function() {
 },
 ```
 
-### 表单前端OnLoad事件 BindChange + Post 请求后端
+## 表单前端OnLoad事件 BindChange + Post 请求后端
 
 可用位置：✔表单 / ✘列表
 
 表单前端代码
-``` javascript
+``` js
 // 加载事件
 OnLoad: function() {
 	/*
