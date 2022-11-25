@@ -35,6 +35,7 @@
         window.$docsify = {
             name: "氚专开发者共创文档",
             loadSidebar: true, // 开启侧边导航栏
+            subMaxLevel: 2,
             // autoHeader: true, // 自动为文档添加标题
             auto2top: true, // 切换文档自动跳转到顶部
             repo: repo, //仓库地址，并会显示页面右上角github仓库标
@@ -73,11 +74,11 @@
         };
 
         //文档离线化（本地预览环境不开启）
-        if (location.hostname && location.hostname.indexOf("127.0.0.1") < 0) {
-            if (typeof navigator.serviceWorker !== "undefined") {
-                navigator.serviceWorker.register("./sw.js");
-            }
-        }
+        // if (location.hostname && location.hostname.indexOf("127.0.0.1") < 0) {
+        //     if (typeof navigator.serviceWorker !== "undefined") {
+        //         navigator.serviceWorker.register("./sw.js");
+        //     }
+        // }
     </script>
 
 
