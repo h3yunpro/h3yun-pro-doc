@@ -50,7 +50,7 @@ Dictionary < string, object > bodys = new Dictionary<string, object>();
 H3.BizBus.InvokeResult InResult = this.Engine.BizBus.InvokeApi(
     H3.Organization.User.SystemUserId, //固定值，无需改变
     H3.BizBus.AccessPointType.ThirdConnection, //固定值，无需改变
-    "cc", //连接编码，对应 插件中心 中配置的连接的编码
+    "ConnectCode", //连接编码，对应 插件中心 中配置的连接的编码
     "GET", //请求方式，取值：GET / POST
     "text/html;charset=utf-8", //请求数据类型
     headers, querys, bodys, structureSchema);
