@@ -33,6 +33,7 @@
 <!--  </nav>-->
     <script>
         var repo = "https://gitee.com/h3yun-pro-public/h3yun-pro-doc";
+        var editUrl = "https://gitee.com/-/ide/project/h3yun-pro-public/h3yun-pro-doc/edit/quick/-/";
 
         //docsify配置
         window.$docsify = {
@@ -49,8 +50,7 @@
             plugins: [
                 function (hook, vm) {
                     hook.beforeEach(function (html) {
-                        var url = repo + "/edit/dev/" + vm.route.file;
-                        var editHtml = "[📝 编辑本文档](" + url + ") - {docsify-updated} \n";
+                        var editHtml = "[📝 编辑本文档](" + editUrl + vm.route.file + ") - {docsify-updated} \n";
                         var powered = '\n\n----\n\n<a href="' + repo + '" target="_blank" style="color: inherit; font-weight: normal; text-decoration: none;">Powered by h3yun-pro-doc</a>\n\n';
 
                         return (
