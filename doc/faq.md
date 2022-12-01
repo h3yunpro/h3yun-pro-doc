@@ -34,5 +34,30 @@ A5:不可以
 
 >Q6:氚云地图合作的是高德地图还是百度地图？<span class="fontColor" style="float: right;">
 2022/12/1 </span></br>
-A6:高德地图
+>A6:高德地图
 
+
+>Q7:删错的数据有办法恢复吗?<span class="fontColor" style="float: right;">
+> 2022/12/1 </span></br>
+A7:可以做数据恢复，客户可以联系一下渠道经理
+
+>Q8:出现Connection must be valid and open to rollback transaction报错问题？
+![logo](../img/faq-2.png ':size=50%')<span class="fontColor" style="float: right;">
+> 2022/12/1 </span></br>
+A8:同时对一条数据进行插入更新删除操作就容易出现这种情况
+
+> Q9:当前表单的状态/表单模式？<span class="fontColor" style="float: right;">
+> 2022/12/1 </span></br>
+> A9:
+> ~~~cs
+> 表单模式
+> $.SmartForm.ResponseContext.FormMode   
+>0为审批/办理 1为办理完结 2为创建 4为查阅
+> 表单状态
+>this.Request.BizObject.Status;//获取当前表单状态（生效、草稿、进行中、作废）
+> ~~~ 
+
+
+> Q10:设置子流程的时候，父流程中的子表数据能否填充到子流程的主表中？<span class="fontColor" style="float: right;">
+> 2022/12/1 </span></br>
+> A10:不可以的  如果要实现需要用代码的方式实现
