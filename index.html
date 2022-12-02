@@ -47,11 +47,11 @@
             plugins: [
                 function (hook, vm) {
                     hook.beforeEach(function (html) {
-                        var editHtml = "[📝 编辑本文档](" + editUrl + vm.route.file + ") - {docsify-updated} \n";
+                        var editDoc = "[📝 在线编辑](" + editUrl + vm.route.file + ") - {docsify-updated} \n";
                         var powered = '\n\n----\n\n<a href="' + repo + '" target="_blank" style="color: inherit; font-weight: normal; text-decoration: none;">Powered by h3yun-pro-doc</a>\n\n';
 
                         return (
-                            editHtml +
+                            editDoc +
                             html +
                             powered
                         );
