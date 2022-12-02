@@ -1,6 +1,7 @@
  <style>
 .fontColor{
             color: gray ;
+            float: right;
             }
 .imgstyle{
 max-width: 50%;
@@ -10,43 +11,42 @@ max-width: 50%;
 
 # 常见问题解答
 
+> Q1:多选控件可以筛选(做为查询/分析条件)？<span class="fontColor" >
+> 2022/11/30 </span></br>
+> A1: 不可以
 
->Q1:多选控件可以筛选(做为查询/分析条件)？<span class="fontColor" style="float: right;">
-2022/11/30 </span></br>
->A1: 不可以
+> Q2:怎样可以通过输入出生日期，计算出年龄？<span class="fontColor" >
+> 2022/11/30 </span></br>
+> A2:教程https://app2fbcrlcs8626.h5.xiaoeknow.com/p/course/video/v_625e3523e4b01a4851f3a043 </br>
 
->Q2:怎样可以通过输入出生日期，计算出年龄？<span class="fontColor" style="float: right;">
-2022/11/30 </span></br>
-A2:教程https://app2fbcrlcs8626.h5.xiaoeknow.com/p/course/video/v_625e3523e4b01a4851f3a043 </br>
-
->Q3:氚云中消息提醒代码里面多个执行人是使用数组吗？还是直接拼接就行？</span><span class="fontColor" style="float: right;">
-2022/12/1 </span></br>
-A3:循环去提醒，不要拼接
-
->Q4:钉钉考勤怎么同步到氚云？<span class="fontColor" style="float: right;">
-2022/12/1 </span></br>
-A4:教程，参考下https://help.h3yun.com/contents/1155/2296.html
-
->Q5:表单的图标颜色，可以自定义吗？<span class="fontColor" style="float: right;">
-2022/12/1 </span></br>
-![logo](../img/faq-1.png ':size=50%')</br>
-A5:不可以
-
->Q6:氚云地图合作的是高德地图还是百度地图？<span class="fontColor" style="float: right;">
-2022/12/1 </span></br>
->A6:高德地图
-
-
->Q7:删错的数据有办法恢复吗?<span class="fontColor" style="float: right;">
+> Q3:氚云中消息提醒代码里面多个执行人是使用数组吗？还是直接拼接就行？</span><span class="fontColor" >
 > 2022/12/1 </span></br>
-A7:可以做数据恢复，客户可以联系一下渠道经理
+> A3:循环去提醒，不要拼接
 
->Q8:出现Connection must be valid and open to rollback transaction报错问题？
-![logo](../img/faq-2.png ':size=50%')<span class="fontColor" style="float: right;">
+> Q4:钉钉考勤怎么同步到氚云？<span class="fontColor" >
 > 2022/12/1 </span></br>
-A8:同时对一条数据进行插入更新删除操作就容易出现这种情况
+> A4:教程，参考下https://help.h3yun.com/contents/1155/2296.html
 
-> Q9:当前表单的状态/表单模式？<span class="fontColor" style="float: right;">
+> Q5:表单的图标颜色，可以自定义吗？<span class="fontColor" >
+> 2022/12/1 </span></br>
+![logo](../img/faq-1.png ':size=20%')</br>
+> A5:不可以
+
+> Q6:氚云地图合作的是高德地图还是百度地图？<span class="fontColor" >
+> 2022/12/1 </span></br>
+> A6:高德地图
+
+
+> Q7:删错的数据有办法恢复吗?<span class="fontColor" >
+> 2022/12/1 </span></br>
+> A7:可以做数据恢复，客户可以联系一下渠道经理
+
+> Q8:出现Connection must be valid and open to rollback transaction报错问题？<span class="fontColor" >
+> 2022/12/1 </span></br>
+> ![logo](../img/faq-2.png ':size=20%')</br>
+> A8:同时对一条数据进行插入更新删除操作就容易出现这种情况
+
+> Q9:当前表单的状态/表单模式？<span class="fontColor" >
 > 2022/12/1 </span></br>
 > A9:
 > ~~~cs
@@ -58,6 +58,29 @@ A8:同时对一条数据进行插入更新删除操作就容易出现这种情�
 > ~~~ 
 
 
-> Q10:设置子流程的时候，父流程中的子表数据能否填充到子流程的主表中？<span class="fontColor" style="float: right;">
+> Q10:设置子流程的时候，父流程中的子表数据能否填充到子流程的主表中吗？<span class="fontColor" >
 > 2022/12/1 </span></br>
-> A10:不可以的  如果要实现需要用代码的方式实现
+> A10:不可以的 如果要实现需要用代码的方式实现
+
+> Q11:怎么获取表单的流程状态？
+> <span class="fontColor" > 2022/12/2 </span></br>
+> A11:$.SmartForm.ResponseContext.BizObjectStatus
+
+> Q12:今天图片上传一直出现这个问题,只有一个人是这样
+> <span class="fontColor" > 2022/12/2 </span></br>
+> A12:重启一下钉钉软件看看
+
+> Q13:每次主表添加完数据之后，都生成到另外一个表的子表里边
+> <span class="fontColor" > 2022/12/2 </span></br>
+> A13:这是以前简写的例子，可以参考</br>
+> ![logo](../img/faq-3.png ':size=20%')
+
+> Q14:用Excel导入数据，要如何导入多条子表的数据?
+> <span class="fontColor" > 2022/12/2 </span></br>
+> A14:这是以前简写的例子，可以参考</br>
+> ![logo](../img/faq-4.png ':size=20%')
+
+> Q15:业务规则又先后顺序的吗？
+> <span class="fontColor" > 2022/12/2 </span></br>
+> A15:从上往下执行的
+
