@@ -3,22 +3,41 @@
   * [概述](/)
   * [技术栈](/doc/language)
   * [开发工具](/doc/dev-tools)
+  * [常见名词](/doc/noun)
   * [应用/表单/控件编码查看](/doc/check-code)
   * [列表事件](/doc/list-events)
   * [表单事件](/doc/form-events)  
-  * [定时器](/doc/timer)
 
-* 常用实例
+
+* 前端API
+  * [表单设计](/doc/form-api)
+  * [列表设计](/doc/list-api)
+
+
+* 后端API
   
-  * [前端常用实例](/doc/js-instance)
-  * [后端常用实例](/doc/cs-instance)
+  * [业务对象](/doc/biz-object)
+  * [部门/人员/权限](/doc/organization)
+  * [流程操作](/doc/workflow)
+  * [消息通知/提醒](/doc/notification)
+  * [定时器](/doc/timer)
+  * [数据库](/doc/database)
+  * [后端执行SQL](/doc/exec-sql)
+  * [SQL报表/SQL数据源](doc/sql-report)
+
 
 * 第三方系统集成
 
-    * 氚云调用WebService
+    * [氚云调用WebService](/doc/req-ws)
     * [氚云调用RESTful API](/doc/req-api)
-    * 第三方调用氚云默认接口
-    * 第三方调用氚云自定义接口
+    * [第三方调用氚云默认接口](/doc/open-api)
+    * [第三方调用氚云自定义接口](/doc/my-api)
+
+
+* 扩展
+
+  * [前端实例详解](/doc/js-instance)
+  * [后端实例详解](/doc/cs-instance)
 
 
 * 代码示例
