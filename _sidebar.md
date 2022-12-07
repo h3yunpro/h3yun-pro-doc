@@ -46,3 +46,6 @@
   * [后端代码示例](/doc/cs-example)
   * [数据库代码示例](/doc/sql-example)
   * [纯净代码示例](/doc/pure)
+
+* 常见问答
+  * [常见问答](/doc/faq)
