@@ -10,6 +10,7 @@
 
 
 * 前端API
+  
   * [表单设计](/doc/form-api)
   * [列表设计](/doc/list-api)
 
@@ -21,7 +22,6 @@
   * [流程操作](/doc/workflow)
   * [消息通知/提醒](/doc/notification)
   * [定时器](/doc/timer)
-  * [数据库](/doc/database)
   * [后端执行SQL](/doc/exec-sql)
   * [SQL报表/SQL数据源](doc/sql-report)
 
@@ -38,6 +38,7 @@
 
   * [前端实例详解](/doc/js-instance)
   * [后端实例详解](/doc/cs-instance)
+  * [数据库表结构详解](/doc/database)
 
 
 * 代码示例
@@ -47,5 +48,8 @@
   * [数据库代码示例](/doc/sql-example)
   * [纯净代码示例](/doc/pure)
 
-* 常见问答
+
+* 其他
+  
+  * [排期](/doc/todo)
   * [常见问答](/doc/faq)
