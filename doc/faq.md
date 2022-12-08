@@ -84,11 +84,51 @@ max-width: 50%;
 > <span class="fontColor" > 2022/12/2 </span></br>
 > A15:从上往下执行的
 
->Q16:接口创建的表单数据触发业务规则跟消息通知吗?
+> Q16:接口创建的表单数据触发业务规则跟消息通知吗?
 > <span class="fontColor" > 2022/12/5 </span></br>
->A16:会触发，如果消息通知没触发，看看人员控件的值是否给了固定值，因为在接口创建数据时是不会给人员控件默认值的，有可能没发是因为
+> A16:会触发，如果消息通知没触发，看看人员控件的值是否给了固定值，因为在接口创建数据时是不会给人员控件默认值的，有可能没发是因为
 > 人员控件的值是空的，  ```H_User```人员基础信息表
-> 
+
 > Q17:仪表盘有sql嘛？
- > <span class="fontColor" > 2022/12/5 </span></br>
+> <span class="fontColor" > 2022/12/5 </span></br>
 > A17:仪表盘也支持sql的，需要找相关人员开通权限
+
+> Q18:子表的序号后端可以获取到吗？
+> <span class="fontColor" > 2022/12/6 </span></br>
+> A18:子表的序号只是前端显示在界面上，实际没有存到数据库中的
+
+> Q19:新增子表里面的数据的时候可以设置数据行的颜色吗？
+> <span class="fontColor" > 2022/12/7 </span></br>
+> A19:不可以的
+
+> Q20:前端自定义代码编写错误，请联系管理员修改
+> 函数名:AfterSubmit;错误信息:SyntaxError:undefined" is not valid JSoN
+> <span class="fontColor" > 2022/12/7 </span></br>
+> A20: 检查 返回的值是否有为null的或undefined的 只有有值才转成json
+
+> Q21:位置控件限定范围支持多少米以内的定位？
+> <span class="fontColor" > 2022/12/8 </span></br>
+> A21:位置控件是调用的钉钉接口，表单设计内设置“限定附近范围”后可限定为只能选择以定位点为中心大概周围 ```500m ```
+> 内的位置，单根据设备本身定位的准确性，会有所偏差。
+
+> ![logo](../img/faq-5.png ':size=20%')
+
+
+> Q22:有什么办法获取当前表单数据的流程节点吗？<span class="fontColor" >
+> 2022/12/8 </span></br>
+> A22:
+> ~~~cs
+> H3.Workflow.Instance.IToken tok = this.Request.Engine.WorkflowInstanceManager.GetWorkflowInstance("流程id").GetLastToken();
+> ~~~ 
+
+
+
+> Q23:氚云有英文版本吗？
+> <span class="fontColor" >
+> 2022/12/8 </span></br>
+> A23:氚云系统设计是提供的中文版编写环境，暂时没有英文的表单设计页面版本。 可由懂中文的氚云系统管理员搭建系统，
+> 设置控件名称为英文的，这样可以提供给国外同事来提交表单和查看数据。
+
+> Q24:一个表单支持多少个控件?<span class="fontColor" >
+> 2022/12/8</span></br>
+> A24:不能超过2万个字符  例如 多行文本控件的最大字符是2000  那么最多只能10个多行文本
