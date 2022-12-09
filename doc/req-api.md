@@ -15,9 +15,22 @@
 以下是一个请求示例：
 
 ``` cs
-//响应数据示例：{"code":200,"ID":"654028207203","msg":"查询成功，查询花费0.0002秒","data":{"Name":"阔克托干村","Province":"新疆维吾尔自治区","City":"伊犁哈萨克自治州","District":"尼勒克县","Tow":"喀拉托别乡","Villag":"阔克托干村","LevelType":"5"}}
+/*
+    第一步：
+    定义响应数据结构体，如响应JSON为：
 
-//定义 data 属性 的结构体
+    {"code":200,"ID":"654028207203","msg":"查询成功，查询花费0.0002秒","data":{"Name":"阔克托干村","Province":"新疆维吾尔自治区","City":"伊犁哈萨克自治州","District":"尼勒克县","Tow":"喀拉托别乡","Villag":"阔克托干村","LevelType":"5"}}
+
+    则按一下代码进行定义
+*/
+
+//定义响应数据整体结构体
+H3.BizBus.BizStructureSchema structureSchema = new H3.BizBus.BizStructureSchema();
+structureSchema.Add(new H3.BizBus.ItemSchema("code", "返回码", H3.Data.BizDataType.Int, null));
+structureSchema.Add(new H3.BizBus.ItemSchema("ID", "返回内容", H3.Data.BizDataType.String, null));
+structureSchema.Add(new H3.BizBus.ItemSchema("msg", "返回内容", H3.Data.BizDataType.String, null));
+
+//定义响应数据的 data 属性 的结构体
 H3.BizBus.BizStructureSchema dataSchema = new H3.BizBus.BizStructureSchema();
 dataSchema.Add(new H3.BizBus.ItemSchema("Name", "返回内容", H3.Data.BizDataType.String, null));
 dataSchema.Add(new H3.BizBus.ItemSchema("Province", "返回内容", H3.Data.BizDataType.String, null));
@@ -26,27 +39,21 @@ dataSchema.Add(new H3.BizBus.ItemSchema("District", "返回内容", H3.Data.BizD
 dataSchema.Add(new H3.BizBus.ItemSchema("Tow", "返回内容", H3.Data.BizDataType.String, null));
 dataSchema.Add(new H3.BizBus.ItemSchema("Villag", "返回内容", H3.Data.BizDataType.String, null));
 dataSchema.Add(new H3.BizBus.ItemSchema("LevelType", "返回内容", H3.Data.BizDataType.String, null));
-
-//定义响应数据对应的结构体
-H3.BizBus.BizStructureSchema structureSchema = new H3.BizBus.BizStructureSchema();
-structureSchema.Add(new H3.BizBus.ItemSchema("code", "返回码", H3.Data.BizDataType.Int, null));
-structureSchema.Add(new H3.BizBus.ItemSchema("ID", "返回内容", H3.Data.BizDataType.String, null));
-structureSchema.Add(new H3.BizBus.ItemSchema("msg", "返回内容", H3.Data.BizDataType.String, null));
-
-//将 data 属性的结构体添加进整个的响应数据结构体
+//将 data 属性的结构体添加进整体的响应数据结构体
 structureSchema.Add(new H3.BizBus.ItemSchema("data", "返回内容", H3.Data.BizDataType.BizStructure, dataSchema));
 
-//header 请求参数初始化
+
+//header 请求参数初始化，此实例会添加到请求的 Headers 中
 Dictionary < string, string > headers = new Dictionary<string, string>();
 
-//query 请求参数初始化
+//query 请求参数初始化，此处添加的参数会附加在请求Url后（?code=654028207203）
 Dictionary < string, string > querys = new Dictionary<string, string>();
 querys.Add("code", "654028207203");
 
-//body 请求数据初始化
+//body 请求数据初始化，此实例会转换为JSON，
 Dictionary < string, object > bodys = new Dictionary<string, object>();
 
-//调用Invoke接口，系统底层访问第三方WebService接口的Invoke方法
+//调用Invoke接口，系统底层访问第三方接口的Invoke方法
 H3.BizBus.InvokeResult InResult = this.Engine.BizBus.InvokeApi(
     H3.Organization.User.SystemUserId, //固定值，无需改变
     H3.BizBus.AccessPointType.ThirdConnection, //固定值，无需改变
@@ -59,7 +66,7 @@ if(InResult != null)
     int Code = InResult.Code; //调用是否成功
     if(Code == 0)
     {
-        //获取返回数据，此对象对应完整的响应json
+        //获取返回数据，此实例对应完整的响应JSON
         H3.BizBus.BizStructure Obj = InResult.Data;
 
         //获取响应数据中的 ID 属性值

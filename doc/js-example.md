@@ -20,7 +20,9 @@ OnLoad: function() {
 	that.D154601Fd2d12b143fae4419a2d3e8380d78ad1b.BindChange( $.IGuid(), function( data ) {
 		if( data && data.length >= 2 ) {
 			var btnCode = data[ 1 ];//取得子表按钮代码
+
 			debugger
+
 			if( btnCode == "add" ) {//点击 新增/在上面添加行/在下面添加行 按钮
 				var rowData = data[ 0 ];//所添加的行数据
 			}
@@ -41,6 +43,7 @@ OnLoad: function() {
 	});
 },
 ```
+
 
 ## 表单前端OnLoad事件 BindChange + Post 请求后端
 
@@ -155,3 +158,67 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 	base.OnSubmit(actionName, postValue, response);
 }
 ```
+
+
+## 表单按钮控件点击 Post 请求后端
+
+可用位置：✔表单 / ✘列表
+
+表单前端代码
+``` js
+// 提交校验
+OnValidate: function( actionControl ) {
+	var that = this;
+
+	//判断按钮编码（即按钮控件编码）
+	if( actionControl.Action == "F0000005" ) {
+		//获取 文本框F0000002 的值，此值为用户填写的用户姓名
+		var userName = that.F0000002.GetValue();
+
+		//将用户姓名传给后端OnSubmit事件，获取对应的UserId
+		$.SmartForm.PostForm(
+			"GetUserIdByName_Post",//传给后端的actionName，命名标准：功能名_Post
+
+			//传给后端的数据
+			{
+				"userName": userName
+			},
+
+			//请求成功后，触发本事件
+			function( data ) {
+				if( data.Errors && data.Errors.length ) {//后端通过 response.Errors.Add("异常信息") 或者 异常抛出，在此处接收
+					$.IShowError( "错误", JSON.stringify( data.Errors ) );
+				} else {//后端代码执行无误，在此处接收后端的响应值
+					var result = data.ReturnData;//此值对应后端的 response.ReturnData
+
+					//判断后端是否正确返回了 userId 字段，并且 userId 字段有值
+					if( result && result[ "userId" ] ) {
+						//将 userId 填充到 人员单选框F0000003，至此示例效果实现完成
+						that.F0000003.SetValue( result[ "userId" ] );
+					} else {
+						$.IShowError( "错误", "未匹配到人员Id" );
+						that.F0000003.SetValue( "" );
+					}
+				}
+			},
+
+			//平台底层报错时，触发本事件
+			function( error ) {
+				$.IShowError( "错误", JSON.stringify( error ) );
+			},
+
+			false //true：不阻塞，false：请求过程中阻塞后续代码执行
+		);
+
+		//阻止按钮的默认请求后端处理
+		return false;
+	}
+
+	return true;
+},
+```
+
+表单后端代码参考上面的 BindChange + Post 请求后端例子
+
+
+## 
