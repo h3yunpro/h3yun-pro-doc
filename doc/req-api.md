@@ -1,11 +1,11 @@
 
 # 氚云请求第三方Api
 
-第三方Api要求：Http/Https协议，请求参数和响应数据必须是文本类型，且响应数据必须是json格式
+第三方Api要求：Http/Https协议，请求参数和响应数据不支持文件类型，且响应数据必须是JSON格式
 
 步骤：
 
-1. 在 **插件中心** 新建连接（注意：编码框内填连接的代码，不是填UTF-8这种数据编码）
+1. 在 **插件中心** 新建连接（注意：编码框内填该连接的Code，不是填UTF-8、ASCII等数据编码）
 ![](../img/req-api-1.png)
 
 ![](../img/req-api-2.png)
@@ -21,7 +21,7 @@
 
     {"code":200,"ID":"654028207203","msg":"查询成功，查询花费0.0002秒","data":{"Name":"阔克托干村","Province":"新疆维吾尔自治区","City":"伊犁哈萨克自治州","District":"尼勒克县","Tow":"喀拉托别乡","Villag":"阔克托干村","LevelType":"5"}}
 
-    则按一下代码进行定义
+    则按以下代码进行定义
 */
 
 //定义响应数据整体结构体
@@ -46,41 +46,44 @@ structureSchema.Add(new H3.BizBus.ItemSchema("data", "返回内容", H3.Data.Biz
 //header 请求参数初始化，此实例会添加到请求的 Headers 中
 Dictionary < string, string > headers = new Dictionary<string, string>();
 
-//query 请求参数初始化，此处添加的参数会附加在请求Url后（?code=654028207203）
+//query 请求参数初始化，此处添加的参数会附加在请求Url后（例：?code=654028207203）
 Dictionary < string, string > querys = new Dictionary<string, string>();
 querys.Add("code", "654028207203");
 
-//body 请求数据初始化，此实例会转换为JSON，
+//body 请求数据初始化，此实例会转换为JSON格式发送给接口
 Dictionary < string, object > bodys = new Dictionary<string, object>();
 
+//本示例是在表单后端事件中调用，所以H3.IEngine实例可以用this.Engine获取
+H3.IEngine engine = this.Engine;
+
 //调用Invoke接口，系统底层访问第三方接口的Invoke方法
-H3.BizBus.InvokeResult InResult = this.Engine.BizBus.InvokeApi(
+H3.BizBus.InvokeResult res = engine.BizBus.InvokeApi(
     H3.Organization.User.SystemUserId, //固定值，无需改变
     H3.BizBus.AccessPointType.ThirdConnection, //固定值，无需改变
     "ConnectCode", //连接编码，对应 插件中心 中配置的连接的编码
     "GET", //请求方式，取值：GET / POST
     "text/html;charset=utf-8", //请求数据类型
     headers, querys, bodys, structureSchema);
-if(InResult != null)
+if(res != null)
 {
-    int Code = InResult.Code; //调用是否成功
-    if(Code == 0)
+    int resCode = res.Code; //调用是否成功
+    if(resCode == 0)
     {
         //获取返回数据，此实例对应完整的响应JSON
-        H3.BizBus.BizStructure Obj = InResult.Data;
+        H3.BizBus.BizStructure resData = res.Data;
 
         //获取响应数据中的 ID 属性值
-        string ID = Obj["ID"] + string.Empty;
+        string ID = resData["ID"] + string.Empty;
 
         //获取响应数据中的 data.Name 属性值
-        H3.BizBus.BizStructure d = (H3.BizBus.BizStructure) Obj["data"];
+        H3.BizBus.BizStructure d = (H3.BizBus.BizStructure) resData["data"];
         string n = d["Name"] + string.Empty;
     }
     else
     {
         //获取错误信息
-        string ErrorMessage = InResult.Message;
-        throw new Exception("接口调用失败：" + ErrorMessage);
+        string resMessage = res.Message;
+        throw new Exception("接口调用失败：" + resMessage);
     }
 } else
 {
