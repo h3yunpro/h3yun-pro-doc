@@ -201,3 +201,23 @@ protected override void OnInit(H3.SmartForm.LoadListViewResponse response)
     base.OnInit(response);
 }
 ```
+
+
+## 表单获取指定的控件名称
+
+可用位置：✔表单 / ✘列表 / ✘定时器 / ✘自定义接口
+
+``` cs
+protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
+{
+    base.OnLoad(response);
+    string title = response.ReturnData["F0000004"].DisplayName + string.Empty;//获取F0000004控件的显示名称
+}
+
+protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
+{
+    H3.DataModel.PropertySchema property = this.Request.Schema.GetProperty("F0000004");
+    string name = property.DisplayName + string.Empty; // 获取控件名称
+    base.OnSubmit(actionName, postValue, response);
+}
+```
