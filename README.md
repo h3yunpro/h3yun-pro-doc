@@ -4,9 +4,11 @@
 
 ?> PS：如您想查看官方文档，请前往此地址： [https://help.h3yun.com/channels/3.html](https://help.h3yun.com/channels/3.html)
 
+
 ## 概述
 
 此文档库创立，是希望以另一种编排方式，引导开发者上手氚云专业版。并且欢迎所有开发人员参与进来，一起补充、完善文档，互帮互助。后续本文档将会作为群机器人训练数据。
+
 
 ## 如何做出贡献
 
@@ -14,19 +16,10 @@
 
 提交pr的操作：
 
-1、首先将仓库clone到本地
+1、fork仓库
 
-2、创建并切换到自己独有的分支 **xxx** 
+2、完成贡献后，在gitee上发起 Pull Requests
 
-```git checkout -b xxx```
-
-3、在 **xxx** 分支下，编写文档内容
-
-4、push **xxx** 分支 
-
-```git push origin xxx```
-
-5、在gitee上发起 Pull Requests
 
 ## 文档/目录
 
@@ -40,11 +33,13 @@
   
 - ```/file``` 存放代码量较大的项目文件，或者SDK等
 
+
 ## 默认分支
 
 - ```master``` 主分支，此分支内容实时推送到线上文档
 
 - ```quick``` 快速编辑分支，用于直接在gitee上对文档细节微调
+
 
 ## 本地预览
 
