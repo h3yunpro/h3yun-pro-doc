@@ -1,6 +1,6 @@
 # 氚专开发者共创文档
 
-[文档仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc)  |  [浏览文档](https://charles2fox.github.io/h3yun-pro-doc/)  |  [docsify](https://docsify.js.org/#/zh-cn/) 
+[文档仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc)  |  [浏览文档](https://chuck9090.github.io/h3yun-pro-doc/)  |  [docsify](https://docsify.js.org/#/zh-cn/) 
 
 ?> PS：如您想查看官方文档，请前往此地址： [https://help.h3yun.com/channels/3.html](https://help.h3yun.com/channels/3.html)
 
