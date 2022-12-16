@@ -18,6 +18,7 @@
 * 后端API
   
   * [业务对象](/doc/biz-object)
+  * [业务对象之控件的取值/赋值](/doc/bo-set-get)
   * [部门/人员/权限](/doc/organization)
   * [流程操作](/doc/workflow)
   * [消息通知/提醒](/doc/notification)
