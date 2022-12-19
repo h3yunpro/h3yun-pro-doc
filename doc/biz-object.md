@@ -20,11 +20,13 @@
 | ModifiedBy         | String                       | 数据修改者，值为氚云用户Id，不管表单上是否有此控件，此值都会有           |      |
 | ModifiedTime       | DateTime                     | 修改时间，不管表单上是否有此控件，此值都会有                            |      |
 
-?>  Status 取值：<br/>
+?>  Status 枚举值：<br/>
     ```H3.DataModel.BizObjectStatus.Draft```：草稿，数据库中对应值 0 <br/>
     ```H3.DataModel.BizObjectStatus.Running```：流程进行中，数据库中对应值 2 <br/>
     ```H3.DataModel.BizObjectStatus.Effective```：数据生效，数据库中对应值 1 <br/>
     ```H3.DataModel.BizObjectStatus.Canceled```：数据作废，数据库中对应值 3 <br/>
+
+?> 以上的系统属性对应的控件，不管表单中是否拖出配置这些控件，业务对象都会有这些属性，并且数据库的表中也会有对应字段
 
 
 ## 静态方法

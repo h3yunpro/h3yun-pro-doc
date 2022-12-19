@@ -32,3 +32,28 @@ FROM (
 > 
 > 以模拟出 ```mysql.help_topic``` 表。
 
+
+## 查询表单/列表中编写的前后端代码
+
+表单设计中编写的代码：
+``` sql
+SELECT javascript AS `旧版前端代码`, newjscode AS `新版前端代码`, behindcode AS `后端代码` 
+FROM H_PublishedFormSetting
+WHERE schemacode = '表单编码'
+```
+
+列表设计中编写的代码：
+``` sql
+SELECT javascript AS `前端代码`, behindcode AS `后端代码` 
+FROM H_PublishedListViewSetting
+WHERE schemacode = '表单编码'
+```
+
+
+## 获取氚云应用在钉钉中的appId
+
+``` sql
+SELECT corpid, extractvalue(agents, '/ArrayOfDingTalkISVAgent/DingTalkISVAgent/AppId') AS `appId`
+FROM h_dingtalkisv
+```
+
