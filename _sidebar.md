@@ -46,6 +46,7 @@
 
   * [前端代码示例](/doc/js-example)
   * [后端代码示例](/doc/cs-example)
+  * [前后端交互示例](/doc/interactive-example)
   * [数据库代码示例](/doc/sql-example)
   * [纯净代码示例](/doc/pure)
 
