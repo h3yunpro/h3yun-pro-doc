@@ -68,6 +68,45 @@ $.SmartForm.PostForm( "Test_Post", {
 ```
 
 
+## 表单后端处理PostForm
+
+``` cs
+protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
+{
+    Test_Post(actionName, this.Request, response);
+    base.OnSubmit(actionName, postValue, response);
+}
+
+public void Test_Post(string actionName, H3.SmartForm.SmartFormRequest request, H3.SmartForm.SubmitSmartFormResponse response)
+{
+    if(actionName != "Test_Post")
+    {
+        return;
+    }
+
+    try
+    {
+        H3.IEngine engine = request.Engine;
+        string currUserId = request.UserContext.UserId;
+
+        string orderDate_Str = request["orderDate"] + string.Empty;
+        if(string.IsNullOrWhiteSpace(orderDate_Str))
+        {
+            throw new Exception("orderDate参数值为空！");
+        }
+        DateTime orderDate = DateTime.Parse(orderDate_Str);
+
+
+        response.ReturnData = new Dictionary<string, object>();
+        response.ReturnData["data"] = "";
+    } catch(Exception ex)
+    {
+        response.Errors.Add(ex.Message);
+    }
+}
+```
+
+
 ## 列表前端Post
 
 ``` js
@@ -83,4 +122,42 @@ $.ListView.Post( "Test_Post", {
 }, function( error ) {
     $.IShowError( "错误", JSON.stringify( error ) );
 }, false );
+```
+
+## 列表后端处理Post
+
+``` cs
+protected override void OnSubmit(string actionName, H3.SmartForm.ListViewPostValue postValue, H3.SmartForm.SubmitListViewResponse response)
+{
+    Test_Post(actionName, this.Request, response);
+    base.OnSubmit(actionName, postValue, response);
+}
+
+public void Test_Post(string actionName, H3.SmartForm.ListViewRequest request, H3.SmartForm.SubmitListViewResponse response)
+{
+    if(actionName != "Test_Post")
+    {
+        return;
+    }
+
+    try
+    {
+        H3.IEngine engine = request.Engine;
+        string currUserId = request.UserContext.UserId;
+
+        string orderDate_Str = request["orderDate"] + string.Empty;
+        if(string.IsNullOrWhiteSpace(orderDate_Str))
+        {
+            throw new Exception("orderDate参数值为空！");
+        }
+        DateTime orderDate = DateTime.Parse(orderDate_Str);
+
+
+        response.ReturnData = new Dictionary<string, object>();
+        response.ReturnData["data"] = "";
+    } catch(Exception ex)
+    {
+        response.Errors.Add(ex.Message);
+    }
+}
 ```

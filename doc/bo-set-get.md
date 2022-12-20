@@ -118,7 +118,8 @@ if(string.IsNullOrWhiteSpace(numStr))
     //此控件值为null
 } else
 {
-    //有值时转换成 DateTime 类型
+    //有值时转换成 decimal 类型
+    //因为氚云数字控件可配置最多16位小数，所以转成decimal类型（不管配置里小数位数多少，精度都足够）
     decimal num = decimal.Parse(numStr);
 }
 ```
@@ -133,7 +134,7 @@ bo["控件编码"] = num;
 2. 赋值一个小数
 ``` cs
 //赋值小数时不用double类型，是因为氚云数字控件可配置最多16位小数，而double类型精度不够
-//100.22后面有个“m”，是C#的decimal值语法，因为直接写100.22表示的是double类型，而100.22m就能表示是一个decimal类型的100.22
+//100.22后面有个“m”，是C#的decimal值语法，因为直接写100.22表示的是double类型，而100.22m就能表示是一个decimal类型
 decimal num = 100.22m;
 bo["控件编码"] = num;
 ```

@@ -65,62 +65,50 @@ OnLoad: function() {
 	var childTableCode = "D278609xxx";
 	//要设置为不可写的子表字段编码集合
 	var readonlyFieldCodes = [ "F0000031", "F0000033" ];
-	if( readonlyFieldCodes && readonlyFieldCodes.length ) {
 
-		//获取子表当前已有的所有数据
-		var rowDatas = that[ childTableCode ].GetValue();
-		if( rowDatas && rowDatas.length ) {
-			//循环子表数据
-			for( var i = 0;i < rowDatas.length;i++ ) {
-				//取出子表行数据Id
-				var rowId = rowDatas[ i ][ "ObjectId" ];
+	//定义函数，本函数会获取到子表所有行，并按照readonlyFieldCodes集合，将对应子表字段都设置为不可写
+	function setReadonlyToAllRowData() {
+		if( readonlyFieldCodes && readonlyFieldCodes.length ) {
+			//获取子表当前已有的所有数据
+			var rowDatas = that[ childTableCode ].GetValue();
+			if( rowDatas && rowDatas.length ) {
+				//循环子表数据
+				for( var i = 0;i < rowDatas.length;i++ ) {
+					//取出子表行数据Id
+					var rowId = rowDatas[ i ][ "ObjectId" ];
 
-				//循环readonlyFieldCodes，将里面每个子表字段编码对应的字段，设置为不可写
-				for( var j = 0;j < readonlyFieldCodes.length;j++ ) {
-					//此处不能直接用子表字段编码，而需要通过此格式拼接出一个完整路径编码，格式为：子表编码.子表内控件编码
-					//此示例中，该编码结果为：D278609xxx.F0000031  和  D278609xxx.F0000033
-					var fullCode = childTableCode + "." + readonlyFieldCodes[ j ];
+					//循环readonlyFieldCodes，将里面每个子表字段编码对应的字段，设置为不可写
+					for( var j = 0;j < readonlyFieldCodes.length;j++ ) {
+						//此处不能直接用子表字段编码，而需要通过此格式拼接出一个完整路径编码，格式为：子表编码.子表内控件编码
+						//此示例中，该编码结果为：D278609xxx.F0000031  和  D278609xxx.F0000033
+						var fullCode = childTableCode + "." + readonlyFieldCodes[ j ];
 
-					//根据子表行数据Id和字段编码，获取该行的子表控件
-					var con = that[ childTableCode ].GetCellManager( rowId, fullCode );
-					if( con ) {
-						//若控件存在，则调用SetReadonly设置该控件不可写
-						con.SetReadonly( true );
-					}
-				}
-			}
-		}
-
-		//当子表点击新增时，设置新增行的子表控件不可写，实现方案是给子表绑定BindChange事件，并监听子表新增按钮的点击
-		that[ childTableCode ].BindChange( $.IGuid(), function( data ) {
-			if( data && data.length >= 2 ) {
-				var btnCode = data[ 1 ];//取得子表按钮代码
-
-				//判断用户点击了子表的新增按钮或者复制按钮
-				if( btnCode == "add" || btnCode == "copy" ) {
-					//获取此时的子表全部数据
-					var rowDatas = that[ childTableCode ].GetValue();
-					if( rowDatas && rowDatas.length ) {
-						//循环子表数据
-						for( var i = 0;i < rowDatas.length;i++ ) {
-							var rowId = rowDatas[ i ][ "ObjectId" ];
-
-							//循环readonlyFieldCodes，将里面每个子表字段编码对应的字段，设置为不可写
-							for( var j = 0;j < readonlyFieldCodes.length;j++ ) {
-								//此处不能直接用子表字段编码，而需要通过此格式拼接出一个完整路径编码，格式为：子表编码.子表内控件编码
-								var fullCode = childTableCode + "." + readonlyFieldCodes[ j ];
-
-								//根据子表行数据Id和字段编码，获取该行的子表控件
-								var con = that[ childTableCode ].GetCellManager( rowId, fullCode );
-								if( con ) {
-									con.SetReadonly( true );
-								}
-							}
+						//根据子表行数据Id和字段编码，获取该行的子表控件
+						var con = that[ childTableCode ].GetCellManager( rowId, fullCode );
+						if( con ) {
+							//若控件存在，则调用SetReadonly设置该控件不可写
+							con.SetReadonly( true );
 						}
 					}
 				}
 			}
-		});
+		}
 	}
+
+	//执行不可写设置
+	setReadonlyToAllRowData();
+
+	//当子表点击新增时，设置新增行的子表控件不可写，实现方案是给子表绑定BindChange事件，并监听子表新增按钮的点击
+	that[ childTableCode ].BindChange( $.IGuid(), function( data ) {
+		if( data && data.length >= 2 ) {
+			var btnCode = data[ 1 ];//取得子表按钮代码
+
+			//判断用户点击了子表的新增按钮或者复制按钮
+			if( btnCode == "add" || btnCode == "copy" ) {
+				//执行不可写设置
+				setReadonlyToAllRowData();
+			}
+		}
+	});
 },
 ```
