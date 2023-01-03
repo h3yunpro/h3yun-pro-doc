@@ -4,6 +4,8 @@
 |----------|--------------------------------------|----------|--------|
 | 应用编码     | AppCode                              |          |        |
 | 表单编码     | SchemaCode                           |          |        |
-| 业务对象数据Id | ObjectId                             |          |        |
-| 用户Id     | UserId                               |          |        |
+| 表单Schema  | H3.DataModel.BizObjectSchema 实例     |          |        |
+| 业务对象    | H3.DataModel.BizObject 实例           |          |        |
+| 业务对象数据Id / 表单数据Id | 业务对象实例ObjectId属性值，数据库中表单表的 ObjectId字段值             |          |        |
+| 用户Id     | H_User表ObjectId字段值                 |          |        |
 | POST请求后端 | $.SmartForm.PostForm/$.ListView.Post |          |        |

@@ -33,16 +33,28 @@ FROM (
 > 以模拟出 ```mysql.help_topic``` 表。
 
 
+## 根据表单编码查询表单名称
+
+?> 编码有可能是表单编码，也可能是子表控件编码，所以此处 ```schemacode``` 和 ```childschemas``` 两个都判断一遍。
+
+``` sql
+SELECT schemacode AS `主表编码`, childschemas AS `子表编码`, displayname AS `主表名称` 
+FROM H_PublishedBizObjectSchema 
+WHERE schemacode = '表单编码' 
+OR childschemas LIKE '%表单编码%'
+```
+
+
 ## 查询表单/列表中编写的前后端代码
 
-表单设计中编写的代码：
+表单设计中的自定义代码：
 ``` sql
 SELECT javascript AS `旧版前端代码`, newjscode AS `新版前端代码`, behindcode AS `后端代码` 
 FROM H_PublishedFormSetting
 WHERE schemacode = '表单编码'
 ```
 
-列表设计中编写的代码：
+列表设计中的自定义代码：
 ``` sql
 SELECT javascript AS `前端代码`, behindcode AS `后端代码` 
 FROM H_PublishedListViewSetting

@@ -161,3 +161,45 @@ public void Test_Post(string actionName, H3.SmartForm.ListViewRequest request, H
     }
 }
 ```
+
+
+## 弹窗表单，去掉无用的按钮
+
+``` cs
+protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
+{
+    base.OnLoad(response);
+
+    if(response.Actions != null)
+    {
+        if(response.Actions.ContainsKey("Save")) 
+        {
+            response.Actions.Remove("Save");
+        }
+        if(response.Actions.ContainsKey("Remove")) 
+        {
+            response.Actions.Remove("Remove");
+        }
+        if(response.Actions.ContainsKey("Print")) 
+        {
+            response.Actions.Remove("Print");
+        }
+        if(response.Actions.ContainsKey("ViewQrCode")) 
+        {
+            response.Actions.Remove("ViewQrCode");
+        }
+        if(response.Actions.ContainsKey("FullScreen")) 
+        {
+            response.Actions.Remove("FullScreen");
+        }
+        if(response.Actions.ContainsKey("Close")) 
+        {
+            response.Actions.Remove("Close");
+        }
+        if(response.Actions.ContainsKey("SubmitAndAdd")) 
+        {
+            response.Actions.Remove("SubmitAndAdd");
+        }
+    }
+}
+```

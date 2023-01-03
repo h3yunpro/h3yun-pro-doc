@@ -144,15 +144,138 @@ bo["控件编码"] = num;
 
 ## 复选框
 
+此控件值是 ```string``` 类型，但是值的格式是：```选项值1;选项值2;选项值3```。
+</br>所以，取值时，把值通过 ```;``` 分割，即可得到每个选项值。
+
+取值：
+``` cs
+//获取复选框控件的值
+string str = bo["控件编码"] + string.Empty;
+
+//先定义一个结果数组
+string[] value = null;
+//判断控件值不为空
+if(!string.IsNullOrWhiteSpace(str)) 
+{
+    //把值通过 ; 符号分割，即可得到所有选项值的数组
+    value = str.Split(new char[]{ ';'});
+}
+
+if(value == null || value.Length == 0)
+{
+    //结果无值
+} else
+{
+    //结果有值
+    //循环获取每个选项值
+    foreach(string item in value) 
+    {
+
+    }
+}
+```
+
+赋值：
+``` cs
+bo["控件编码"] = "选项1;选项2";
+```
+
+清空控件值：```bo["控件编码"] = null;```
+
 
 ## 是/否
+
+此控件值是 ```bool``` 类型
+
+取值：
+``` cs
+//由于控件值可能为null，直接转bool类型有风险，先转成string类型判断一下是否是空值，比较保险
+string str = bo["控件编码"] + string.Empty;
+
+//定义一个bool类型的结果
+bool value = false;
+if(!string.IsNullOrWhiteSpace(str))
+{
+    //当控件值不为空，则将string转成bool类型
+    value = bool.Parse(str);
+}
+
+//判断 是/否 控件值
+if(value)
+{
+    //选择了 是
+} else
+{
+    //选择了 否
+}
+```
+
+赋值：```bo["控件编码"] = true;```
+
+清空控件值：```bo["控件编码"] = null;```
 
 
 ## 地址
 
+此控件值是 ```string``` 类型的JSON字符串，格式如：
+``` js
+{"adcode":"440305","adname":"广东省 深圳市 南山区","Detail":"科兴科学园B1栋"}
+```
+
+取值：
+``` cs
+string str = bo["控件编码"] + string.Empty;
+if(string.IsNullOrWhiteSpace(str))
+{
+    //此控件值为 null 或 空字符串 或 空格
+} else
+{
+    //此控件有值
+}
+```
+
+赋值：
+``` cs
+bo["控件编码"] = "{\"adcode\":\"440305\",\"adname\":\"广东省 深圳市 南山区\",\"Detail\":\"科兴科学园B1栋\"}";
+```
+
+清空控件值：```bo["控件编码"] = null;```
+
 
 ## 位置
 
+此控件值是 ```string``` 类型的JSON字符串，格式如：
+``` js
+{"Address":"深圳市南山区科技南十路航天科技研究院","Point":{"lat":"21.345","lng":"114.454"}}
+```
+
+取值：
+``` cs
+string str = bo["控件编码"] + string.Empty;
+if(string.IsNullOrWhiteSpace(str))
+{
+    //此控件值为 null 或 空字符串 或 空格
+} else
+{
+    //此控件有值
+}
+```
+
+赋值：
+``` cs
+bo["控件编码"] = "{\"Address\":\"深圳市南山区科技南十路航天科技研究院\",\"Point\":{\"lat\":\"21.345\",\"lng\":\"114.454\"}}";
+```
+
+清空控件值：```bo["控件编码"] = null;```
 
 
+## 附件/图片
 
+取值：
+附件/图片 控件，无法通过业务对象取值，若要获取附件Id，使用SQL查询 ```H_BizObjectFile``` 表。
+
+赋值：
+附件/图片 控件，无法通过业务对象赋值，只可以采用复制附件的方式，进行赋值。
+
+清空控件值：
+附件/图片 控件，无法通过业务对象清空控件值。
