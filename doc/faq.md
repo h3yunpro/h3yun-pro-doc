@@ -1,10 +1,11 @@
- <style>
-.fontColor{
-            color: gray ;
-            float: right;
-            }
-.imgstyle{
-max-width: 50%;
+<style>
+.fontColor {
+    color: gray;
+    float: right;
+}
+
+.imgstyle {
+    max-width: 50%;
     max-height: 50%;
 }
 </style>
@@ -117,7 +118,7 @@ max-width: 50%;
 > Q22:有什么办法获取当前表单数据的流程节点吗？<span class="fontColor" >
 > 2022/12/8 </span></br>
 > A22:
-> ~~~cs
+> ~~~ cs
 > H3.Workflow.Instance.IToken tok = this.Request.Engine.WorkflowInstanceManager.GetWorkflowInstance("流程id").GetLastToken();
 > ~~~ 
 

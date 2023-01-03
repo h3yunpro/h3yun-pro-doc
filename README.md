@@ -2,7 +2,7 @@
 
 [文档仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc)  |  [浏览文档](https://chuck9090.github.io/h3yun-pro-doc/)  |  [docsify](https://docsify.js.org/#/zh-cn/) 
 
-?> PS：如您想查看官方文档，请前往此地址： [https://help.h3yun.com/channels/3.html](https://help.h3yun.com/channels/3.html)
+!> 官方文档地址： [https://help.h3yun.com/channels/3.html](https://help.h3yun.com/channels/3.html)
 
 
 ## 概述
@@ -33,12 +33,16 @@
   
 - ```/file``` 存放代码量较大的项目文件，或者SDK等
 
+- ```/css``` 存放样式文件，以及自定义样式
+
+- ```/js``` 存放js插件
+
 
 ## 默认分支
 
 - ```master``` 主分支，此分支内容实时推送到线上文档
 
-- ```quick``` 快速编辑分支，用于直接在gitee上对文档细节微调
+- ```quick``` 快速编辑分支，用于直接在gitee在线对文档细节微调
 
 
 ## 本地预览
