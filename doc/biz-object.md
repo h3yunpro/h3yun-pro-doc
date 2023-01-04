@@ -40,7 +40,7 @@
 
 - ```string userId```：查询人的用户Id，一般使用System用户 ```H3.Organization.User.SystemUserId```
 
-- ```H3.DataModel.BizObjectSchema schema```：表单模型实例
+- ```H3.DataModel.BizObjectSchema schema```：表单结构实例，文档参考 [H3.DataModel.BizObjectSchema](/doc/cs-instance?id=H3.DataModel.BizObjectSchema)
 
 - ```H3.DataModel.GetListScopeType getListScopeType```：查询范围，一般使用不限范围的全局查询 ```H3.DataModel.GetListScopeType.GlobalAll```
 

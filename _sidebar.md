@@ -10,9 +10,9 @@
 
 
 * 前端API
-  
-  * [表单设计](/doc/form-api)
-  * [列表设计](/doc/list-api)
+
+  * [表单相关API](/doc/form-api)
+  * [列表相关API](/doc/list-api)
 
 
 * 后端API
@@ -29,10 +29,10 @@
 
 * 第三方系统集成
 
-    * [氚云调用WebService](/doc/req-ws)
-    * [氚云调用WebAPI](/doc/req-api)
-    * [第三方调用氚云默认接口](/doc/open-api)
-    * [第三方调用氚云自定义接口](/doc/my-api)
+  * [氚云调用WebService](/doc/req-ws)
+  * [氚云调用WebAPI](/doc/req-api)
+  * [第三方调用氚云默认接口](/doc/open-api)
+  * [第三方调用氚云自定义接口](/doc/my-api)
 
 
 * 扩展
