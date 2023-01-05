@@ -64,7 +64,8 @@ WHERE schemacode = '表单编码'
 ## 获取氚云应用在钉钉中的appId
 
 ``` sql
-SELECT corpid, extractvalue(agents, '/ArrayOfDingTalkISVAgent/DingTalkISVAgent/AppId') AS `appId`
+SELECT corpid, 
+extractvalue(agents, '/ArrayOfDingTalkISVAgent/DingTalkISVAgent/AppId') AS `appId`
 FROM h_dingtalkisv
 ```
 
