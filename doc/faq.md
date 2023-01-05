@@ -179,3 +179,17 @@
 > <span class="fontColor" >
 > 2022/12/30 </span></br>
 > A31:不能超过2万个字符  例如 多行文本控件的最大字符是2000  那么最多只能10个多行文本,目前大概是80/90个控件
+
+> Q32:表单如何只能创建人编辑？
+ > <span class="fontColor" >
+> 2022/1/5 </span></br>
+> A32:
+> ~~~cs
+>  protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
+    {
+>       if(this.Request.BizObject.CreatedBy != this.Request.UserContext.UserId && response.Actions.ContainsKey("Edit"))
+>       {
+>       response.Actions.Remove("Edit");
+>       }
+>   }
+> ~~~
