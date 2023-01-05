@@ -41,7 +41,10 @@
 
 * 表单/列表后端代码类的任意事件中，均可以通过 ```this.Request.Schema``` 获取（即获取到的是当前表单结构实例）
 
-* 其他位置，需要通过 ```H3.DataModel.BizObjectSchema schema = engine.BizObjectManager.GetPublishedSchema("表单编码");``` 获取
+* 其他位置，或者获取其他表单结构实例，则指定表单编码获取
+``` cs
+H3.DataModel.BizObjectSchema schema = engine.BizObjectManager.GetPublishedSchema("表单编码");
+``` 
 
 
 

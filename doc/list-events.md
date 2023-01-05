@@ -34,12 +34,15 @@
 $.ListView.ActionPreDo = function( actionCode ) {
     debugger
 
-    //获取列表选中数据
-    var datas = $.ListView.GetSelected();
-    if( datas && datas.length ) {
-        //当有选中数据时，取出选中数据的ObjectId值
-        for( var i = 0;i < datas.length;i++ ) {
-            alert( datas[ i ][ "ObjectId" ] );
+    //通过actionCode判断用户点击的是自定义按钮 MyBtn
+    if( actionCode == "MyBtn" ) {
+        //获取列表选中数据
+        var datas = $.ListView.GetSelected();
+        if( datas && datas.length ) {
+            //当有选中数据时，取出选中数据的ObjectId值
+            for( var i = 0;i < datas.length;i++ ) {
+                alert( datas[ i ][ "ObjectId" ] );
+            }
         }
     }
 

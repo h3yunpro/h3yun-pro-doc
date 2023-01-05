@@ -18,7 +18,7 @@ SELECT VERSION()
 <br/><br/>
 若因用户执行 **增删改** 三类SQL语句，造成表单数据异常而无法查询，或者因修改系统表数据导致氚云无法使用，解决办法只能找运维恢复数据（收费）。
 
-!> 为了防止用户滥用或执行低效SQL，从而对系统性能造成过大影响， ```engine.Query.QueryTable``` 接口有执行超时机制，耗时超过 ```30秒``` ，则SQL语句执行失败，并抛出异常，异常消息示例：
+!> 为了防止用户滥用或执行低效SQL，从而对系统性能造成过大影响， ```engine.Query.QueryTable``` 接口有执行超时机制，耗时超过 **30秒** ，则SQL语句执行失败，并抛出异常，异常消息示例：
 <br/>```Timeout in IO operation``` 或者 ```Connection must be valid and open to rollback transaction```
 <br/>一旦出现此类情况，请优化SQL，提升效率，或者将执行逻辑拆分，分批多次执行。
 

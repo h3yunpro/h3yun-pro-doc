@@ -74,14 +74,19 @@ foreach(System.Text.RegularExpressions.Match match in System.Text.RegularExpress
 ~~~
 
 
-## 目标已有附件保留，新增附件追加
+## 目标已有附件保留，追加新增的附件
 
 可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
+
+当目标表的附件控件是由多个源表复制过去的，此时只用 CopyFiles 接口的覆盖模式，会把其他源表附件覆盖。<br/>
+换成 CopyFiles 接口的追加模式，本条源数据上次追加的附件又不会被清理，就无法显示更新的效果。
+
+所以，本示例先将 本条源数据上次追加的附件 删除，后追加上 本条源数据 的所有附件，就完美解决了以上两个问题。
 
 ``` cs
 public void AddFileToBo(H3.IEngine engine, H3.DataModel.BizObject sourBo, string sourFieldCode, string toBoSchemaCode, string toBoId, string toFieldCode)
 {
-    //删除 对方 指定字段由源数据带过去的附件
+    //第一步：删除 目标 中由本条数据带过去的附件
     System.Data.DataTable dt = engine.Query.QueryTable(
         "SELECT objectid FROM H_BizObjectFile WHERE fileflag = 0 AND schemacode = @toBoSchemaCode AND propertyname = @toFieldCode AND bizobjectid = @toBoId AND sourcebizobjectid = @sourBoId AND sourcepropertyname = @sourFieldCode", new H3.Data.Database.Parameter[]{
             new H3.Data.Database.Parameter("@toBoSchemaCode", System.Data.DbType.String, toBoSchemaCode),
@@ -102,7 +107,7 @@ public void AddFileToBo(H3.IEngine engine, H3.DataModel.BizObject sourBo, string
         }
     }
 
-    //追加本次附件
+    //第二步：将本条数据的附件以追加的方式赋值到 目标
     engine.BizObjectManager.CopyFiles(
         sourBo.Schema.SchemaCode, "", sourFieldCode, sourBo.ObjectId,
         toBoSchemaCode, "", toFieldCode, toBoId, false, false

@@ -7,18 +7,34 @@
 
 ## 系统属性
 
+!> 系统属性对应的控件，不管表单中是否拖出配置这些控件，业务对象都会有这些属性，并且数据库的表中也会有对应字段
+
+使用系统属性，可以直接使用 ```bo.属性名``` 的方式，而不是 ```bo["属性名"]```，例：
+``` cs
+//获取业务对象的数据状态
+H3.DataModel.BizObjectStatus boStatus = bo.Status;
+//判断数据是否是生效状态
+if ( boStatus == H3.DataModel.BizObjectStatus.Effective ) 
+{
+
+}
+
+//将当前拥有者更改为 System 用户
+bo.OwnerId = H3.Organization.User.SystemUserId;
+```
+
 | 属性名                | 数据类型                         | 释义                                                          | 是否必填 |
 |--------------------|------------------------------|--------------------------------------------------------------------|--------|
-| ObjectId           | String                       | 数据Id，用于标识表单数据的唯一值，通过GUID生成                         | 必填   |
-| Name               | String                       | 数据标题，显示在列表页和关联表单控件上，方便用户浏览和选择               |      |
-| OwnerId            | String                       | 拥有者，值为氚云用户Id，不管表单上是否有此控件，此值都会有               | 必填   |
-| OwnerDeptId        | String                       | 所属部门，值为氚云部门Id，不管表单上是否有此控件，此值都会有             | 必填   |
-| Status             | H3.DataModel.BizObjectStatus | 数据状态（草稿/流程进行中/生效/作废），不管表单上是否有此控件，此值都会有 | 必填   |
-| WorkflowInstanceId | String                       | 流程实例Id                                                           |      |
-| CreatedBy          | String                       | 创建人，值为氚云用户Id，不管表单上是否有此控件，此值都会有               | 必填   |
-| CreatedTime        | DateTime                     | 创建时间，不管表单上是否有此控件，此值都会有                            | 必填   |
-| ModifiedBy         | String                       | 数据修改者，值为氚云用户Id，不管表单上是否有此控件，此值都会有           |      |
-| ModifiedTime       | DateTime                     | 修改时间，不管表单上是否有此控件，此值都会有                            |      |
+| ObjectId           | ```String```                 | 数据Id，用于标识表单数据的唯一值，通过GUID生成                         | 必填   |
+| Name               | ```String```                 | 数据标题，显示在列表页和关联表单控件上，方便用户浏览和选择               |      |
+| OwnerId            | ```String```                 | 拥有者，值为氚云用户Id                                               | 必填   |
+| OwnerDeptId        | ```String```                 | 所属部门，值为氚云部门Id                                              | 必填   |
+| Status             | ```H3.DataModel.BizObjectStatus``` | 数据状态（草稿/流程进行中/生效/作废）                                  | 必填   |
+| WorkflowInstanceId | ```String```                 | 流程实例Id                                                           |      |
+| CreatedBy          | ```String```                 | 创建人，值为氚云用户Id                                                | 必填   |
+| CreatedTime        | ```DateTime```               | 创建时间                                                            | 必填   |
+| ModifiedBy         | ```String```                 | 最后一次数据修改人，值为氚云用户Id                                            |      |
+| ModifiedTime       | ```DateTime```               | 最后一次数据修改时间                                                             |      |
 
 ?>  Status 枚举值：<br/>
     ```H3.DataModel.BizObjectStatus.Draft```：草稿，数据库中对应值 0 <br/>
@@ -26,21 +42,17 @@
     ```H3.DataModel.BizObjectStatus.Effective```：数据生效，数据库中对应值 1 <br/>
     ```H3.DataModel.BizObjectStatus.Canceled```：数据作废，数据库中对应值 3 <br/>
 
-?> 以上的系统属性对应的控件，不管表单中是否拖出配置这些控件，业务对象都会有这些属性，并且数据库的表中也会有对应字段
 
+## 静态方法-GetList
 
-## 静态方法
-
-### H3.DataModel.BizObject.GetList
-
-用于批量获取业务对象实例
+```H3.DataModel.BizObject.GetList``` 方法用于批量获取业务对象实例。
 
 方法传入参数：
-- ```H3.IEngine engine```：总控引擎，文档参考 [H3.IEngine](/doc/cs-instance?id=H3.IEngine)
+- ```H3.IEngine engine```：总控引擎，文档参考 [H3.IEngine](/doc/cs-instance?id=H3IEngine)
 
 - ```string userId```：查询人的用户Id，一般使用System用户 ```H3.Organization.User.SystemUserId```
 
-- ```H3.DataModel.BizObjectSchema schema```：表单结构实例，文档参考 [H3.DataModel.BizObjectSchema](/doc/cs-instance?id=H3.DataModel.BizObjectSchema)
+- ```H3.DataModel.BizObjectSchema schema```：表单结构实例，文档参考 [H3.DataModel.BizObjectSchema](/doc/cs-instance?id=H3DataModelBizObjectSchema)
 
 - ```H3.DataModel.GetListScopeType getListScopeType```：查询范围，一般使用不限范围的全局查询 ```H3.DataModel.GetListScopeType.GlobalAll```
 
@@ -74,13 +86,12 @@ if(boArray == null || boArray.Length == 0)
 
     }
 }
-
-base.OnLoad(response);
 ```
 
-### H3.DataModel.BizObject.Load
 
-用于根据数据Id获取单个业务对象实例
+## 静态方法-Load
+
+```H3.DataModel.BizObject.Load``` 方法用于根据数据Id获取单个业务对象实例。
 
 方法传入参数：
 - ```string userId```：查询人的用户Id，一般使用System用户 ```H3.Organization.User.SystemUserId```
@@ -98,14 +109,14 @@ base.OnLoad(response);
 使用示例：
 ``` cs
 H3.IEngine engine = this.Engine;
-string schemaSchema = "表单编码";
+string schemaCode = "表单编码";
 string bizObjectId = "数据Id";
 
 //调用 H3.DataModel.BizObject.Load，获取数据Id对应业务对象实例
-H3.DataModel.BizObject bo = H3.DataModel.BizObject.Load(H3.Organization.User.SystemUserId, engine, schema.SchemaCode, bizObjectId, false);
+H3.DataModel.BizObject bo = H3.DataModel.BizObject.Load(H3.Organization.User.SystemUserId, engine, schemaCode, bizObjectId, false);
 if(bo != null)
 {
-    /*****获取到数据*****/
+    /*****Load业务对象成功*****/
 
     //获取数据标题
     string boName = bo["Name"] + string.Empty;
@@ -147,10 +158,10 @@ H3.DataModel.BizObject bo = new H3.DataModel.BizObject(engine, schema, H3.Organi
     注：创建表单数据时，不需要设置的值有：
         ObjectId：构造方法内部会自动通过GUID生成出此值
                   如果要取此值，在 new H3.DataModel.BizObject() 之后便可以通过 bo.ObjectId 获取到
-        OwnerDeptId：创建时平台会自动根据 OwnerId 带出所属部门
+        OwnerDeptId：创建时平台会自动根据 OwnerId 带出所属部门，所以 OwnerId 一定要设置
         CreatedTime：创建时平台会自动设置为当前时间
-        Name：创建时平台会自动生成
-        SeqNo：创建时平台会自动生成
+        Name：创建后平台会自动生成
+        SeqNo：创建后平台会自动生成
 */
 
 //设置 创建人
@@ -165,7 +176,7 @@ bo.Status = H3.DataModel.BizObjectStatus.Draft;
 //设置控件编码为 F0000001 的值
 bo["F0000001"] = "xxx";
 
-//将本业务对象保存到数据库
+//创建本业务对象，调用完此方法后，数据才会存到数据库，否则只是在内存中
 bo.Create();
 ```
 
@@ -176,16 +187,11 @@ bo.Create();
 数据状态设置为 ```H3.DataModel.BizObjectStatus.Effective```，在创建时，会自动触发该表单的生效业务规则
 
 
-## 动态方法
+## 动态方法-Create
 
-前面两类方法用于在无业务对象实例时，获取/创建 出业务对象。
+```Create``` 方法都是搭配构造方法使用，上面的构造方法文档已经做了说明，这里只展示同时创建主表/子表数据的示例
 
-而动态方法，是在已经得到了业务对象实例，对业务对象进行操作的方法。
-
-### Create方法
-
-Create方法都是搭配构造方法使用，上面的构造方法文档已经做了说明，这里只展示同时创建主表/子表数据的示例
-
+使用示例：
 ``` cs
 H3.IEngine engine = this.Engine;
 H3.DataModel.BizObjectSchema parSchema = engine.BizObjectManager.GetPublishedSchema("主表表单编码");
@@ -266,4 +272,105 @@ parBo[chiSchema.SchemaCode] = chiBoList.ToArray();
 
 //主表和子表数据都定义好了，这里只用调用创建主表业务对象的 Create，主表和子表数据就可以一起创建出来
 parBo.Create();
+```
+
+
+## 动态方法-Update
+
+```Update``` 方法用于在已得到业务对象实例后，对其属性或控件值修改，然后更新并保存。
+
+使用示例：
+``` cs
+H3.IEngine engine = this.Engine;
+H3.DataModel.BizObjectSchema schema = engine.BizObjectManager.GetPublishedSchema("表单编码");
+string seqNo = "HT20220101001";
+
+//构建过滤器
+H3.Data.Filter.Filter filter = new H3.Data.Filter.Filter();
+//构造And匹配器
+H3.Data.Filter.And andMatcher = new H3.Data.Filter.And();
+//添加匹配条件，筛选生效的数据，此处通过流水号进行筛选
+andMatcher.Add(new H3.Data.Filter.ItemMatcher("SeqNo", H3.Data.ComparisonOperatorType.Equal, seqNo));
+filter.Matcher = andMatcher;
+
+//调用 H3.DataModel.BizObject.GetList，获取符合条件的数据
+H3.DataModel.BizObject[] boArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId, schema, H3.DataModel.GetListScopeType.GlobalAll, filter);
+if(boArray != null && boArray.Length > 0)
+{
+    //由于是通过流水号进行筛选的，所以查询结果最多只有一条数据，这里直接取下标 0 的即可
+    H3.DataModel.BizObject bo = boArray[0];
+
+    //更新 最后一次数据修改时间 为当前时间
+    bo.ModifiedTime = DateTime.Now;
+
+    //清空 F0000001 控件值
+    bo["F0000001"] = null;
+
+    //执行更新操作，此方法执行完成，本次更新的数据才会保存到数据库
+    bo.Update();
+} else
+{
+    //根据流水号未查找到数据，这里演示下抛出自定义异常
+    throw new Exception("未找到流水号为“" + seqNo + "”对应数据！");
+}
+```
+
+
+## 动态方法-Remove
+
+```Remove``` 方法用于在已得到业务对象实例后，将数据删除。
+
+单条删除使用示例：
+``` cs
+H3.IEngine engine = this.Engine;
+string schemaCode = "表单编码";
+string bizObjectId = "数据Id";
+
+H3.DataModel.BizObject bo = H3.DataModel.BizObject.Load(H3.Organization.User.SystemUserId, engine, schemaCode, bizObjectId, false);
+if(bo != null)
+{
+    //当根据 数据Id 查找到业务对象后，调用 Remove 方法，将删除操作直接发送给数据库进行数据删除
+    bo.Remove();
+}
+```
+
+批量删除使用示例：
+``` cs
+H3.IEngine engine = this.Engine;
+H3.DataModel.BizObjectSchema schema = engine.BizObjectManager.GetPublishedSchema("表单编码");
+DateTime time = DateTime.Parse("2022-01-01");
+
+//定义一个批量提交实例
+H3.DataModel.BulkCommit commit = new H3.DataModel.BulkCommit();
+
+//构建过滤器
+H3.Data.Filter.Filter filter = new H3.Data.Filter.Filter();
+//构造And匹配器
+H3.Data.Filter.And andMatcher = new H3.Data.Filter.And();
+//添加匹配条件，筛选生效的数据，此处筛选出 创建时间 <= 2022-01-01 的数据
+andMatcher.Add(new H3.Data.Filter.ItemMatcher("CreatedTime", H3.Data.ComparisonOperatorType.NotAbove, time));
+filter.Matcher = andMatcher;
+
+//调用 H3.DataModel.BizObject.GetList，获取符合条件的数据
+H3.DataModel.BizObject[] boArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId, schema, H3.DataModel.GetListScopeType.GlobalAll, filter);
+if(boArray != null && boArray.Length > 0)
+{
+    //将 创建时间 <= 2022-01-01 的数据，循环添加到 H3.DataModel.BulkCommit 实例中
+    foreach(H3.DataModel.BizObject bo in boArray) 
+    {
+        //将本业务对象，以删除的方式，添加到 批量提交实例
+        //跟直接 bo.Remove() 不同，此方式不会立马将操作发送给数据库，而是先将操作记录起来，等待下面的 commit.Commit() 操作
+        bo.Remove(commit);
+    }
+
+    //将 批量提交实例 进行提交，此操作完成，会将上面代码添加到 commit 的业务对象操作，一起发送给数据库进行执行
+    string errorMsg = null;
+    commit.Commit(engine.BizObjectManager, out errorMsg);
+
+    //判断批量提交结果，如果 errorMsg 变量有值，说明删除失败
+    if(!string.IsNullOrEmpty(errorMsg))
+    {
+        throw new Exception("批量删除数据失败，原因：" + errorMsg);
+    }
+}
 ```
