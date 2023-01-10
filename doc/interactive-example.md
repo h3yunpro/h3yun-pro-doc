@@ -87,8 +87,15 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 			}
 
 			//根据 userName 参数值查询对应的 userId
-			string sql = "select ObjectId from h_user where Name='" + userName + "'";
-			System.Data.DataTable dt = engine.Query.QueryTable(sql, null);
+			string sql = "SELECT ObjectId FROM H_User WHERE Name = @name; ";
+			List < H3.Data.Database.Parameter > parameters = new List<H3.Data.Database.Parameter>();
+			H3.Data.Database.Parameter param = new H3.Data.Database.Parameter(
+				"@name", //参数名
+				System.Data.DbType.String, //参数值类型
+				userName //参数值    
+			);
+			parameters.Add(param);
+			System.Data.DataTable dt = engine.Query.QueryTable(sql, parameters.ToArray());
 
 			//当 h_user 表查无此用户名时
 			if(dt == null || dt.Rows.Count == 0)

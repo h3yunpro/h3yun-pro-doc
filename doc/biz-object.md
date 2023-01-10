@@ -126,6 +126,7 @@ if(bo != null)
 
     //将数据状态改为作废
     bo.Status = H3.DataModel.BizObjectStatus.Canceled;
+    
     //将本次对业务对象实例的修改映射保存到数据库
     bo.Update();
 } else

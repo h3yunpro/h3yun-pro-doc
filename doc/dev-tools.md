@@ -119,10 +119,10 @@ $.ListView.ActionPreDo = function( actionCode ) {
 };
 ```
 
-之后回到列表页面，通过快捷键 ```**Ctrl + Shift + I**``` 调出开发者工具。当js引擎执行到debugger标记处，就会自动跳到代码块。
+加完 ```debugger``` 标记之后，回到列表页面 --> 刷新页面 --> 通过快捷键 ```**Ctrl + Shift + I**``` 调出开发者工具。<br/>当js引擎执行到debugger标记处，就会自动跳到代码块。
 
-> 注：不同电脑和浏览器，调出开发者工具的快捷键会不一样，不清楚的话，可以百度一下
+?> ```debugger``` 标记可以直接加在任意要调试的代码前一行，不是一定要加在事件首句。
 
-> 未使用过浏览器开发者工具的同学，推荐阅读：[浏览器开发者工具打开与使用](https://developer.mozilla.org/zh-CN/docs/Learn/Common_questions/What_are_browser_developer_tools) 
-
-> 前端代码调试，推荐使用Chrome浏览器（开发者调试工具比较全面）
+?> 注：不同电脑和浏览器，调出开发者工具的快捷键会不一样，不清楚的话，可以百度一下。
+<br/>未使用过浏览器开发者工具的同学，推荐阅读：[浏览器开发者工具打开与使用](https://developer.mozilla.org/zh-CN/docs/Learn/Common_questions/What_are_browser_developer_tools) 。
+<br/>前端代码调试，推荐使用Chrome浏览器（开发者调试工具比较全面）

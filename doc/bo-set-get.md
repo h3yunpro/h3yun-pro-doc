@@ -79,7 +79,12 @@ if(userIdArray == null || userIdArray.Length)
 }
 ```
 
-赋值：```bo["控件编码"] = new string[]{ "44358530-a4cc-4e9c-9009-2c052f71c706", "c9afbea4-1800-4708-bb6a-90dd5a46e538" };```
+赋值：
+``` cs
+//此处本应通过查询方式获得Id数组，篇幅原因此处隐去
+string[] userIdArray = new string[]{ "44358530-a4cc-4e9c-9009-2c052f71c706", "c9afbea4-1800-4708-bb6a-90dd5a46e538" };
+bo["控件编码"] = userIdArray;
+```
 
 清空控件值：```bo["控件编码"] = null;```
 
@@ -212,7 +217,11 @@ if(value)
 
 赋值：```bo["控件编码"] = true;```
 
-清空控件值：```bo["控件编码"] = null;```
+清空控件值：
+``` cs
+//由于此控件按设计来说，取值只有两种，所以若要清空控件值，设置为 false 即可。
+bo["控件编码"] = false;
+```
 
 
 ## 地址
@@ -278,9 +287,10 @@ bo["控件编码"] = "{\"Address\":\"深圳市南山区科技南十路航天科�
 <br/>附件/图片 控件，无法通过业务对象赋值，只可以采用复制附件的方式，进行赋值。
 
 复制 附件/图片 示例：
-``` cs
-H3.IEngine engine = this.Engine;
 
+```engine``` 实例获取方式参考 [H3.IEngine](/doc/cs-instance?id=H3IEngine)
+
+``` cs
 //主表 复制到 主表 上
 engine.BizObjectManager.CopyFiles("来源-主表编码", "", "来源-主表内附件控件编码", "来源-主表数据ObjectId", "目标-主表编码", "", "目标-主表内附件控件编码", "目标-主表数据ObjectId", true, true);
 
@@ -299,4 +309,11 @@ engine.BizObjectManager.CopyFiles("来源-主表编码", "来源-子表编码", 
 <br/>最后一个 ```true```：若本次是覆盖模式，目标控件原先附件是否进行物理删除（```true```：物理删除，```false```：只删除记录）
 
 清空控件值：
-<br/>附件/图片 控件，无法通过业务对象清空控件值。
+
+```engine``` 实例获取方式参考 [H3.IEngine](/doc/cs-instance?id=H3IEngine)
+
+``` cs
+//第一个参数：附件Id，即数据表 H_BizObjectFile 的 ObjectId 字段值
+//第二个参数：true（物理删除附件），false（逻辑删除附件，实际附件还保存着，只是无法查到）
+engine.BizObjectManager.RemoveFile("附件Id", true);
+```
