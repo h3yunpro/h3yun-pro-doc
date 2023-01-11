@@ -21,30 +21,53 @@ public class MyTest_Timer: H3.SmartForm.Timer
 ## 自定义接口
 
 ``` cs
-public class MyApiController : H3.SmartForm.RestApiController
+public class MyApiController: H3.SmartForm.RestApiController
 {
-    public MyApiController(H3.SmartForm.RestApiRequest request) : base(request) { }
+    public MyApiController(H3.SmartForm.RestApiRequest request): base(request) { }
     protected override void OnInvoke(string actionName, H3.SmartForm.RestApiResponse response)
     {
         try
         {
-            if(actionName == "TestApi")
+            Dictionary < string, object > resData = null;
+
+            MyApiHelper apiHelper = new MyApiHelper();
+
+            if(actionName == "Test")
             {
-                string stringValue = this.Request.GetValue<string>("para1",   "defaultValue");
+                string stringValue = this.Request.GetValue<string>("para1", "defaultValue");
                 int intValue = this.Request.GetValue<int>("para2", 0);
 
-                response.ReturnData.Add("result",   "success");
-                response.ReturnData.Add("message", string.Empty);
-            } else
+                resData = apiHelper.Test(this.Engine, stringValue, intValue);
+            }
+
+            if(resData != null && resData.Count > 0)
             {
-                response.ReturnData.Add("result", "not found");
-                response.ReturnData.Add("message", "无法处理actionName为“" + actionName + "”的请求！");
+                foreach(KeyValuePair < string, object > resItem in resData)
+                {
+                    response.ReturnData[resItem.Key] = resItem.Value;
+                }
             }
         } catch(Exception ex)
         {
-            response.ReturnData.Add("result", "error");
-            response.ReturnData.Add("message", ex.Message);
+            response.Errors.Add(ex.ToString());
         }
+    }
+}
+
+//此处定义Helper类，是为了方便调试，MyApiController没办法在其他地方调用
+//此处继承H3.SmartForm.Timer，是为了可以使用到JSON序列化与反序列化两个API
+public class MyApiHelper: H3.SmartForm.Timer
+{
+    public MyApiHelper() { }
+    protected override void OnWork(H3.IEngine engine) { }
+
+    public Dictionary < string, object > Test(H3.IEngine engine, string stringValue, int intValue)
+    {
+        Dictionary < string, object > resData = new Dictionary<string, object>();
+        resData["stringValue"] = stringValue;
+        resData["intValue"] = intValue;
+        resData["merge"] = stringValue + intValue;
+        return resData;
     }
 }
 ```
