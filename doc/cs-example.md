@@ -1,7 +1,7 @@
 # 后端代码示例
 
 
-## 如何创建带流程的表单数据
+## [通用]创建带流程的表单数据
 
 可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
 
@@ -59,7 +59,7 @@ H3.Workflow.Messages.WorkflowInstanceChangeSet OriginateInstance(
 ```
 
 
-## 正则
+## [通用]正则
 
 可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
 
@@ -74,7 +74,7 @@ foreach(System.Text.RegularExpressions.Match match in System.Text.RegularExpress
 ~~~
 
 
-## 目标已有附件保留，追加新增的附件
+## [通用]目标已有附件保留，追加新增的附件
 
 可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
 
@@ -116,7 +116,7 @@ public void AddFileToBo(H3.IEngine engine, H3.DataModel.BizObject sourBo, string
 ```
 
 
-## 表单提交时汇总子表金额
+## [表单]提交时汇总子表金额
 
 可用位置：✔表单 / ✘列表 / ✘定时器 / ✘自定义接口
 
@@ -166,7 +166,89 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 ```
 
 
-## 给列表增加筛选条件
+## [表单]OnLoad事件中获取指定控件的标题名
+
+可用位置：✔表单 / ✘列表 / ✘定时器 / ✘自定义接口
+
+``` cs
+protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
+{
+    //base.OnLoad 中将 this.Request.BizObject 转换处理为 response.ReturnData
+    base.OnLoad(response);
+
+    //对 response.ReturnData 进行处理前，先判断字段是否存在
+    if(response.ReturnData != null && response.ReturnData.ContainsKey("F0000004"))
+    {
+        //获取 F0000004 控件对应的响应数据实例
+        H3.SmartForm.SmartFormResponseDataItem item = response.ReturnData["F0000004"];
+
+        //获取 F0000004 控件的标题名
+        string fieldLabelName = item.DisplayName;
+
+        //设置 F0000004 控件的标题名
+        item.DisplayName = "这是F0000004控件";
+
+        //设置 F0000004 控件不可编辑
+        item.Editable = false;
+
+        //设置 F0000004 控件不可见
+        item.Visible = false;
+    }
+}
+```
+
+
+## [表单]获取控件的H3.DataModel.PropertySchema实例
+
+可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
+
+``` cs
+//总控实例
+H3.IEngine engine = this.Engine;
+
+//表单结构实例
+H3.DataModel.BizObjectSchema schema = engine.BizObjectManager.GetPublishedSchema("表单编码");
+
+//获取 F0000004 控件实例
+H3.DataModel.PropertySchema property = schema.GetProperty("F0000004");
+
+//获取 F0000004 控件的标题名
+string fieldLabelName = property.DisplayName;
+```
+
+
+## [表单]提交时获取系统生成的流水号控件值
+
+可用位置：✔表单 / ✘列表 / ✘定时器 / ✘自定义接口
+
+``` cs
+protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
+{
+    //由于 this.Request.BizObject 在经过 base.OnSubmit 方法后，Status 会发生改变，所以这里先暂存备用
+    H3.DataModel.BizObjectStatus beforeStatus = this.Request.BizObject.Status;
+
+    //base.OnSubmit 方法会将本次提交数据保存到数据库，并生成 流水号，所以在提交后立马获取流水号，需要写在 base.OnSubmit 方法之后
+    base.OnSubmit(actionName, postValue, response);
+
+    //由于表单头部按钮以及按钮控件都会进入OnSubmit事件，所以写在OnSubmit事件中的代码，都需要判断执行时机，以防误执行
+    //判断当前是否是 表单发起提交
+    if(
+        (actionName == "Submit" && this.Request.IsCreateMode) ||
+        (actionName == "Submit" && beforeStatus == H3.DataModel.BizObjectStatus.Draft) ||
+        (actionName == "Submit" && this.Request.ActivityCode == "Activity2")
+    )
+    {
+        //将当前业务对象数据重新加载一次，更新业务对象中的 SeqNo 字段值
+        this.Request.BizObject.Load();
+
+        //获取系统生成出的流水号控件值
+        string seqNo = this.Request.BizObject["SeqNo"] + string.Empty;
+    }
+}
+```
+
+
+## [列表]增加筛选条件
 
 可用位置：✘表单 / ✔列表 / ✘定时器 / ✘自定义接口
 
@@ -207,84 +289,3 @@ protected override void OnInit(H3.SmartForm.LoadListViewResponse response)
 }
 ```
 
-
-## 表单OnLoad事件中获取指定控件的标题名
-
-可用位置：✔表单 / ✘列表 / ✘定时器 / ✘自定义接口
-
-``` cs
-protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
-{
-    //base.OnLoad 中将 this.Request.BizObject 转换处理为 response.ReturnData
-    base.OnLoad(response);
-
-    //对 response.ReturnData 进行处理前，先判断字段是否存在
-    if(response.ReturnData != null && response.ReturnData.ContainsKey("F0000004"))
-    {
-        //获取 F0000004 控件对应的响应数据实例
-        H3.SmartForm.SmartFormResponseDataItem item = response.ReturnData["F0000004"];
-
-        //获取 F0000004 控件的标题名
-        string fieldLabelName = item.DisplayName;
-
-        //设置 F0000004 控件的标题名
-        item.DisplayName = "这是F0000004控件";
-
-        //设置 F0000004 控件不可编辑
-        item.Editable = false;
-
-        //设置 F0000004 控件不可见
-        item.Visible = false;
-    }
-}
-```
-
-
-## 获取表单控件的H3.DataModel.PropertySchema实例
-
-可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
-
-``` cs
-//总控实例
-H3.IEngine engine = this.Engine;
-
-//表单结构实例
-H3.DataModel.BizObjectSchema schema = engine.BizObjectManager.GetPublishedSchema("表单编码");
-
-//获取 F0000004 控件实例
-H3.DataModel.PropertySchema property = schema.GetProperty("F0000004");
-
-//获取 F0000004 控件的标题名
-string fieldLabelName = property.DisplayName;
-```
-
-
-## 表单提交时获取系统生成的流水号控件值
-
-可用位置：✔表单 / ✘列表 / ✘定时器 / ✘自定义接口
-
-``` cs
-protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
-{
-    //由于 this.Request.BizObject 在经过 base.OnSubmit 方法后，Status 会发生改变，所以这里先暂存备用
-    H3.DataModel.BizObjectStatus beforeStatus = this.Request.BizObject.Status;
-
-    //base.OnSubmit 方法会将本次提交数据保存到数据库，并生成 流水号，所以在提交后立马获取流水号，需要写在 base.OnSubmit 方法之后
-    base.OnSubmit(actionName, postValue, response);
-
-    //由于表单头部按钮以及按钮控件都会进入OnSubmit事件，所以写在OnSubmit事件中的代码，都需要判断执行时机，以防误执行
-    //判断当前是否是 表单发起提交
-    if(
-        (actionName == "Submit" && this.Request.IsCreateMode) ||
-        (actionName == "Submit" && beforeStatus == H3.DataModel.BizObjectStatus.Draft) ||
-        (actionName == "Submit" && this.Request.ActivityCode == "Activity2")
-    )
-    {
-        //将当前业务对象数据重新加载一次，更新业务对象中的 SeqNo 字段值
-        this.Request.BizObject.Load();
-
-        //获取系统生成出的流水号控件值
-        string seqNo = this.Request.BizObject["SeqNo"] + string.Empty;
-    }
-}
-```

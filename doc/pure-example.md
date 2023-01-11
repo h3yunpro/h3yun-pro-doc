@@ -50,7 +50,49 @@ public class MyApiController : H3.SmartForm.RestApiController
 ```
 
 
-## 表单前端PostForm
+## [表单][前端]去掉弹窗的无用按钮
+
+``` cs
+protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
+{
+    base.OnLoad(response);
+
+    if(response.Actions != null)
+    {
+        if(response.Actions.ContainsKey("Save")) 
+        {
+            response.Actions.Remove("Save");
+        }
+        if(response.Actions.ContainsKey("Remove")) 
+        {
+            response.Actions.Remove("Remove");
+        }
+        if(response.Actions.ContainsKey("Print")) 
+        {
+            response.Actions.Remove("Print");
+        }
+        if(response.Actions.ContainsKey("ViewQrCode")) 
+        {
+            response.Actions.Remove("ViewQrCode");
+        }
+        if(response.Actions.ContainsKey("FullScreen")) 
+        {
+            response.Actions.Remove("FullScreen");
+        }
+        if(response.Actions.ContainsKey("Close")) 
+        {
+            response.Actions.Remove("Close");
+        }
+        if(response.Actions.ContainsKey("SubmitAndAdd")) 
+        {
+            response.Actions.Remove("SubmitAndAdd");
+        }
+    }
+}
+```
+
+
+## [表单][前端]PostForm
 
 ``` js
 $.SmartForm.PostForm( "Test_Post", {
@@ -68,7 +110,7 @@ $.SmartForm.PostForm( "Test_Post", {
 ```
 
 
-## 表单后端处理PostForm
+## [表单][后端]处理PostForm
 
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
@@ -107,7 +149,7 @@ public void Test_Post(string actionName, H3.SmartForm.SmartFormRequest request, 
 ```
 
 
-## 列表前端Post
+## [列表][前端]Post
 
 ``` js
 $.ListView.ActionPreDo = function( actionCode ) {
@@ -118,15 +160,15 @@ $.ListView.ActionPreDo = function( actionCode ) {
         var seDatas = $.ListView.GetSelected();
         if( seDatas && seDatas.length ) {
             if( seDatas.length > maxSelectedCount ) {
-                var ids = [];
+                var seIds = [];
                 for( var i = 0;i < seDatas.length;i++ ) {
-                    ids.push( seDatas[ i ][ "ObjectId" ] );
+                    seIds.push( seDatas[ i ][ "ObjectId" ] );
                 }
 
                 $.IShowSuccess( "成功", "系统处理中，请稍候..." );
-                var idsJson = JSON.stringify( ids );
+                var seIdsJson = JSON.stringify( seIds );
                 $.ListView.Post( actionCode + "_Post", {
-                    "seIds": ids
+                    "seIds": seIdsJson
                 }, function( data ) {
                     if( data.Errors && data.Errors.length ) {
                         $.IShowError( "错误", JSON.stringify( data.Errors ) );
@@ -149,7 +191,7 @@ $.ListView.ActionPreDo = function( actionCode ) {
 };
 ```
 
-## 列表后端处理Post
+## [列表][后端]处理Post
 
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.ListViewPostValue postValue, H3.SmartForm.SubmitListViewResponse response)
@@ -202,43 +244,3 @@ public void TestBtn_Post(string actionName, H3.SmartForm.ListViewRequest request
 ```
 
 
-## 弹窗表单，去掉无用的按钮
-
-``` cs
-protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
-{
-    base.OnLoad(response);
-
-    if(response.Actions != null)
-    {
-        if(response.Actions.ContainsKey("Save")) 
-        {
-            response.Actions.Remove("Save");
-        }
-        if(response.Actions.ContainsKey("Remove")) 
-        {
-            response.Actions.Remove("Remove");
-        }
-        if(response.Actions.ContainsKey("Print")) 
-        {
-            response.Actions.Remove("Print");
-        }
-        if(response.Actions.ContainsKey("ViewQrCode")) 
-        {
-            response.Actions.Remove("ViewQrCode");
-        }
-        if(response.Actions.ContainsKey("FullScreen")) 
-        {
-            response.Actions.Remove("FullScreen");
-        }
-        if(response.Actions.ContainsKey("Close")) 
-        {
-            response.Actions.Remove("Close");
-        }
-        if(response.Actions.ContainsKey("SubmitAndAdd")) 
-        {
-            response.Actions.Remove("SubmitAndAdd");
-        }
-    }
-}
-```
