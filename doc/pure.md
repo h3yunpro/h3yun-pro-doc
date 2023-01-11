@@ -110,18 +110,43 @@ public void Test_Post(string actionName, H3.SmartForm.SmartFormRequest request, 
 ## 列表前端Post
 
 ``` js
-$.ListView.Post( "Test_Post", {
-    "para": "123"
-}, function( data ) {
-    if( data.Errors && data.Errors.length ) {
-        $.IShowError( "错误", JSON.stringify( data.Errors ) );
-    } else {
-        var result = data.ReturnData;
+$.ListView.ActionPreDo = function( actionCode ) {
 
+    if( actionCode == "TestBtn" ) {
+        var maxSelectedCount = 10;//最大选择数量
+
+        var seDatas = $.ListView.GetSelected();
+        if( seDatas && seDatas.length ) {
+            if( seDatas.length > maxSelectedCount ) {
+                var ids = [];
+                for( var i = 0;i < seDatas.length;i++ ) {
+                    ids.push( seDatas[ i ][ "ObjectId" ] );
+                }
+
+                $.IShowSuccess( "成功", "系统处理中，请稍候..." );
+                var idsJson = JSON.stringify( ids );
+                $.ListView.Post( actionCode + "_Post", {
+                    "seIds": ids
+                }, function( data ) {
+                    if( data.Errors && data.Errors.length ) {
+                        $.IShowError( "错误", JSON.stringify( data.Errors ) );
+                    } else {
+                        $.IShowSuccess( "成功", "系统处理完成！" );
+                        $.ListView.RefreshView();
+                    }
+                }, function( error ) {
+                    $.IShowError( "错误", JSON.stringify( error ) );
+                }, false );
+            } else {
+                $.IShowWarn( "警告", "一次批量处理最多" + maxSelectedCount + "条！" );
+            }
+        } else {
+            $.IShowWarn( "警告", "没有选中任何行" );
+        }
+        return false;
     }
-}, function( error ) {
-    $.IShowError( "错误", JSON.stringify( error ) );
-}, false );
+    
+};
 ```
 
 ## 列表后端处理Post
@@ -129,13 +154,13 @@ $.ListView.Post( "Test_Post", {
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.ListViewPostValue postValue, H3.SmartForm.SubmitListViewResponse response)
 {
-    Test_Post(actionName, this.Request, response);
+    TestBtn_Post(actionName, this.Request, response);
     base.OnSubmit(actionName, postValue, response);
 }
 
-public void Test_Post(string actionName, H3.SmartForm.ListViewRequest request, H3.SmartForm.SubmitListViewResponse response)
+public void TestBtn_Post(string actionName, H3.SmartForm.ListViewRequest request, H3.SmartForm.SubmitListViewResponse response)
 {
-    if(actionName != "Test_Post")
+    if(actionName != "TestBtn_Post")
     {
         return;
     }
@@ -143,15 +168,29 @@ public void Test_Post(string actionName, H3.SmartForm.ListViewRequest request, H
     try
     {
         H3.IEngine engine = request.Engine;
+        H3.DataModel.BizObjectSchema schema = request.Schema;
         string currUserId = request.UserContext.UserId;
 
-        string orderDate_Str = request["orderDate"] + string.Empty;
-        if(string.IsNullOrWhiteSpace(orderDate_Str))
+        string seIds_Str = request["seIds"] + string.Empty;
+        if(string.IsNullOrWhiteSpace(seIds_Str))
         {
-            throw new Exception("orderDate参数值为空！");
+            throw new Exception("没有选中任何行");
         }
-        DateTime orderDate = DateTime.Parse(orderDate_Str);
+        string[] seIds = this.Deserialize<string[]>(seIds_Str);
+        if(seIds == null || seIds.Length == 0)
+        {
+            throw new Exception("没有选中任何行");
+        }
 
+        H3.Data.Filter.Filter filter = new H3.Data.Filter.Filter();
+        H3.Data.Filter.And andMatcher = new H3.Data.Filter.And();
+        andMatcher.Add(new H3.Data.Filter.ItemMatcher("ObjectId", H3.Data.ComparisonOperatorType.In, seIds));
+        filter.Matcher = andMatcher;
+        H3.DataModel.BizObject[] boArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId, schema, H3.DataModel.GetListScopeType.GlobalAll, filter);
+        if(boArray == null || boArray.Length != ids.Length)
+        {
+            throw new Exception("数据加载失败！");
+        }
 
         response.ReturnData = new Dictionary<string, object>();
         response.ReturnData["data"] = "";
