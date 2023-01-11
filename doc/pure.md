@@ -54,7 +54,7 @@ public class MyApiController : H3.SmartForm.RestApiController
 
 ``` js
 $.SmartForm.PostForm( "Test_Post", {
-    "para": "123"
+    "orderDate": "2023-01-11"
 }, function( data ) {
     if( data.Errors && data.Errors.length ) {
         $.IShowError( "错误", JSON.stringify( data.Errors ) );
