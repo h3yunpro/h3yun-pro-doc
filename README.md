@@ -1,6 +1,6 @@
 # 氚专开发者共创文档
 
-[文档仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc)  |  [浏览文档](https://h3yunpro.github.io/h3yun-pro-doc/)  |  [docsify](https://docsify.js.org/#/zh-cn/) 
+[Gitee仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc)  |  [浏览文档](https://h3yunpro.github.io/h3yun-pro-doc/)  |  [docsify](https://docsify.js.org/#/) 
 
 !> 官方文档地址： [https://help.h3yun.com/channels/3.html](https://help.h3yun.com/channels/3.html)
 
@@ -12,7 +12,7 @@
 
 ## 如何做出贡献
 
-如您想要为本文档做出贡献，可以前往 [文档仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc) 提交 PR 和 ISSUE 。
+如您想要为本文档做出贡献，可以前往 [Gitee仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc) 提交 PR 和 ISSUE 。
 
 提交pr的操作：
 
