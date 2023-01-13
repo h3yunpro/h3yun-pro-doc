@@ -1,11 +1,13 @@
 # 前后端交互示例
 
-
 ## [表单]前端OnLoad事件 BindChange + Post 请求后端
 
 可用位置：✔表单 / ✘列表
 
-表单前端代码
+<!-- tabs:start -->
+
+#### **前端代码**
+
 ``` js
 // 加载事件
 OnLoad: function() {
@@ -67,7 +69,8 @@ OnLoad: function() {
 },
 ```
 
-表单后端代码
+#### **后端代码**
+
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -122,12 +125,17 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
+<!-- tabs:end -->
+
 
 ## [表单]前端子表控件值改变时 Post 请求后端
 
 可用位置：✔表单 / ✘列表
 
-表单前端代码
+<!-- tabs:start -->
+
+#### **前端代码**
+
 ``` js
 // 加载事件
 OnLoad: function() {
@@ -190,14 +198,21 @@ OnLoad: function() {
 },
 ```
 
-?> 表单后端代码参考上面的 BindChange + Post 请求后端例子
+#### **后端代码**
+
+参考上面的 BindChange + Post 请求后端例子
+
+<!-- tabs:end -->
 
 
 ## [表单]按钮控件点击时 Post 请求后端
 
 可用位置：✔表单 / ✘列表
 
-表单前端代码
+<!-- tabs:start -->
+
+#### **前端代码**
+
 ``` js
 // 提交校验
 OnValidate: function( actionControl ) {
@@ -251,14 +266,21 @@ OnValidate: function( actionControl ) {
 },
 ```
 
-?> 表单后端代码参考上面的 BindChange + Post 请求后端例子
+#### **后端代码**
+
+参考上面的 BindChange + Post 请求后端例子
+
+<!-- tabs:end -->
 
 
 ## [表单]前端Post请求，后端响应多条数据
 
 可用位置：✔表单 / ✘列表
 
-表单前端代码
+<!-- tabs:start -->
+
+#### **前端代码**
+
 ``` js
 // 加载事件
 OnLoad: function() {
@@ -312,7 +334,8 @@ OnLoad: function() {
 },
 ```
 
-表单后端代码
+#### **后端代码**
+
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -363,3 +386,6 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 	base.OnSubmit(actionName, postValue, response);
 }
 ```
+
+<!-- tabs:end -->
+

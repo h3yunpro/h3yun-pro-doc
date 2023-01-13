@@ -115,7 +115,11 @@ protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 ```
 
 
-## [表单][前端]PostForm
+## [表单]PostForm
+
+<!-- tabs:start -->
+
+#### **前端请求**
 
 ``` js
 $.SmartForm.PostForm( "Test_Post", {
@@ -132,8 +136,7 @@ $.SmartForm.PostForm( "Test_Post", {
 }, false );
 ```
 
-
-## [表单][后端]处理PostForm
+#### **后端接收**
 
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
@@ -171,8 +174,14 @@ public void Test_Post(string actionName, H3.SmartForm.SmartFormRequest request, 
 }
 ```
 
+<!-- tabs:end -->
 
-## [列表][前端]Post
+
+## [列表]Post
+
+<!-- tabs:start -->
+
+#### **前端请求**
 
 ``` js
 $.ListView.ActionPreDo = function( actionCode ) {
@@ -214,7 +223,7 @@ $.ListView.ActionPreDo = function( actionCode ) {
 };
 ```
 
-## [列表][后端]处理Post
+#### **后端接收**
 
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.ListViewPostValue postValue, H3.SmartForm.SubmitListViewResponse response)
@@ -267,5 +276,7 @@ public void TestBtn_Post(string actionName, H3.SmartForm.ListViewRequest request
     }
 }
 ```
+
+<!-- tabs:end -->
 
 
