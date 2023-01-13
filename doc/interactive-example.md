@@ -1,7 +1,7 @@
 # 前后端交互示例
 
 
-## 表单前端OnLoad事件 BindChange + Post 请求后端
+## [表单]前端OnLoad事件 BindChange + Post 请求后端
 
 可用位置：✔表单 / ✘列表
 
@@ -57,7 +57,7 @@ OnLoad: function() {
 					$.IShowError( "错误", JSON.stringify( error ) );
 				},
 
-				false //true：不阻塞，false：请求过程中阻塞后续代码执行
+				true //true：不阻塞，false：请求过程中阻塞后续代码执行
 			);
 		} else {
 			//若 文本框F0000001 无值，则将 人员单选框F0000003 置空
@@ -123,7 +123,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 ```
 
 
-## 表单前端子表控件值改变时 Post 请求后端
+## [表单]前端子表控件值改变时 Post 请求后端
 
 可用位置：✔表单 / ✘列表
 
@@ -178,7 +178,9 @@ OnLoad: function() {
 					}
 				}, function( error ) {
 					$.IShowError( "错误", JSON.stringify( error ) );
-				}, false );
+				}, 
+				true //true：不阻塞，false：请求过程中阻塞后续代码执行
+				);
 			}else{
 				//当订单控件值为空时，设置当前子表行的销售数量值为 0
 				quanCon.SetValue( 0 );
@@ -191,7 +193,7 @@ OnLoad: function() {
 ?> 表单后端代码参考上面的 BindChange + Post 请求后端例子
 
 
-## 表单按钮控件点击时 Post 请求后端
+## [表单]按钮控件点击时 Post 请求后端
 
 可用位置：✔表单 / ✘列表
 
@@ -252,7 +254,7 @@ OnValidate: function( actionControl ) {
 ?> 表单后端代码参考上面的 BindChange + Post 请求后端例子
 
 
-## 前端Post请求，后端响应多条数据至前端
+## [表单]前端Post请求，后端响应多条数据
 
 可用位置：✔表单 / ✘列表
 
@@ -291,7 +293,7 @@ OnLoad: function() {
                         //拿出本条数据
                         var proData = result[ "proDataList" ][ i ];
 
-                        //新增子表行，并赋值产品信息
+                        //将 产品信息 填充到子表
                         proCon.AddRow( $.IGuid(), {
                             "D278209Fct.F0000003": proData[ "proId" ],//产品
                             "D278209Fct.F0000011": proData[ "proSeqNo" ],//产品号
@@ -303,7 +305,9 @@ OnLoad: function() {
             }
         }, function( error ) {
             $.IShowError( "错误", JSON.stringify( error ) );
-        }, false );
+        }, 
+		true //true：不阻塞，false：请求过程中阻塞后续代码执行
+		);
     }
 },
 ```

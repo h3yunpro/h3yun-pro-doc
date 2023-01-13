@@ -251,6 +251,8 @@ public void TestBtn_Post(string actionName, H3.SmartForm.ListViewRequest request
         H3.Data.Filter.And andMatcher = new H3.Data.Filter.And();
         andMatcher.Add(new H3.Data.Filter.ItemMatcher("ObjectId", H3.Data.ComparisonOperatorType.In, seIds));
         filter.Matcher = andMatcher;
+        filter.FromRowNum = 0;
+        filter.ToRowNum = 1000;
         H3.DataModel.BizObject[] boArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId, schema, H3.DataModel.GetListScopeType.GlobalAll, filter);
         if(boArray == null || boArray.Length != ids.Length)
         {

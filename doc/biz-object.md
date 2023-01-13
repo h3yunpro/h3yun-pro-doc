@@ -73,6 +73,13 @@ H3.Data.Filter.And andMatcher = new H3.Data.Filter.And();
 andMatcher.Add(new H3.Data.Filter.ItemMatcher("Status", H3.Data.ComparisonOperatorType.Equal, H3.DataModel.BizObjectStatus.Effective));
 filter.Matcher = andMatcher;
 
+//设置查询结果数据起始、终止下标（平台限制范围最多1000条，设置更多也保持1000条）
+filter.FromRowNum = 0;
+filter.ToRowNum = 1000;
+
+//设置查询结果按CreatedTime字段正序排序
+filter.AddSortBy("CreatedTime", H3.Data.Filter.SortDirection.Ascending);
+
 //调用 H3.DataModel.BizObject.GetList，获取符合条件的数据
 H3.DataModel.BizObject[] boArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId, schema, H3.DataModel.GetListScopeType.GlobalAll, filter);
 if(boArray == null || boArray.Length == 0)

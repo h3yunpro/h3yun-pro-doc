@@ -139,7 +139,7 @@ bo["控件编码"] = num;
 2. 赋值一个小数
 ``` cs
 //赋值小数时不用double类型，是因为氚云数字控件可配置最多16位小数，而double类型精度不够
-//100.22后面有个“m”，是C#的decimal值语法，因为直接写100.22表示的是double类型，而100.22m就能表示是一个decimal类型
+//100.22 后面有个“m”，是C#的decimal值语法，因为直接写 100.22 表示的是double类型，而 100.22m 表示是一个decimal类型
 decimal num = 100.22m;
 bo["控件编码"] = num;
 ```
@@ -279,6 +279,9 @@ bo["控件编码"] = "{\"Address\":\"深圳市南山区科技南十路航天科�
 
 
 ## 附件/图片
+
+!> 此控件取值赋值，不能在表单数据未保存之前，比如在 ```base.OnSubmit(actionName, postValue, response);``` 代码之前获取当前表单的附件/图片，或者复制当前表单的附件/图片到另外表单。
+<br/>正确做法应该是在 ```base.OnSubmit(actionName, postValue, response);``` 之后对当前表单的附件/图片进行操作。
 
 取值：
 <br/>附件/图片 控件，无法通过业务对象取值，若要获取附件Id，使用SQL查询 ```H_BizObjectFile``` 表。
