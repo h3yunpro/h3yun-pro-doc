@@ -73,7 +73,7 @@ public class MyApiHelper: H3.SmartForm.Timer
 ```
 
 
-## [表单]去掉弹窗的无用按钮
+## [表单][后端]去掉弹窗的无用按钮
 
 ``` cs
 protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
