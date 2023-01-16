@@ -73,7 +73,7 @@ public class MyApiHelper: H3.SmartForm.Timer
 ```
 
 
-## [表单][前端]去掉弹窗的无用按钮
+## [表单][后端]去掉弹窗的无用按钮
 
 ``` cs
 protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
@@ -119,7 +119,7 @@ protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 
 <!-- tabs:start -->
 
-#### **前端请求**
+#### **前端代码**
 
 ``` js
 $.SmartForm.PostForm( "Test_Post", {
@@ -136,7 +136,7 @@ $.SmartForm.PostForm( "Test_Post", {
 }, false );
 ```
 
-#### **后端接收**
+#### **后端代码**
 
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
@@ -181,7 +181,7 @@ public void Test_Post(string actionName, H3.SmartForm.SmartFormRequest request, 
 
 <!-- tabs:start -->
 
-#### **前端请求**
+#### **前端代码**
 
 ``` js
 $.ListView.ActionPreDo = function( actionCode ) {
@@ -223,7 +223,7 @@ $.ListView.ActionPreDo = function( actionCode ) {
 };
 ```
 
-#### **后端接收**
+#### **后端代码**
 
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.ListViewPostValue postValue, H3.SmartForm.SubmitListViewResponse response)
