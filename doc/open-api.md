@@ -1,19 +1,27 @@
 # 第三方调用氚云默认接口
+
+
 ## 查询单条业务数据
+
 LoadBizObject 为加载单个数据，请勿使用该接口来循环加载数据，可以使用LoadBizObjects 来批量加载数据。
+
+<!-- tabs:start -->
+
+#### **Api说明**
 
 请求方式：POST（HTTPS）
 
 请求地址：https://www.h3yun.com/OpenApi/Invoke
-请求包体：
 
-~~~cs
+请求包体：
+~~~ cs
 {
     "ActionName": "LoadBizObject",
     "SchemaCode": "D0015994821985e8b434394bc0737ffb22a0584",
-    "BizObjectId":"b1540570-d463-4325-8ca1-759ec3d7aa03"
+    "BizObjectId": "b1540570-d463-4325-8ca1-759ec3d7aa03"
 }
 ~~~
+
 参数说明：
 
 | 参数                 | 参数类型                       | 必须                   | 说明        |
@@ -24,13 +32,9 @@ LoadBizObject 为加载单个数据，请勿使用该接口来循环加载数据
 
 工具Postman请求：
 
-
 ![logo](../img/open-api-1.png ':size=80%')
 
-
-
 ![logo](../img/open-api-4.png ':size=80%')
-
 
 返回结果：
 
@@ -42,14 +46,17 @@ LoadBizObject 为加载单个数据，请勿使用该接口来循环加载数据
 | ReturnData    | 返回的数据                |
 | DataType      | 返回的数据类型，默认0          |
 
+#### **代码示例（C#）**
 
-请求示例（C#）：
-~~~cs
+~~~ cs
 using Newtonsoft.Json;
 using System.Net;
 using System.Text;
-SelectOneData();//查询单条业务数据-第三方调用氚云OpenApi
-void SelectOneData()
+
+//查询单条业务数据-第三方调用氚云OpenApi
+LoadBizObject();
+
+void LoadBizObject()
 {
     //请求地址
     string apiAddress = @"https://www.h3yun.com/OpenApi/Invoke";
@@ -92,3 +99,5 @@ void SelectOneData()
     }
 }
 ~~~
+
+<!-- tabs:end -->
