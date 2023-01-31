@@ -1,4 +1,17 @@
-# 第三方调用氚云默认接口
+# 第三方调用氚云OpenApi
+
+氚云默认对所有表单数据提供了 创建、修改、删除、查询 4类接口，开发者可以借助这些接口能力，实现企业系统与氚云的集成。
+<br/>并且也支持用户在氚云上编写自定义接口，提供给第三方调用，以实现个性化需求。
+
+调用氚云接口时，需使用 HTTPS 协议、JSON 数据格式、UTF-8 编码、POST请求、Content-Type:application/json。
+
+并且需要在Headers中添加身份校验参数：EngineCode、EngineSecret，身份校验参数来源：
+<br/>头像 -> 系统管理 -> 系统集成
+
+
+## SDK
+
+[.NET Core 氚云OpenApi请求辅助类](/file/RequestH3yunAPI.cs ':ignore :target=_blank')
 
 
 ## 查询单条业务数据

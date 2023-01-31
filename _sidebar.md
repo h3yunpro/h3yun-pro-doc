@@ -33,8 +33,7 @@
 
   * [氚云调用WebService](/doc/req-ws)
   * [氚云调用WebAPI](/doc/req-api)
-  * [第三方调用氚云默认接口](/doc/open-api)
-  * [第三方调用氚云自定义接口](/doc/my-api)
+  * [第三方调用氚云OpenApi](/doc/open-api)
 
 
 * 扩展
