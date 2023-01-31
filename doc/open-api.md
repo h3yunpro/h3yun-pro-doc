@@ -11,7 +11,7 @@
 
 ## SDK
 
-[.NET Core 氚云OpenApi请求辅助类](/file/RequestH3yunAPI.cs ':ignore :target=_blank')
+[.NET Core 氚云OpenApi请求辅助类](../../file/RequestH3yunAPI.cs ':ignore :target=_blank')
 
 
 ## 查询单条业务数据
