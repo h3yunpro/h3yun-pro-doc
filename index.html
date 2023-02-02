@@ -13,6 +13,7 @@
 <body>
     <div id="app">文档加载中，饮茶先啦...</div>
     <script>
+        var docName = "h3yun-pro-doc";
         var repo = "https://gitee.com/h3yun-pro-public/h3yun-pro-doc";
         var editUrl = "https://gitee.com/-/ide/project/h3yun-pro-public/h3yun-pro-doc/edit/quick/-/";
 
@@ -30,13 +31,15 @@
             },
             plugins: [
                 function (hook, vm) {
-                    hook.beforeEach(function (html) {
-                        var editDoc = "[📝 在线编辑](" + editUrl + vm.route.file + ") - {docsify-updated} \n";
-                        var powered = '\n\n----\n\n<a href="' + repo + '" target="_blank" style="color: inherit; font-weight: normal; text-decoration: none;">Powered by h3yun-pro-doc</a>\n\n';
+                    hook.beforeEach(function (content) {
+                        content = fileUrlSupplement(content);
+
+                        var editDoc = `[📝 在线编辑](${editUrl}${vm.route.file}) - {docsify-updated} \n`;
+                        var powered = `\n\n----\n\n[![Fork me on Gitee](${repo}/widgets/widget_6.svg)](${repo})\n\n`;
 
                         return (
                             editDoc +
-                            html +
+                            content +
                             powered
                         );
                     });
@@ -70,12 +73,22 @@
             }
         };
 
+        var isLocalEnv = (location.hostname == "127.0.0.1" || location.hostname == "localhost");
+
         //文档离线化（本地预览环境不开启）
-        // if (location.hostname && location.hostname.indexOf("127.0.0.1") < 0) {
-        //     if (typeof navigator.serviceWorker !== "undefined") {
-        //         navigator.serviceWorker.register("./js/sw.js");
-        //     }
-        // }
+        if (!isLocalEnv && typeof navigator.serviceWorker !== "undefined") {
+            //navigator.serviceWorker.register("./js/sw.js");
+        }
+
+        //线上环境时，改正文件下载url
+        function fileUrlSupplement(content) {
+            if (!isLocalEnv) {
+                return content.replace(/\[.+\]\(\s*\/file.+\)/g, function (item) {
+                    return item.replace("/file/", `/${docName}/file/`);
+                });
+            }
+            return content;
+        }
     </script>
 
 
