@@ -13,7 +13,7 @@
 
 [.NET Core 氚云OpenApi请求辅助类](/h3yun-pro-doc/file/RequestH3yunAPI.cs ':ignore :target=_blank')
 
-
+[Java      氚云OpenApi请求示例](/file/Java-调用氚云接口.zip ':ignore :target=_blank')
 ## 查询单条业务数据
 
 LoadBizObject 为加载单个数据，请勿使用该接口来循环加载数据，可以使用LoadBizObjects 来批量加载数据。
