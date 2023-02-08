@@ -51,8 +51,9 @@
 ## 设置子流程的时候，父流程中的子表数据能否填充到子流程的主表中吗？
 不可以的 如果要实现需要用代码的方式实现<span class="fontColor" >
 2022/12/1 </span>
+
 ## 怎么获取表单的流程状态？
-$.SmartForm.ResponseContext.BizObjectStatus<span class="fontColor" > 2022/12/2 </span>
+$.SmartForm.ResponseContext.BizObjectStatus <span class="fontColor" > 2022/12/2 </span>
 
 ## 今天图片上传一直出现这个问题,doUploadFile fail
 ![logo](../img/faq-7.png ':size=20%')</br>
