@@ -1,5 +1,6 @@
 # 前端代码示例
 
+
 ## [表单]前端子表按钮点击事件
 
 可用位置：✔表单 / ✘列表
@@ -119,18 +120,18 @@ OnLoad: function() {
 
 表单前端代码
 ``` js
-   // 提交后事件
-    AfterSubmit: function( action, responseValue ) {
-        ///编辑后不 关闭编辑页
-        debugger
-        var status=$.SmartForm.ResponseContext.BizObjectStatus;
-        if( action == "Submit"&&status==1 ) //数据生效，数据库中对应值 1
-        {
-
-            $.IShowForm( "D001599e03c250e58644ed78696640af9fb856b", $.SmartForm.ResponseContext.BizObjectId ,null);
-            responseValue.ClosePage = false;
-            responseValue.Refresh = true;
-        }
-        //  schemaCode: 表单编码; objectId; 表单数据Id; checkIsChange: 关闭时，是否感知变化;
-    }
+// 提交后事件
+AfterSubmit: function( action, responseValue ) {
+	///编辑后不 关闭编辑页
+	debugger
+	var status = $.SmartForm.ResponseContext.BizObjectStatus;
+	if( action == "Submit" && status == 1 ) //数据生效，数据库中对应值 1
+	{
+		//  schemaCode: 表单编码; objectId; 表单数据Id; checkIsChange: 关闭时，是否感知变化;
+		$.IShowForm( "D001599e03c250e58644ed78696640af9fb856b", $.SmartForm.ResponseContext.BizObjectId, null);
+		responseValue.ClosePage = false;
+		responseValue.Refresh = true;
+	}
+}
 ```
+
