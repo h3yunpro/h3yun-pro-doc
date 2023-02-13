@@ -3,17 +3,16 @@
 ```H3.DataModel.BizObject``` 实现了索引器，可以使用 ```bo["控件编码"]``` 的方式指定控件
 
 取值时由于返回的都是 ```Object``` 类型，所以需要拆箱，例：
-```string str = bo["控件编码"] + string.Empty```
+```string str = bo["控件编码"] + string.Empty;```
 
 赋值时装箱，例：
-```bo["控件编码"] = DateTime.Now```
+```bo["控件编码"] = DateTime.Now;```
 
 !> 注：本文档中的```bo```变量，指一个```H3.DataModel.BizObject```类型的实例，此实例获取方式可通过以下几种方式获取（具体获取方式文档，请参考[业务对象](/doc/biz-object)）
 1. ```H3.DataModel.BizObject bo = this.Request.BizObject;```
 2. ```H3.DataModel.BizObject bo = new H3.DataModel.BizObject(engine, schema, H3.Organization.User.SystemUserId);```
 3. ```H3.DataModel.BizObject bo = H3.DataModel.BizObject.Load(H3.Organization.User.SystemUserId, engine, schema.SchemaCode, bizObjectId, false);```
-4. ```H3.DataModel.BizObject[] boArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId, schema, H3.DataModel.GetListScopeType.GlobalAll, filter);  H3.DataModel.BizObject bo = boArray[0];```
-
+4. ```H3.DataModel.BizObject[] boArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId, schema, H3.DataModel.GetListScopeType.GlobalAll, filter);             H3.DataModel.BizObject bo = boArray[0];```
 
 下面是控件的取值/赋值详细说明
 
@@ -35,7 +34,7 @@ if(string.IsNullOrWhiteSpace(str))
 }
 ```
 
-?> ```+ string.Empty``` 是C#的隐式转换语法，此语法会将null自动处理成空字符串，其他值则自动ToString()
+?> ```+ string.Empty``` 是 C# 的隐式转换语法，此语法会将 null 自动处理成空字符串，其他值则自动 ToString()
 
 赋值：```bo["控件编码"] = "xxx";```
 
