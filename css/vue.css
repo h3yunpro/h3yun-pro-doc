@@ -9,51 +9,13 @@
 }
 
 body:not(.ready) {
-    overflow: hidden;
+    overflow: hidden
 }
 
 body:not(.ready) .app-nav,
 body:not(.ready)>nav,
 body:not(.ready) [data-cloak] {
-    display: none;
-}
-
-body,
-html {
-    height: 100%;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-    color: #34495e;
-    font-family: Source Sans Pro, Helvetica Neue, Arial, sans-serif;
-    font-size: 15px;
-    letter-spacing: 0;
-    margin: 0;
-    overflow-x: hidden;
-}
-
-img {
-    max-width: 100%;
-}
-
-a[disabled] {
-    cursor: not-allowed;
-    opacity: .6
-}
-
-kbd {
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    display: inline-block;
-    font-size: 12px !important;
-    line-height: 12px;
-    margin-bottom: 3px;
-    padding: 3px 5px;
-    vertical-align: middle
-}
-
-li input[type=checkbox] {
-    margin: 0 .2em .25em 0;
-    vertical-align: middle
+    display: none
 }
 
 div#app {
@@ -103,6 +65,47 @@ span.emoji {
 .search .search-keyword {
     font-style: normal;
     font-weight: 700
+}
+
+body,
+html {
+    font-size: 15px;
+    height: 100%
+}
+
+body {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    color: #34495e;
+    font-family: Source Sans Pro, Helvetica Neue, Arial, sans-serif;
+    letter-spacing: 0;
+    margin: 0;
+    overflow-x: hidden
+}
+
+img {
+    max-width: 100%
+}
+
+a[disabled] {
+    cursor: not-allowed;
+    opacity: .6
+}
+
+kbd {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    display: inline-block;
+    font-size: 12px !important;
+    line-height: 12px;
+    margin-bottom: 3px;
+    padding: 3px 5px;
+    vertical-align: middle
+}
+
+li input[type=checkbox] {
+    margin: 0 .2em .25em 0;
+    vertical-align: middle
 }
 
 .app-nav {
@@ -764,12 +767,12 @@ body {
 }
 
 .markdown-section h1 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     margin: 0 0 1rem
 }
 
 .markdown-section h2 {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     margin: 45px 0 .8rem
 }
 
@@ -779,7 +782,7 @@ body {
 }
 
 .markdown-section h4 {
-    font-size: 1.2rem
+    font-size: 1.1rem
 }
 
 .markdown-section h5 {
