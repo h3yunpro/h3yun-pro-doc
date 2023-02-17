@@ -26,21 +26,21 @@
 
 //定义响应数据整体结构体
 H3.BizBus.BizStructureSchema structureSchema = new H3.BizBus.BizStructureSchema();
-structureSchema.Add(new H3.BizBus.ItemSchema("code", "返回码", H3.Data.BizDataType.Int, null));
-structureSchema.Add(new H3.BizBus.ItemSchema("ID", "返回内容", H3.Data.BizDataType.String, null));
-structureSchema.Add(new H3.BizBus.ItemSchema("msg", "返回内容", H3.Data.BizDataType.String, null));
+structureSchema.Add(new H3.BizBus.ItemSchema("code", "结果状态码", H3.Data.BizDataType.Int, null));
+structureSchema.Add(new H3.BizBus.ItemSchema("ID", "数据ID", H3.Data.BizDataType.String, null));
+structureSchema.Add(new H3.BizBus.ItemSchema("msg", "描述", H3.Data.BizDataType.String, null));
 
 //定义响应数据的 data 属性 的结构体
 H3.BizBus.BizStructureSchema dataSchema = new H3.BizBus.BizStructureSchema();
-dataSchema.Add(new H3.BizBus.ItemSchema("Name", "返回内容", H3.Data.BizDataType.String, null));
-dataSchema.Add(new H3.BizBus.ItemSchema("Province", "返回内容", H3.Data.BizDataType.String, null));
-dataSchema.Add(new H3.BizBus.ItemSchema("City", "返回内容", H3.Data.BizDataType.String, null));
-dataSchema.Add(new H3.BizBus.ItemSchema("District", "返回内容", H3.Data.BizDataType.String, null));
-dataSchema.Add(new H3.BizBus.ItemSchema("Tow", "返回内容", H3.Data.BizDataType.String, null));
-dataSchema.Add(new H3.BizBus.ItemSchema("Villag", "返回内容", H3.Data.BizDataType.String, null));
-dataSchema.Add(new H3.BizBus.ItemSchema("LevelType", "返回内容", H3.Data.BizDataType.String, null));
+dataSchema.Add(new H3.BizBus.ItemSchema("Name", "名称", H3.Data.BizDataType.String, null));
+dataSchema.Add(new H3.BizBus.ItemSchema("Province", "省级名称", H3.Data.BizDataType.String, null));
+dataSchema.Add(new H3.BizBus.ItemSchema("City", "市级名称", H3.Data.BizDataType.String, null));
+dataSchema.Add(new H3.BizBus.ItemSchema("District", "区县名称", H3.Data.BizDataType.String, null));
+dataSchema.Add(new H3.BizBus.ItemSchema("Tow", "镇级名称", H3.Data.BizDataType.String, null));
+dataSchema.Add(new H3.BizBus.ItemSchema("Villag", "村级名称", H3.Data.BizDataType.String, null));
+dataSchema.Add(new H3.BizBus.ItemSchema("LevelType", "层级类型", H3.Data.BizDataType.String, null));
 //将 data 属性的结构体添加进整体的响应数据结构体
-structureSchema.Add(new H3.BizBus.ItemSchema("data", "返回内容", H3.Data.BizDataType.BizStructure, dataSchema));
+structureSchema.Add(new H3.BizBus.ItemSchema("data", "地区数据", H3.Data.BizDataType.BizStructure, dataSchema));
 
 
 //header 请求参数初始化，此实例会添加到请求的 Headers 中

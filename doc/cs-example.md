@@ -116,6 +116,61 @@ public void AddFileToBo(H3.IEngine engine, H3.DataModel.BizObject sourBo, string
 ```
 
 
+## [通用]通过筛选器分页获取某表单全部业务对象
+
+可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
+
+``` cs
+//分页轮询查询出所有数据
+public static List < H3.DataModel.BizObject > GetAllBizObject(H3.IEngine engine, H3.DataModel.BizObjectSchema schema)
+{
+    List < H3.DataModel.BizObject > boList = new List<H3.DataModel.BizObject>();
+    int pageIndex = 0;
+    int pageSize = 1000; //由于H3.DataModel.BizObject.GetList每次最多只返回1000条，所以每页数据量最大只能设置1000
+    while(true)
+    {
+        H3.Data.Filter.Filter filter = new H3.Data.Filter.Filter();
+        H3.Data.Filter.And andMatcher = new H3.Data.Filter.And();
+
+        //此处演示只查询所有生效数据，如想查询其他状态，可自行调整
+        andMatcher.Add(new H3.Data.Filter.ItemMatcher("Status", H3.Data.ComparisonOperatorType.Equal, H3.DataModel.BizObjectStatus.Effective));
+
+        filter.FromRowNum = pageIndex * pageSize;
+        filter.ToRowNum = (pageIndex + 1) * pageSize;
+
+        //由于是分页查询，所以加上按创建时间排序，可以避免某些页中有重复数据
+        filter.AddSortBy("CreatedTime", H3.Data.Filter.SortDirection.Ascending);
+
+        filter.Matcher = andMatcher;
+        H3.DataModel.BizObject[] boArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId, schema, H3.DataModel.GetListScopeType.GlobalAll, filter);
+        if(boArray == null || boArray.Length == 0)
+        {
+            break;
+        }
+
+        foreach(H3.DataModel.BizObject bo in boArray) 
+        {
+            if(bo == null)
+            {
+                continue;
+            }
+            boList.Add(bo);
+        }
+
+        // 当本次返回数据量已不足每页大小，说明已无需再查下一页了，直接终止轮询
+        if(boArray.Length < pageSize)
+        {
+            break;
+        }
+
+        pageIndex++;
+    }
+
+    return boList;
+}
+```
+
+
 ## [表单]提交时汇总子表金额
 
 可用位置：✔表单 / ✘列表 / ✘定时器 / ✘自定义接口

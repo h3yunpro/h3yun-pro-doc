@@ -883,8 +883,8 @@ body {
 .markdown-section pre>code {
     color: #525252;
     font-size: .9rem;
-    padding: 2.2em 5px;
-    line-height: inherit;
+    padding: 1em 5px;
+    line-height: 1rem;
     margin: 0 2px;
     max-width: inherit;
     overflow: inherit;
