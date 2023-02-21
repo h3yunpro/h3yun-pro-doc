@@ -221,7 +221,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 ```
 
 
-## [表单]OnLoad事件中获取指定控件的标题名
+## [表单]OnLoad事件中获取控件名或设置不可见不可写
 
 可用位置：✔表单 / ✘列表 / ✘定时器 / ✘自定义接口
 

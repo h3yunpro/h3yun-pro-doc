@@ -15,13 +15,29 @@
 以下是一个请求示例：
 
 ``` cs
+//本示例是在表单后端事件中调用，所以H3.IEngine实例可以用this.Engine获取
+H3.IEngine engine = this.Engine;
+
+
+//header 请求参数初始化，此实例会添加到请求的 Headers 中
+Dictionary < string, string > headers = new Dictionary<string, string>();
+
+//query 请求参数初始化，此处添加的参数会附加在请求Url后（例：?code=654028207203）
+Dictionary < string, string > querys = new Dictionary<string, string>();
+querys.Add("code", "654028207203");
+
+//body 请求数据初始化，此实例会转换为JSON格式发送给接口
+Dictionary < string, object > bodys = new Dictionary<string, object>();
+
+
 /*
-    第一步：
-    定义响应数据结构体，如响应JSON为：
+    氚云的接口请求，响应数据一定要为JSON格式，并且需要在此定义响应JSON的结构，第三方接口的响应JSON，会自动按照定义的结构，反序列化成H3.BizBus.BizStructure类的实例。
+
+    如响应JSON为：
 
     {"code":200,"ID":"654028207203","msg":"查询成功，查询花费0.0002秒","data":{"Name":"阔克托干村","Province":"新疆维吾尔自治区","City":"伊犁哈萨克自治州","District":"尼勒克县","Tow":"喀拉托别乡","Villag":"阔克托干村","LevelType":"5"}}
 
-    则按以下代码进行定义
+    则按以下代码进行定义响应JSON结构，看以上的示例JSON，会发现响应JSON有两层（外层与data参数层），所以这里需要定义两个H3.BizBus.BizStructureSchema
 */
 
 //定义响应数据整体结构体
@@ -42,19 +58,6 @@ dataSchema.Add(new H3.BizBus.ItemSchema("LevelType", "层级类型", H3.Data.Biz
 //将 data 属性的结构体添加进整体的响应数据结构体
 structureSchema.Add(new H3.BizBus.ItemSchema("data", "地区数据", H3.Data.BizDataType.BizStructure, dataSchema));
 
-
-//header 请求参数初始化，此实例会添加到请求的 Headers 中
-Dictionary < string, string > headers = new Dictionary<string, string>();
-
-//query 请求参数初始化，此处添加的参数会附加在请求Url后（例：?code=654028207203）
-Dictionary < string, string > querys = new Dictionary<string, string>();
-querys.Add("code", "654028207203");
-
-//body 请求数据初始化，此实例会转换为JSON格式发送给接口
-Dictionary < string, object > bodys = new Dictionary<string, object>();
-
-//本示例是在表单后端事件中调用，所以H3.IEngine实例可以用this.Engine获取
-H3.IEngine engine = this.Engine;
 
 //调用Invoke接口，系统底层访问第三方接口的Invoke方法
 H3.BizBus.InvokeResult res = engine.BizBus.InvokeApi(

@@ -56,7 +56,7 @@ bo.OwnerId = H3.Organization.User.SystemUserId;
 
 - ```H3.DataModel.GetListScopeType getListScopeType```：查询范围，一般使用不限范围的全局查询 ```H3.DataModel.GetListScopeType.GlobalAll```
 
-- ```H3.Data.Filter.Filter filter```：过滤器对象
+- ```H3.Data.Filter.Filter filter```：过滤器对象，文档参考 [H3.IEngine](/doc/cs-instance?id=H3DataFilterFilter)
 
 方法返回：```H3.DataModel.BizObject[]```，业务对象实例数组
 
