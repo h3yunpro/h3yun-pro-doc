@@ -68,4 +68,15 @@ SELECT corpid,
 extractvalue(agents, '/ArrayOfDingTalkISVAgent/DingTalkISVAgent/AppId') AS `appId`
 FROM h_dingtalkisv
 ```
-
+## 获取氚云流程表单审批通过时间
+```sql
+select
+    date_format(b.finishtime, '%Y-%m-%d %H:%i:%s') as 审批通过时间,
+    Approval 是否最终审批通过
+from
+    表单编码 a
+    left join H_WorkflowInstance b on a.workflowinstanceid = b.ObjectId
+where
+    1 = 1
+    and b.Approval = 1
+```
