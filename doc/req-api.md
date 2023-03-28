@@ -65,7 +65,10 @@ H3.BizBus.InvokeResult res = engine.BizBus.InvokeApi(
     H3.BizBus.AccessPointType.ThirdConnection, //固定值，无需改变
     "ConnectCode", //连接编码，对应 插件中心 中配置的连接的编码
     "GET", //请求方式，取值：GET / POST
-    "text/html;charset=utf-8", //请求数据类型
+
+    //请求数据类型
+    //注意：如果是传递json数据，这里直接用“application/json”，而不是“application/json;charset=utf-8”
+    "text/html;charset=utf-8",
     headers, querys, bodys, structureSchema);
 if(res != null)
 {
