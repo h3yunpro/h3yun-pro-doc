@@ -123,15 +123,28 @@ OnLoad: function() {
 // 提交后事件
 AfterSubmit: function( action, responseValue ) {
 	///编辑后不 关闭编辑页
-	debugger
-	var status = $.SmartForm.ResponseContext.BizObjectStatus;
-	if( action == "Submit" && status == 1 ) //数据生效，数据库中对应值 1
+	if( action == "Submit" && $.SmartForm.ResponseContext.BizObjectStatus == 1 ) //数据生效，BizObjectStatus值为 1
 	{
-		//  schemaCode: 表单编码; objectId; 表单数据Id; checkIsChange: 关闭时，是否感知变化;
-		$.IShowForm( "D001599e03c250e58644ed78696640af9fb856b", $.SmartForm.ResponseContext.BizObjectId, null);
+		$.IShowForm( "D00000xxxx", $.SmartForm.ResponseContext.BizObjectId, null);
 		responseValue.ClosePage = false;
 		responseValue.Refresh = true;
 	}
 }
 ```
 
+
+## [表单]前端获取控件的只读/隐藏状态
+
+可用位置：✔表单 / ✘列表
+
+表单前端代码：
+``` js
+// 加载事件
+OnLoad: function() {
+	//是否只读，true：可写，false：只读
+	that.F0000001.Editable
+
+	//是否隐藏，true：显示，false：隐藏
+	that.F0000001.Visible
+},
+```

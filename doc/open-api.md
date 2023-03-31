@@ -23,6 +23,8 @@
 
 LoadBizObject 为加载单个数据，请勿使用该接口来循环加载数据，可以使用LoadBizObjects 来批量加载数据。
 
+?> 通过本接口创建的数据，若生效，会触发生效的业务规则
+
 <!-- tabs:start -->
 
 #### **Api说明**
@@ -44,9 +46,12 @@ LoadBizObject 为加载单个数据，请勿使用该接口来循环加载数据
 
 | 参数                 | 参数类型                       | 必须                   | 说明        |
 |--------------------|----------------------------|----------------------|-----------|
-| ActionName           | ```String```               | 是                    | 调用的方法名    |
-| SchemaCode            | ```String```               | 是                    | 需要查询的表单编码 |
-| BizObjectId           | ```String```               | 是                    | 需要查询的数据ID，每个表单都有唯一的ObjectId        |
+| ActionName         | ```String```               | 是                   | 调用的方法名    |
+| SchemaCode         | ```String```               | 是                   | 需要查询的表单编码 |
+| BizObjectId        | ```String```               | 是                   | 需要查询的数据ID，每个表单都有唯一的ObjectId        |
+| IsSubmit           | ```Bool```                 | 是                   | 是否提交    |
+
+!> ```IsSubmit``` 参数具体说明：<br/> ```false``` 则不提交，创建为草稿数据；<br/> ```true``` 且表单无流程，创建为生效数据；<br/> ```true``` 且表单有流程，创建为进行中数据（按请求数据中 ```OwnerId``` 为提交人自动提交，若未传 ```OwnerId```，则由管理员提交）
 
 工具Postman请求：
 
