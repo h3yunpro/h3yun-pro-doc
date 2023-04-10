@@ -12,7 +12,7 @@
 1. ```H3.DataModel.BizObject bo = this.Request.BizObject;```
 2. ```H3.DataModel.BizObject bo = new H3.DataModel.BizObject(engine, schema, H3.Organization.User.SystemUserId);```
 3. ```H3.DataModel.BizObject bo = H3.DataModel.BizObject.Load(H3.Organization.User.SystemUserId, engine, schema.SchemaCode, bizObjectId, false);```
-4. ```H3.DataModel.BizObject[] boArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId, schema, H3.DataModel.GetListScopeType.GlobalAll, filter);             H3.DataModel.BizObject bo = boArray[0];```
+4. ```H3.DataModel.BizObject[] boArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId, schema, H3.DataModel.GetListScopeType.GlobalAll, filter);  H3.DataModel.BizObject bo = boArray[0];```
 
 下面是控件的取值/赋值详细说明
 
@@ -34,7 +34,7 @@ if(string.IsNullOrWhiteSpace(str))
 }
 ```
 
-?> ```+ string.Empty``` 是 C# 的隐式转换语法，此语法会将 null 自动处理成空字符串，其他值则自动 ToString()
+?> ```+ string.Empty``` 是 C# 的隐式转换语法，可以不用判断 ```bo["控件编码"]``` 的值是否为 ```null```，会将 null 自动处理成空字符串。
 
 赋值：```bo["控件编码"] = "xxx";```
 
@@ -65,7 +65,7 @@ if(string.IsNullOrWhiteSpace(str))
 取值：
 ``` cs
 string[] userIdArray = (string[]) bo["控件编码"];
-if(userIdArray == null || userIdArray.Length)
+if(userIdArray == null || userIdArray.Length == 0)
 {
     //此控件值为null 或 无任何元素
 } else

@@ -25,11 +25,8 @@ FROM (
 	JOIN mysql.help_topic b ON b.help_topic_id < length(a.userIds) - length(REPLACE(a.userIds, ' ', '')) + 1
 ```
 
-> 注：关联 ```mysql.help_topic``` 表的目的是因为里面有一个 0 - 699 的自增字段 ```help_topic_id```。
-> 
-> 所以，如果有的企业```mysql.help_topic``` 表无数据，只需用户自建一个表单并导入0-999，且增量为1的数据，
-> 
-> 以模拟出 ```mysql.help_topic``` 表。
+!> 注：关联 ```mysql.help_topic``` 表的目的是因为里面有一个 0 - 699 的自增字段 ```help_topic_id```。
+所以，如果有的企业```mysql.help_topic``` 表无数据，只需用户自建一个表单并导入0-999，且增量为1的数据，以模拟出 ```mysql.help_topic``` 表。
 
 
 ## 根据表单编码查询表单名称

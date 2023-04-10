@@ -3,6 +3,9 @@
 氚云默认对所有表单数据提供了 创建、修改、删除、查询 4类接口，开发者可以借助这些接口能力，实现企业系统与氚云的集成。
 <br/>并且也支持用户在氚云上编写自定义接口，提供给第三方调用，以实现个性化需求。
 
+
+## 对接前必读
+
 调用氚云接口时，需使用 HTTPS 协议、JSON 数据格式、UTF-8 编码、POST请求、Content-Type: application/json。
 
 并且需要在Headers中添加身份校验参数：EngineCode、EngineSecret，身份校验参数来源：
@@ -12,7 +15,7 @@
 请求超时时间：<= 60 秒
 
 
-## SDK
+### SDK
 
 [【.NET Core】氚云OpenApi请求辅助类](/file/RequestH3yunAPI.cs ':ignore :target=_blank')
 
@@ -22,8 +25,6 @@
 ## 查询单条业务数据
 
 LoadBizObject 为加载单个数据，请勿使用该接口来循环加载数据，可以使用LoadBizObjects 来批量加载数据。
-
-?> 通过本接口创建的数据，若生效，会触发生效的业务规则
 
 <!-- tabs:start -->
 
@@ -49,9 +50,6 @@ LoadBizObject 为加载单个数据，请勿使用该接口来循环加载数据
 | ActionName         | ```String```               | 是                   | 调用的方法名    |
 | SchemaCode         | ```String```               | 是                   | 需要查询的表单编码 |
 | BizObjectId        | ```String```               | 是                   | 需要查询的数据ID，每个表单都有唯一的ObjectId        |
-| IsSubmit           | ```Bool```                 | 是                   | 是否提交    |
-
-!> ```IsSubmit``` 参数具体说明：<br/> ```false``` 则不提交，创建为草稿数据；<br/> ```true``` 且表单无流程，创建为生效数据；<br/> ```true``` 且表单有流程，创建为进行中数据（按请求数据中 ```OwnerId``` 为提交人自动提交，若未传 ```OwnerId```，则由管理员提交）
 
 工具Postman请求：
 
@@ -92,35 +90,45 @@ void LoadBizObject()
     //参数
     Dictionary<string, object> dicParams = new Dictionary<string, object>();
     dicParams.Add("ActionName", "LoadBizObject");
-    dicParams.Add("SchemaCode", "D0015994821985e8b434394bc0737ffb22a0584");
-    dicParams.Add("BizObjectId", "b1540570-d463-4325-8ca1-759ec3d7aa03");
+    dicParams.Add("SchemaCode", "表单编码");
+    dicParams.Add("BizObjectId", "数据Id");
     string jsonData = JsonConvert.SerializeObject(dicParams);//序列化参数
-    byte[] bytes;
-    bytes = System.Text.Encoding.UTF8.GetBytes(jsonData);
+    byte[] bytes = System.Text.Encoding.UTF8.GetBytes(jsonData);
     request.ContentLength = bytes.Length;
-    using (Stream writer = request.GetRequestStream())//使用该方法 GetRequestStream 获取流，然后写入该流的数据
+    //将请求数据写入请求数据流
+    using (Stream writer = request.GetRequestStream())
     {
         writer.Write(bytes, 0, bytes.Length);
         writer.Close();
     }
-    string strValue = string.Empty;//返回结果
-                                   //HttpWebResponse用于发送 HTTP 请求和接收 HTTP 响应
+    //定义用于接收响应数据的变量
+    string strValue = string.Empty;
+    //请求并获取响应数据
     using (System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)request.GetResponse())
     {
-        using (System.IO.Stream s = response.GetResponseStream())
+        using (System.IO.Stream resStream = response.GetResponseStream())
         {
-            string StrDate = string.Empty;
-            using (StreamReader Reader = new StreamReader(s, Encoding.UTF8))
+            string chuck = null;
+            using (StreamReader reader = new StreamReader(resStream, Encoding.UTF8))
             {
-                while ((StrDate = Reader.ReadLine()) != null)
+                while ((chuck = reader.ReadLine()) != null)
                 {
-                    strValue += StrDate + "\r\n";
+                    strValue += chuck + "\r\n";
                 }
             }
         }
-        Console.WriteLine(strValue);//输出返回结果
     }
+    //输出返回结果
+    Console.WriteLine(strValue);
 }
 ~~~
 
 <!-- tabs:end -->
+
+
+## 创建单条业务数据
+
+?> 通过本接口创建的数据，若生效，会触发生效的业务规则
+| IsSubmit           | ```Bool```                 | 是                   | 是否提交    |
+
+!> ```IsSubmit``` 参数具体说明：<br/> ```false``` 则不提交，创建为草稿数据；<br/> ```true``` 且表单无流程，创建为生效数据；<br/> ```true``` 且表单有流程，创建为进行中数据（按请求数据中 ```OwnerId``` 为提交人自动提交，若未传 ```OwnerId```，则由管理员提交）

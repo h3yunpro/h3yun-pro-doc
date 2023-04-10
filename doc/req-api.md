@@ -67,7 +67,7 @@ H3.BizBus.InvokeResult res = engine.BizBus.InvokeApi(
     "GET", //请求方式，取值：GET / POST
 
     //请求数据类型
-    //注意：如果是传递json数据，这里直接用“application/json”，而不是“application/json;charset=utf-8”
+    //注意：如果是传递json数据，这里直接用“application/json”
     "text/html;charset=utf-8",
     headers, querys, bodys, structureSchema);
 if(res != null)
