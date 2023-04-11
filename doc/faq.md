@@ -206,6 +206,7 @@ $.SmartForm.ResponseContext.BizObjectStatus
 > ~~~cs
 >  protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
     {
+>       base.OnLoad(response);
 >       if(this.Request.BizObject.CreatedBy != this.Request.UserContext.UserId && response.Actions.ContainsKey("Edit"))
 >       {
 >       response.Actions.Remove("Edit");
