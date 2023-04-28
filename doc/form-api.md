@@ -24,6 +24,14 @@ OnLoad: function() {
 ```
 
 
+## GetValue
+
+```GetValue``` 是一个控件实例上的函数，使用方式：```控件实例.GetValue()```。
+
+```GetValue``` 用来获取控件的值，不同类型的控件，返回值结构会略有不同。
+
+
+
 ## $.SmartForm.PostForm
 
 利用Ajax技术，异步请求后端，触发后端OnSubmit事件。

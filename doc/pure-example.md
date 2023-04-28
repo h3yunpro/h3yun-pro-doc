@@ -82,33 +82,13 @@ protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 
     if(response.Actions != null)
     {
-        if(response.Actions.ContainsKey("Save")) 
+        string[] rmBtnCodes = new string[]{ "Save", "Remove", "Print", "ViewQrCode", "FullScreen", "Close", "SubmitAndAdd"};
+        foreach(string btnCode in rmBtnCodes)
         {
-            response.Actions.Remove("Save");
-        }
-        if(response.Actions.ContainsKey("Remove")) 
-        {
-            response.Actions.Remove("Remove");
-        }
-        if(response.Actions.ContainsKey("Print")) 
-        {
-            response.Actions.Remove("Print");
-        }
-        if(response.Actions.ContainsKey("ViewQrCode")) 
-        {
-            response.Actions.Remove("ViewQrCode");
-        }
-        if(response.Actions.ContainsKey("FullScreen")) 
-        {
-            response.Actions.Remove("FullScreen");
-        }
-        if(response.Actions.ContainsKey("Close")) 
-        {
-            response.Actions.Remove("Close");
-        }
-        if(response.Actions.ContainsKey("SubmitAndAdd")) 
-        {
-            response.Actions.Remove("SubmitAndAdd");
+            if(response.Actions.ContainsKey(btnCode)) 
+            {
+                response.Actions.Remove(btnCode);
+            }
         }
     }
 }

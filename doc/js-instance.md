@@ -37,5 +37,59 @@
 
 !> 建议：事件内第一句代码，用一个变量转存 ```this```，以防指向错误的BUG。
 
-正确指向与错误指向示例：
+正确指向示例：
+``` js
+// 加载事件
+OnLoad: function() {
+    var that = this;
+    that.F0000001.BindChange( $.IGuid(), function() {
+        var val = that.F0000001.GetValue();
+    });
+},
+```
+
+错误指向示例：
+``` js
+// 加载事件
+OnLoad: function() {
+    this.F0000001.BindChange( $.IGuid(), function() {
+        //此处直接用this，将指向的是匿名函数，而不是指向到OnLoad，所以 this.F0000001 的值会是 undefined
+        var val = this.F0000001.GetValue();
+    });
+},
+```
+
+
+## 控件实例获取
+
+氚云的表单前端只允许用户 取值/赋值/显示/隐藏/只读/可写 控件数据，不允许设置控件的样式。
+
+而想要做到以上的操作，就需要通过控件实例，下面是获取控件实例的一些示例：
+
+### 主表控件实例获取：
+``` js
+//that 即事件内的 this 转存
+//F0000001 是主表控件编码
+var con = that.F0000001;
+```
+
+### 子表控件实例获取方式：
+``` js
+//that 即事件内的 this 转存
+//D000726F0001 是子表控件编码
+var ctCon = that.D000726F0001;
+```
+
+### 子表内控件实例获取方式：
+``` js
+//that 即事件内的 this 转存
+//D000726F0001 是子表控件编码
+//D000726F0001.F0000002 是子表内控件的编码
+
+//获取子表第一行数据的ObjectId
+var firstRowId = that.D000726F0001.GetValue()[ 0 ].ObjectId;
+
+//获取子表第一行数据 D000726F0001.F0000002 控件的实例
+var cellCon = that.D000726F0001.GetCellManager(firstRowId, "D000726F0001.F0000002" );
+```
 
