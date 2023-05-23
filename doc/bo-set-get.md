@@ -286,7 +286,7 @@ bo["控件编码"] = "{\"Address\":\"深圳市南山区科技南十路航天科�
 <br/>附件/图片 控件，无法通过业务对象取值，若要获取附件Id，使用SQL查询 ```H_BizObjectFile``` 表。
 
 赋值：
-<br/>附件/图片 控件，无法通过业务对象赋值，只可以采用复制附件的方式，进行赋值。
+<br/>附件/图片 控件，无法通过业务对象直接赋值，只可以通过复制其他已有数据的附件，进行赋值。
 
 复制 附件/图片 示例：
 
@@ -319,3 +319,166 @@ engine.BizObjectManager.CopyFiles("来源-主表编码", "来源-子表编码", 
 //第二个参数：true（物理删除附件），false（逻辑删除附件，实际附件还保存着，只是无法查到）
 engine.BizObjectManager.RemoveFile("附件Id", true);
 ```
+
+
+## 子表
+
+此控件值是 ```H3.DataModel.BizObject[]``` 类型
+
+由于子表的类型是业务对象数组，跟业务对象操作有关，都要用上 ```H3.IEngine``` 实例，下面的示例中 ```engine``` 变量即 ```H3.IEngine``` 实例，参考 [H3.IEngine](/doc/cs-instance?id=H3IEngine)。
+
+取值：
+``` cs
+H3.DataModel.BizObject[] chiBoArray = (H3.DataModel.BizObject[]) bo["子表控件编码"];
+if(chiBoArray == null || chiBoArray.Length == 0)
+{
+    //子表无数据
+} else
+{
+    //子表有数据
+
+    //获取子表第一行的业务对象
+    H3.DataModel.BizObject firstChiBo = chiBoArray[0];
+
+    //循环子表所有行的业务对象
+    foreach(H3.DataModel.BizObject chiBo in chiBoArray) 
+    {
+
+    }
+}
+```
+
+新增子表行数据：
+``` cs
+//通过主表的Schema实例，获取子表的Schema实例
+H3.DataModel.BizObjectSchema chiSchema = bo.Schema.GetChildSchema("子表控件编码");
+
+//子表每一行都是一个业务对象，所以这里需要定义一个List集合变量
+List < H3.DataModel.BizObject > chiBoList = new List<H3.DataModel.BizObject>();
+
+//如果原本子表已有数据，那需要先将它们加入到chiBoList
+//注：如果是同时新增主子表数据，那无需本操作，本操作主要是考虑到更新操作
+H3.DataModel.BizObject[] chiBoArray = (H3.DataModel.BizObject[]) bo[chiSchema.SchemaCode];
+if(chiBoArray != null && chiBoArray.Length > 0)
+{
+    chiBoList.AddRange(chiBoArray);
+}
+
+/*
+    注：创建子表业务对象时，由于系统字段只有 ObjectId、Name、ParentObjectId，
+        而这些字段通过业务对象创建数据都会自动生成，所以设置子表业务对象时，
+        可以只用设置子表内的控件值，系统属性一个都无需设置
+*/
+
+/*****Start 下面开始演示new一个简易的子表业务对象*****/
+//通过构造函数，new一个子表业务对象
+H3.DataModel.BizObject aNewchiBo = new H3.DataModel.BizObject(engine, chiSchema, H3.Organization.User.SystemUserId);
+//设置子表内控件编码为 F0000001 的值，此控件为日期控件，此处将当前系统时间赋值给它
+aNewchiBo["F0000001"] = DateTime.Now;
+//将这个子表业务对象，添加到List集合里
+chiBoList.Add(aNewchiBo);
+/*****End*****/
+
+
+/*****Start 下面开始演示通过H3.DataModel.BizObject.GetList查询出另一个表单的数据，通过该表数据循环创建出子表业务对象*****/
+//此处为了节省篇幅，就不做注释了
+H3.DataModel.BizObjectSchema otherSchema = engine.BizObjectManager.GetPublishedSchema("另一个表单的表单编码");
+H3.Data.Filter.Filter filter = new H3.Data.Filter.Filter();
+H3.Data.Filter.And andMatcher = new H3.Data.Filter.And();
+andMatcher.Add(new H3.Data.Filter.ItemMatcher("Status", H3.Data.ComparisonOperatorType.Equal, H3.DataModel.BizObjectStatus.Effective));
+filter.Matcher = andMatcher;
+H3.DataModel.BizObject[] otherBoArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId, otherSchema, H3.DataModel.GetListScopeType.GlobalAll, filter);
+if(otherBoArray != null && otherBoArray.Length > 0)
+{
+    foreach(H3.DataModel.BizObject otherBo in otherBoArray) 
+    {
+        H3.DataModel.BizObject newChiBo = new H3.DataModel.BizObject(engine, chiSchema, H3.Organization.User.SystemUserId);
+        //将otherBo的 F0000001 控件值，赋值给 newChiBo 的 F0000001 控件
+        newChiBo["F0000001"] = otherBo["F0000001"];
+        //将newChiBo添加到List集合里
+        chiBoList.Add(newChiBo);
+    }
+}
+/*****End*****/
+
+
+/*****Start 下面开始演示通过SQL查询出另一个表单的数据，通过该表数据循环创建出子表业务对象*****/
+//此处为了节省篇幅，就不做注释了
+string sql = "SELECT ObjectId, SeqNo FROM i_D00001ABC WHERE Status=1; ";
+System.Data.DataTable dtAccount = engine.Query.QueryTable(sql, null);
+if(dt != null && dt.Rows.Count > 0)
+{
+    foreach(System.Data.DataRow row in dt.Rows)
+    {
+        H3.DataModel.BizObject newChiBo = new H3.DataModel.BizObject(engine, chiSchema, H3.Organization.User.SystemUserId);
+        //将i_D00001ABC表的 SeqNo 字段值，赋值给 newChiBo 的 F0000001 控件
+        newChiBo["F0000001"] = row["SeqNo"] + string.Empty;
+        //将newChiBo添加到List集合里
+        chiBoList.Add(newChiBo);
+    }
+}
+/*****End*****/
+
+//现在子表业务对象都定义好了，但是只是在List集合里，并未绑定到主表业务对象上，这里就通过给 子表控件赋值 绑定上去
+bo[chiSchema.SchemaCode] = chiBoList.ToArray();
+```
+
+编辑子表行数据：
+``` cs
+//获取子表数据
+H3.DataModel.BizObject[] chiBoArray = (H3.DataModel.BizObject[]) bo["子表控件编码"];
+if(chiBoArray != null && chiBoArray.Length > 0)
+{
+    //编辑子表第一行的数据
+    chiBoArray[0]["子表内的控件编码"] = "Hello World!";
+
+    //循环编辑子表所有行的数据
+    foreach(H3.DataModel.BizObject chiBo in chiBoArray) 
+    {
+        //此处按照控件类型不一样，赋值格式也不一样，但是可以参照主表业务对象控件的赋值
+        chiBo["子表内的控件编码"] = "Hello World!";
+    }
+}
+```
+
+删除子表行数据：
+``` cs
+//删除子表行，相当于给子表赋值一个新的H3.DataModel.BizObject[]值，所以这里先定义一个集合
+List < H3.DataModel.BizObject > chiBoList = new List<H3.DataModel.BizObject>();
+
+//获取子表数据
+H3.DataModel.BizObject[] chiBoArray = (H3.DataModel.BizObject[]) bo["子表控件编码"];
+if(chiBoArray != null && chiBoArray.Length > 0)
+{
+
+    for(int i = 0;i < chiBoArray.Length; i++)
+    {
+        //删除子表第一行的数据，就相当于不把第一行数据加入到集合
+        if(i == 0)
+        {
+            //当i为0时，代表子表第一行，所以这里跳过，不添加进集合
+            continue;
+        }
+
+        //删除子表中 F0000001 控件值为空的子表行数据
+        string val = chiBoArray[i]["F0000001"] + string.Empty;
+        if(string.IsNullOrWhiteSpace(val))
+        {
+            continue;
+        }
+
+        //其他的子表数据加入集合
+        chiBoList.Add(chiBoArray[i]);
+    }
+}
+
+//最后别忘了要把新的子表数据绑定到主表上
+bo["子表控件编码"] = chiBoList.ToArray();
+```
+
+清空控件值：
+``` cs
+bo["子表控件编码"] = new H3.DataModel.BizObject[]{ };
+```
+
+

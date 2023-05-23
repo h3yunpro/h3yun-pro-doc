@@ -26,7 +26,7 @@
   * [消息通知/提醒](/doc/notification)
   * [定时器](/doc/timer)
   * [后端执行SQL](/doc/exec-sql)
-  * [SQL报表/SQL数据源](doc/sql-report)
+  * [SQL报表/SQL高级数据源](doc/sql-report)
 
 
 * 第三方系统集成

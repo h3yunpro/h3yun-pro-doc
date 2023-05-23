@@ -23,24 +23,34 @@ if ( boStatus == H3.DataModel.BizObjectStatus.Effective )
 bo.OwnerId = H3.Organization.User.SystemUserId;
 ```
 
+### 主表业务对象系统属性
+
 | 属性名                | 数据类型                         | 释义                                                          | 是否必填 |
 |--------------------|------------------------------|--------------------------------------------------------------------|--------|
 | ObjectId           | ```String```                 | 数据Id，用于标识表单数据的唯一值，通过GUID生成                         | 必填   |
 | Name               | ```String```                 | 数据标题，显示在列表页和关联表单控件上，方便用户浏览和选择               |      |
 | OwnerId            | ```String```                 | 拥有者，值为氚云用户Id                                               | 必填   |
 | OwnerDeptId        | ```String```                 | 所属部门，值为氚云部门Id                                              | 必填   |
-| Status             | ```H3.DataModel.BizObjectStatus``` | 数据状态（草稿/流程进行中/生效/作废）                                  | 必填   |
+| Status             | ```H3.DataModel.BizObjectStatus``` | 数据状态（草稿/流程进行中/生效/作废）                            | 必填   |
 | WorkflowInstanceId | ```String```                 | 流程实例Id                                                           |      |
 | CreatedBy          | ```String```                 | 创建人，值为氚云用户Id                                                | 必填   |
 | CreatedTime        | ```DateTime```               | 创建时间                                                            | 必填   |
-| ModifiedBy         | ```String```                 | 最后一次数据修改人，值为氚云用户Id                                            |      |
-| ModifiedTime       | ```DateTime```               | 最后一次数据修改时间                                                             |      |
+| ModifiedBy         | ```String```                 | 最后一次数据修改人，值为氚云用户Id                                    |      |
+| ModifiedTime       | ```DateTime```               | 最后一次数据修改时间                                                 |      |
 
 ?>  Status 枚举值：<br/>
     ```H3.DataModel.BizObjectStatus.Draft```：草稿，数据库中对应值 0 <br/>
     ```H3.DataModel.BizObjectStatus.Running```：流程进行中，数据库中对应值 2 <br/>
     ```H3.DataModel.BizObjectStatus.Effective```：数据生效，数据库中对应值 1 <br/>
     ```H3.DataModel.BizObjectStatus.Canceled```：数据作废，数据库中对应值 3 <br/>
+
+### 子表业务对象系统属性
+
+| 属性名             | 数据类型                      | 释义                                                               | 是否必填|
+|--------------------|------------------------------|--------------------------------------------------------------------|--------|
+| ObjectId           | ```String```                 | 子表数据Id，用于标识子表数据的唯一值，通过GUID生成                    | 必填   |
+| Name               | ```String```                 | 子表数据标题                                                        |        |
+| Parent             | ```H3.DataModel.BizObject``` | 该数据所属主表业务对象                                               | 必填   |
 
 
 ## 静态方法-GetList
@@ -233,11 +243,10 @@ parBo.Status = H3.DataModel.BizObjectStatus.Draft;
 parBo["F0000001"] = "xxx";
 
 
-/*****Start 下面开始演示定义一个子表业务对象*****/
-
 //子表每一行都是一个业务对象，所以这里需要定义一个List集合变量
 List < H3.DataModel.BizObject > chiBoList = new List<H3.DataModel.BizObject>();
 
+/*****Start 下面开始演示定义一个子表业务对象*****/
 //通过构造函数，new一个子表业务对象
 H3.DataModel.BizObject chiBo = new H3.DataModel.BizObject(engine, chiSchema, H3.Organization.User.SystemUserId);
 /*
@@ -253,7 +262,7 @@ chiBoList.Add(chiBo);
 /*****End*****/
 
 
-/*****Start 下面开始演示通过查询出另一个表单的数据，通过该表数据循环创建出子表业务对象*****/
+/*****Start 下面开始演示通过H3.DataModel.BizObject.GetList查询出另一个表单的数据，通过该表数据循环创建出子表业务对象*****/
 //此处为了节省篇幅，就不做注释了
 H3.DataModel.BizObjectSchema otherSchema = engine.BizObjectManager.GetPublishedSchema("另一个表单的表单编码");
 H3.Data.Filter.Filter filter = new H3.Data.Filter.Filter();
@@ -274,6 +283,23 @@ if(otherBoArray != null && otherBoArray.Length > 0)
 }
 /*****End*****/
 
+
+/*****Start 下面开始演示通过SQL查询出另一个表单的数据，通过该表数据循环创建出子表业务对象*****/
+//此处为了节省篇幅，就不做注释了
+string sql = "SELECT ObjectId, SeqNo FROM i_D00001ABC WHERE Status=1; ";
+System.Data.DataTable dtAccount = engine.Query.QueryTable(sql, null);
+if(dt != null && dt.Rows.Count > 0)
+{
+    foreach(System.Data.DataRow row in dt.Rows)
+    {
+        H3.DataModel.BizObject newChiBo = new H3.DataModel.BizObject(engine, chiSchema, H3.Organization.User.SystemUserId);
+        //将i_D00001ABC表的 SeqNo 字段值，赋值给 newChiBo 的 F0000002 控件
+        newChiBo["F0000002"] = row["SeqNo"] + string.Empty;
+        //将newChiBo添加到List集合里
+        chiBoList.Add(newChiBo);
+    }
+}
+/*****End*****/
 
 //现在子表业务对象都定义好了，但是只是在List集合里，并未绑定到主表业务对象上，这里就通过给 子表控件赋值 绑定上去
 parBo[chiSchema.SchemaCode] = chiBoList.ToArray();
@@ -363,7 +389,7 @@ filter.Matcher = andMatcher;
 H3.DataModel.BizObject[] boArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId, schema, H3.DataModel.GetListScopeType.GlobalAll, filter);
 if(boArray != null && boArray.Length > 0)
 {
-    //将 创建时间 <= 2022-01-01 的数据，循环添加到 H3.DataModel.BulkCommit 实例中
+    //将H3.DataModel.BizObject.GetList查询出的结果，循环添加到 H3.DataModel.BulkCommit 实例中
     foreach(H3.DataModel.BizObject bo in boArray) 
     {
         //将本业务对象，以删除的方式，添加到 批量提交实例
