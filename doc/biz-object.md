@@ -2,7 +2,61 @@
 
 数据类型：```H3.DataModel.BizObject```
 
-在表单设计后端代码中，获取当前表单数据的业务对象：```this.Request.BizObject```（注：前端通过Post请求后端时，当前业务对象无数据）
+
+## 当前表单业务对象
+
+在 **表单设计** 后端代码中的事件中，当前表单数据的业务对象即 ```this.Request.BizObject```，这个业务对象对应的就是当前这个表单的数据。
+
+获取方式如下：
+``` cs
+public class Dxxx: H3.SmartForm.SmartFormController
+{
+    public Dxxx(H3.SmartForm.SmartFormRequest request): base(request)
+    {
+    }
+
+    protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
+    {
+        if(this.Request.IsCreateMode) 
+        {
+            //在表单数据初始创建模式下（即点击 新增 按钮的时候），获取当前表单业务对象
+            H3.DataModel.BizObject bo = this.Request.BizObject;
+        }
+
+        base.OnLoad(response);
+    }
+
+    protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
+    {
+        if(actionName == "Submit")
+        {
+            //当用户点击提交/同意按钮时，获取当前表单业务对象
+            H3.DataModel.BizObject bo = this.Request.BizObject;
+        }
+
+        base.OnSubmit(actionName, postValue, response);
+    }
+
+    protected override void OnWorkflowInstanceStateChanged(H3.Workflow.Instance.WorkflowInstanceState oldState, H3.Workflow.Instance.WorkflowInstanceState newState)
+    {
+        if(oldState == H3.Workflow.Instance.WorkflowInstanceState.Running && newState == H3.Workflow.Instance.WorkflowInstanceState.Finished)
+        {
+            // 流程数据生效时获取当前业务对象
+            H3.DataModel.BizObject bo = this.Request.BizObject;
+        }
+
+        if(oldState == H3.Workflow.Instance.WorkflowInstanceState.Finished && newState == H3.Workflow.Instance.WorkflowInstanceState.Running)
+        {
+            // 流程数据重新激活时获取当前业务对象
+            H3.DataModel.BizObject bo = this.Request.BizObject;
+        }
+
+        base.OnWorkflowInstanceStateChanged(oldState, newState);
+    }
+}
+```
+
+!> 注：前端通过Post请求后端时，后端 ```this.Request.BizObject``` 可以获取，但无控件数据，正确做法应该是通过前端传参，后端获取请求参数。
 
 
 ## 系统属性
@@ -66,7 +120,7 @@ bo.OwnerId = H3.Organization.User.SystemUserId;
 
 - ```H3.DataModel.GetListScopeType getListScopeType```：查询范围，一般使用不限范围的全局查询 ```H3.DataModel.GetListScopeType.GlobalAll```
 
-- ```H3.Data.Filter.Filter filter```：过滤器对象，文档参考 [H3.IEngine](/doc/cs-instance?id=H3DataFilterFilter)
+- ```H3.Data.Filter.Filter filter```：过滤器对象，文档参考 [H3.Data.Filter.Filter](/doc/cs-instance?id=H3DataFilterFilter)
 
 方法返回：```H3.DataModel.BizObject[]```，业务对象实例数组
 

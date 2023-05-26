@@ -59,13 +59,24 @@ engine.WorkflowInstanceManager.SendMessage(actInsMessage);
 ```
 
 
+## 结束流程
+
+!> 注意：此API只针对进行中流程使用。
+
+``` cs
+H3.Workflow.Instance.WorkflowInstance instance = engine.WorkflowInstanceManager.GetWorkflowInstance("流程Id");
+H3.Workflow.Messages.FinishInstanceMessage cancelMessage = new H3.Workflow.Messages.FinishInstanceMessage("流程Id",(int)instance.FinalTokenId);
+engine.WorkflowInstanceManager.SendMessage(cancelMessage);
+```
+
+
 ## 取消流程
 
 !> 只可对进行中数据使用。
 
 ``` cs
 H3.Workflow.Messages.CancelInstanceMessage cancelMessage = new H3.Workflow.Messages.CancelInstanceMessage("流程Id", false);
-engine.Request.Engine.WorkflowInstanceManager.SendMessage(cancelMessage);
+engine.WorkflowInstanceManager.SendMessage(cancelMessage);
 ```
 
 
@@ -104,7 +115,7 @@ engine.WorkflowInstanceManager.SendMessage(cancelMessage);
 ```
 
 
-## 结束流程/重新激活 事件
+## 流程结束/重新激活 事件
 
 当流程状态发生改变时，会触发 ```OnWorkflowInstanceStateChanged``` 事件，该事件有两个传入参数：```oldState```、```newState```，所以就能用来判断当前为结束时触发，还是重新激活时触发。
 

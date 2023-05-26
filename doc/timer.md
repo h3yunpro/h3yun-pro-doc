@@ -96,18 +96,43 @@ public class MyTest_Timer: H3.SmartForm.Timer
 
 1. 执行结果如何知晓？
 
-   可以搭建一个日志表单，定时器中将执行结果写入到该表单（即创建表单数据，将执行时间、结果等赋值到表单中的控件内）
+    可以搭建一个日志表单，定时器中将执行结果写入到该表单（即创建表单数据，将执行时间、结果等赋值到表单中的控件内）
 
 2. 如何调试定时器里的代码？
    
-   定时器类中依然可以封装方法，把业务代码封装成一个 ```public static``` 方法（示例代码中有做演示），就可以在表单的OnLoad事件中调用，进行后端调试了
+    定时器毕竟是由引擎主动调用的，所以我们没法模拟引擎调用的情况，只能通过其他方式来验证代码是否正确，做法如下：
 
-   调用定时器里的业务代码方法示例：
+    ① 在 **定时器类** 中，把业务代码封装成一个 ```public static``` 方法（*参考上面示例代码中的 ```DoSomething``` 方法*）
+
+    ② 在 **表单类** 的 ```OnLoad``` 事件中，调用定时器类里的业务代码方法（*调试时记得点下新增按钮哦( • ̀ω•́ )✧*）
+
+    ③ 调试完成后，在 **表单类** 的 ```OnLoad``` 事件中，去掉调用
+
+    示例：
 
 ``` cs
-protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
+//表单类
+public class Dxxx: H3.SmartForm.SmartFormController
 {
-    MyTest_Timer.DoSomething(this.Engine, DateTime.Now);
-    base.OnLoad(response);
+    public Dxxx(H3.SmartForm.SmartFormRequest request): base(request)
+    {
+    }
+
+    protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
+    {
+        //在创建模式下（即点击 新增 按钮时），调用 MyTest_Timer 类的 DoSomething 方法
+        if(this.Request.IsCreateMode) 
+        {
+            //此代码只用作调试，调试完成后，请去掉本行代码，后续由定时器引擎自动去触发代码即可
+            MyTest_Timer.DoSomething(this.Engine, DateTime.Now);
+        }
+
+        base.OnLoad(response);
+    }
+
+    protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
+    {
+        base.OnSubmit(actionName, postValue, response);
+    }
 }
 ```
