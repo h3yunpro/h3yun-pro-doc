@@ -344,3 +344,17 @@ protected override void OnInit(H3.SmartForm.LoadListViewResponse response)
 }
 ```
 
+## [表单]一张表单提交的手写签名给另一张表单手写签名赋值
+
+可用位置：✔表单 / ✘列表 / ✔定时器 / ✔自定义接口
+
+``` cs
+protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
+{
+   
+    //base.OnSubmit 方法会将本次提交数据保存到数据库，并生成 手写签名，所以在提交后立马获取手写签名，需要写在 base.OnSubmit 方法之后
+    base.OnSubmit(actionName, postValue, response);
+    //主表内手写签名控件 复制到 主表内手写签名控件 上
+    this.Request.Engine.BizObjectManager.CopyFiles("原-主表编码", "", "原-主表内手写签名控件编码", "原-主表数据ObjectId", "新-主表编码","", "新-主表内手写签名控件编码", "新-主表数据ObjectId", true, true);
+}
+```
