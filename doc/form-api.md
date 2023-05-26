@@ -34,7 +34,7 @@ OnLoad: function() {
 
 ## $.SmartForm.PostForm
 
-利用Ajax技术，异步请求后端，触发后端OnSubmit事件。
+利用Ajax技术，异步请求后端，触发表单后端OnSubmit事件，[使用示例](/doc/js-example?id=表单前端onload事件-bindchange-post-请求后端)。
 
 ``` js
 $.SmartForm.PostForm(
@@ -45,5 +45,3 @@ $.SmartForm.PostForm(
     async //true：不阻塞，false：请求过程中阻塞后续代码执行
 );
 ```
-
-[使用示例](./doc/js-example?id=表单前端onload事件-bindchange-post-请求后端)
