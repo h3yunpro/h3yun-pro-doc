@@ -303,6 +303,27 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 ```
 
 
+## [表单]用户提交之后，不关闭表单页面
+
+可用位置：✔表单 / ✘列表 / ✘定时器 / ✘自定义接口
+
+!> 注意：由于产品底层设计原因，表单页面头部上的按钮无法隐藏，用户可以继续点击，所以并不推荐使用本功能。
+
+``` cs
+protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
+{
+    base.OnSubmit(actionName, postValue, response);
+
+    // 判断用户点击的是 提交 按钮
+    if(actionName == "Submit")
+    {
+        response.Message = "提交成功！";// 弹出提示信息
+        response.ClosePage = false;// 不允许关闭表单
+    }
+}
+```
+
+
 ## [列表]增加筛选条件
 
 可用位置：✘表单 / ✔列表 / ✘定时器 / ✘自定义接口
@@ -344,3 +365,59 @@ protected override void OnInit(H3.SmartForm.LoadListViewResponse response)
 }
 ```
 
+
+## 列表删除时获得用户选择的数据
+
+可用位置：✘表单 / ✔列表 / ✘定时器 / ✘自定义接口
+
+``` cs
+protected override void OnSubmit(string actionName, H3.SmartForm.ListViewPostValue postValue, H3.SmartForm.SubmitListViewResponse response)
+{
+    try
+    {
+        // 判断用户点击的是删除按钮
+        if(actionName == "Remove")
+        {
+            // 获取用户选择数据的 ObjectId 数组
+            string[] selectedIds = (string[]) postValue.Data["ObjectIds"];
+            if(selectedIds != null && selectedIds.Length > 0)
+            {
+                H3.IEngine engine = this.Engine;
+                H3.DataModel.BizObjectSchema schema = this.Request.Schema;
+                H3.Data.Filter.Filter filter = new H3.Data.Filter.Filter();
+                H3.Data.Filter.And andMatcher = new H3.Data.Filter.And();
+                andMatcher.Add(new H3.Data.Filter.ItemMatcher("ObjectId", H3.Data.ComparisonOperatorType.In, selectedIds));
+                filter.Matcher = andMatcher;
+                filter.FromRowNum = 0;
+                filter.ToRowNum = 1000;
+                H3.DataModel.BizObject[] boArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId,
+                    schema, H3.DataModel.GetListScopeType.GlobalAll, filter);
+                if(boArray != null && boArray.Length > 0)
+                {
+                    if(boArray.Length != selectedIds.Length)
+                    {
+                        throw new Exception(schema.DisplayName + "数据查询失败！");
+                    }
+                    int maxCount = 100;
+                    if(boArray.Length > maxCount)
+                    {
+                        throw new Exception("单次最多处理" + maxCount + "条数据！");
+                    }
+                    foreach(H3.DataModel.BizObject bo in boArray)
+                    {
+                        //对选中数据循环处理
+
+                    }
+                }
+            }
+        }
+    } catch(Exception ex)
+    {
+        response.Errors.Add(ex.Message);
+        base.OnSubmit(actionName, postValue, response);
+        return;
+    }
+
+    base.OnSubmit(actionName, postValue, response);
+}
+```

@@ -6,13 +6,13 @@
 
 ## 对接前必读
 
-调用氚云接口时，需使用 HTTPS 协议、JSON 数据格式、UTF-8 编码、POST请求、Content-Type: application/json。
+!> 调用氚云接口时，需使用 HTTPS 协议、JSON 数据格式、UTF-8 编码、POST请求、Content-Type: application/json。
+<br/>**调用频率：1-2 次/秒，请求超时时间：<= 60 秒**
 
-并且需要在Headers中添加身份校验参数：EngineCode、EngineSecret，身份校验参数来源：
-<br/>头像 -> 系统管理 -> 系统集成
+并且需要在请求Headers中添加身份校验参数：**EngineCode**、**EngineSecret**，身份校验参数查看路径：**头像** -> **系统管理** -> **系统集成**
 
-调用频率：1-2 次/秒
-请求超时时间：<= 60 秒
+![](../img/open-api-5.png)
+![](../img/open-api-6.png)
 
 
 ### SDK

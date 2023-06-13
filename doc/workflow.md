@@ -1,10 +1,14 @@
 # 流程操作
 
+!> 注意：以下示例中，engine实例获取方式，请参考 [H3.IEngine](/doc/cs-instance?id=h3iengine)
+
+## 获取流程Id
+
 氚云的流程操作API，很关键的一个参数是流程Id，所以开篇，先介绍一下获取流程Id的几种方式：
 
 1. 获取当前流程表单的流程Id
 
-!> 注意：因为只有在表单后端中才能对应上唯一的流程I的，所以以下示例代码仅用于表单后端代码中。
+!> 注意：因为只有在表单后端中才能对应上唯一的流程Id，所以以下示例代码仅用于表单后端代码中。
 
 ``` cs
 protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
@@ -47,7 +51,6 @@ SELECT WorkflowInstanceId FROM i_D154601HolidayRecord WHERE ObjectId = '数据Id
 SELECT ObjectId FROM H_WorkflowInstance WHERE SchemaCode = '表单编码' AND ObjectId = '数据Id'
 ```
 
-!> 注意：以下示例中，engine实例获取方式，请参考 [H3.IEngine](/doc/cs-instance?id=h3iengine)
 
 ## 重新激活流程
 
