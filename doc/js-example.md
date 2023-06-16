@@ -148,3 +148,17 @@ OnLoad: function() {
 	that.F0000001.Visible
 },
 ```
+
+## [表单]前端设置子表隐藏状态
+
+可用位置：✔表单 / ✘列表
+
+表单前端代码：
+``` js
+// 加载事件
+OnLoad: function() {
+	var parent=this;
+        parent.子表编码.SetVisible(false);//把子表隐藏
+        parent.子表编码.SetVisible(true);//把子表显示
+},
+```
