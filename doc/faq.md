@@ -298,10 +298,11 @@ int b = 0;
 2.检查流程设计填充子流程的配置字段有没有被反写
 <span class="fontColor" >2023/3/27 </span></br>
 
+
 ## 42.如果获取表单中子表序号？
 前端：
 ``` cs 
-this.子表编码.GetValue();//他的顺序就是下标
+this.子表编码.GetValue();//它的顺序就是下标
 ```  
 <span class="fontColor" >2023/4/1 </span></br>
 

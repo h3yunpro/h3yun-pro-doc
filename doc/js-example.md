@@ -141,6 +141,8 @@ AfterSubmit: function( action, responseValue ) {
 ``` js
 // 加载事件
 OnLoad: function() {
+	var that = this;
+
 	//是否只读，true：可写，false：只读
 	that.F0000001.Editable
 
@@ -149,7 +151,7 @@ OnLoad: function() {
 },
 ```
 
-## [表单]前端设置子表隐藏状态
+## [表单]前端设置子表隐藏
 
 可用位置：✔表单 / ✘列表
 
@@ -157,8 +159,8 @@ OnLoad: function() {
 ``` js
 // 加载事件
 OnLoad: function() {
-	var parent=this;
-        parent.子表编码.SetVisible(false);//把子表隐藏
-        parent.子表编码.SetVisible(true);//把子表显示
+	var that = this;
+	parent.子表控件编码.SetVisible(false);//把子表隐藏
+	parent.子表控件编码.SetVisible(true);//把子表显示
 },
 ```
