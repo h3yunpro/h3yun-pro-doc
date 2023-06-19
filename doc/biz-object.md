@@ -21,6 +21,8 @@ public class Dxxx: H3.SmartForm.SmartFormController
         {
             //在表单数据初始创建模式下（即点击 新增 按钮的时候），获取当前表单业务对象
             H3.DataModel.BizObject bo = this.Request.BizObject;
+            //获取当前数据Id
+            string boId = bo.ObjectId;
         }
 
         base.OnLoad(response);
@@ -32,6 +34,10 @@ public class Dxxx: H3.SmartForm.SmartFormController
         {
             //当用户点击提交/同意按钮时，获取当前表单业务对象
             H3.DataModel.BizObject bo = this.Request.BizObject;
+            //获取当前数据单行文本控件的值
+            string val = bo["控件编码"] + string.Empty;
+            //设置当前数据单行文本控件的值
+            bo["控件编码"] = "testValue";
         }
 
         base.OnSubmit(actionName, postValue, response);
@@ -73,15 +79,18 @@ if ( boStatus == H3.DataModel.BizObjectStatus.Effective )
 
 }
 
-//将当前拥有者更改为 System 用户
+//将拥有者更改为 System 用户
 bo.OwnerId = H3.Organization.User.SystemUserId;
+
+//获取数据的Id
+string boId = bo.ObjectId;
 ```
 
 ### 主表业务对象系统属性
 
 | 属性名                | 数据类型                         | 释义                                                          | 是否必填 |
 |--------------------|------------------------------|--------------------------------------------------------------------|--------|
-| ObjectId           | ```String```                 | 数据Id，用于标识表单数据的唯一值，通过GUID生成                         | 必填   |
+| ObjectId           | ```String```                 | 数据Id，用于标识表单数据的唯一值，在new H3.DataModel.BizObject()时系统自动通过GUID生成                         | 必填   |
 | Name               | ```String```                 | 数据标题，显示在列表页和关联表单控件上，方便用户浏览和选择               |      |
 | OwnerId            | ```String```                 | 拥有者，值为氚云用户Id                                               | 必填   |
 | OwnerDeptId        | ```String```                 | 所属部门，值为氚云部门Id                                              | 必填   |

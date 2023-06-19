@@ -26,10 +26,43 @@ OnLoad: function() {
 
 ## GetValue
 
-```GetValue``` 是一个控件实例上的函数，使用方式：```控件实例.GetValue()```。
+```GetValue``` 是一个控件实例上的函数，使用方式：```that.控件编码.GetValue()```。
 
-```GetValue``` 用来获取控件的值，不同类型的控件，返回值结构会略有不同。
+```GetValue``` 函数用来获取控件的值，不同类型的控件，返回值的数据类型不同。
 
+
+## SetValue
+
+```SetValue``` 是一个控件实例上的函数，使用方式：```that.控件编码.SetValue(值)```。
+
+```SetValue``` 函数用来设置控件的值，不同类型的控件，值的数据类型不同。
+
+
+## ClearItems
+
+```ClearItems``` 是一个控件实例上的函数，使用方式：```that.控件编码.ClearItems()```。
+
+```ClearItems``` 函数只能用于单选框/复选框/下拉框，作用是将控件的选项全部清空。
+
+
+## AddItem
+
+```AddItem``` 是一个控件实例上的函数，使用方式：```that.控件编码.AddItem("选项")```。
+
+```AddItem``` 函数只能用于单选框/复选框/下拉框，作用是给控件增加一个选项，函数的传入参数必须是一个字符串。
+
+
+## BindChange
+
+```BindChange``` 是一个控件实例上的函数，使用方式：
+``` js
+var that = this;
+that.控件编码.BindChange( "key", function() {
+    var v = that.控件编码.GetValue();
+});
+```
+
+```BindChange``` 函数用于绑定一个值改变事件，但是和js的 ```onchange``` 事件不一样。```onchange``` 函数触发时机为实时的值改变，而 ```BindChange``` 在值改变时不触发，在控件焦点离开后才触发。
 
 
 ## $.SmartForm.PostForm
@@ -45,3 +78,71 @@ $.SmartForm.PostForm(
     async //true：不阻塞，false：请求过程中阻塞后续代码执行
 );
 ```
+
+
+## 弹窗
+``` js
+$.IShowSuccess( "成功", "这是一条成功消息" );//弹出成功消息
+
+$.IShowWarn( "警告", "这是一条警告消息" );//弹出警告消息
+
+$.IShowError( "错误", "这是一条错误消息" );//弹出错误消息
+
+//注意：$.IConfirm弹窗是属于回调式的，而非阻塞式，弹窗后的代码依然会被执行，所以请勿用在用户提交时
+$.IConfirm( "提示", "是否确认？", function( data ) {
+    if( data ) {
+        //点击确认按钮
+    } else {
+        //点击取消按钮
+    }
+});
+```
+
+
+## $.IShowForm 以全屏模式打开表单
+``` js
+var schemaCode = "xxx";// 表单编码
+var objectId = "xx-xx-xx";// 表单数据Id，传 "" 时表示以新增模式打开，传具体数据Id表示打开该条数据表单详情页
+var checkIsChange = true;// 关闭时是否感知变化，固定传 true
+$.IShowForm(schemaCode, objectId, checkIsChange);
+```
+
+
+## $.IShowForm 以弹窗模式打开表单
+``` js
+var schemaCode = "";// 表单编码
+var objectId = ""; // 表单数据Id，传 "" 时表示以新增模式打开，传具体数据Id表示打开该条数据表单详情页
+var params = { "param1": "参数1" };// 传递到表单的参数，JSON对象格式
+var checkIsChange = false;// 是否检查修改
+var showlist = false;// 兼容移动端是否显示列表
+var showInModal = true;// 是否弹出框中显示，如果为false，title height width OnShowCallback OnHiddenCallback 等属性不起作用
+$.IShowForm(schemaCode, objectId, params, checkIsChange, showlist, {
+  showInModal: showInModal, title: "表单页标题", height: 500, width: 800,
+  OnShowCallback: function( da ) { },// OnShowCallback 表单打开时事件
+  onHiddenCallback: function( data ) {// onHiddenCallback 表单关闭时事件
+    
+  }
+});
+```
+
+
+## $.ILocation
+
+用于获取用户当前定位（其精度和位置控件一致），但是仅限移动端，所以使用前，需要判断一下当前表单所处环境，示例：
+``` js
+if($.SmartForm.ResponseContext.IsMobile){
+    //此函数返回值为一个对象，对象格式和位置控件值一致，如下：
+    //{"Address":"深圳市南山区科技南十路航天科技研究院","Point":{"lat":"21.345","lng":"114.454"}}
+    var location = $.ILocation();
+    
+    //因为 $.ILocation 的返回值和位置控件值一致，所以可以直接赋值给位置控件
+    that.位置控件的控件编码.SetValue(location);
+}
+```
+
+
+## $.SmartForm.ClosePage
+
+用于关闭当前表单，示例：```$.SmartForm.ClosePage();```。
+
+不过新版表单已不适用此接口，改为了：```this.ClosePage();```

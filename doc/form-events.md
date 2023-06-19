@@ -111,6 +111,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
     try
     {
         //点提交按钮，有三种情况会发起流程，所以三种情况都需判断
+        //三种情况分别是：新增提交、先暂存后提交，流程回到发起节点重新提交
         //一般在做销售出库冻结库存时，经常会在流程发起时冻结库存，所以会用到此示例
         if(
             (actionName == "Submit" && this.Request.IsCreateMode) ||
@@ -137,7 +138,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 {
     try
     {
-        //由于同意按钮的actionName也是Submit，所以判断同意按钮时，需要联合当前流程节点编码进行判断
+        //由于提交和同意按钮的actionName都是Submit，所以判断同意按钮时，需要联合当前流程节点编码进行判断
         if(actionName == "Submit" && this.Request.ActivityCode == "Activity??")
         {
             // 业务代码
@@ -183,7 +184,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 {
     try
     {
-        //由于编辑时提交，actionName也是Submit，所以判断提交时需要联合当前表单状态进行判断
+        //由于提交和同意按钮的actionName都是Submit，所以判断提交时需要联合当前表单状态进行判断
         if(actionName == "Submit" && (this.Request.IsCreateMode || this.Request.BizObject.Status == H3.DataModel.BizObjectStatus.Draft))
         {
             // 业务代码
@@ -205,7 +206,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 {
     try
     {
-        //由于初始提交按钮actionName也是Submit，所以判断编辑提交时需要联合当前业务对象数据状态进行判断
+        //由于提交和同意按钮的actionName都是Submit，所以判断编辑提交时需要联合当前业务对象数据状态进行判断
         if(actionName == "Submit" && this.Request.BizObject.Status == H3.DataModel.BizObjectStatus.Effective)
         {
             // 业务代码

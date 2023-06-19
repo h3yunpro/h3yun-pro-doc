@@ -133,7 +133,7 @@ AfterSubmit: function( action, responseValue ) {
 ```
 
 
-## [表单]前端获取控件的只读/隐藏状态
+## [表单]前端获取/设置控件的只读/隐藏状态
 
 可用位置：✔表单 / ✘列表
 
@@ -144,14 +144,21 @@ OnLoad: function() {
 	var that = this;
 
 	//是否只读，true：可写，false：只读
-	that.F0000001.Editable
+	var isEdit = that.控件编码.Editable;//获取控件可写状态
 
 	//是否隐藏，true：显示，false：隐藏
-	that.F0000001.Visible
+	var isVis = that.控件编码.Visible;//获取控件隐藏状态
+
+	that.控件编码.SetReadonly(true);//设置控件只读
+	that.控件编码.SetReadonly(false);//设置控件可写
+
+	that.控件编码.SetVisible(false);//设置控件隐藏
+	that.控件编码.SetVisible(true);//设置控件显示
 },
 ```
 
-## [表单]前端设置子表隐藏
+
+## [表单]前端绑定单行文本控件值改变事件
 
 可用位置：✔表单 / ✘列表
 
@@ -159,8 +166,16 @@ OnLoad: function() {
 ``` js
 // 加载事件
 OnLoad: function() {
-	var that = this;
-	parent.子表控件编码.SetVisible(false);//把子表隐藏
-	parent.子表控件编码.SetVisible(true);//把子表显示
+	/*
+		由于BindChange事件的触发时机是焦点离开再触发，在某些需求中及时度不够，此时可以使用OnTempChange事件。
+		注意：OnTempChange事件只限用于 单行文本、多行文本 两类控件。
+
+		本示例实现效果：
+			在单行文本中，输入任意字符，能立马触发事件，而不是等输入完成焦点离开再触发（示例中 F0000001 为单行文本控件的控件编码）。
+	*/
+    var that = this;
+    that.F0000001.OnTempChange( function() {
+        var v = that.F0000001.GetValue();
+    });
 },
 ```
