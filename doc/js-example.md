@@ -179,3 +179,61 @@ OnLoad: function() {
     });
 },
 ```
+
+## [表单]表单内按钮控件点击（触发）实例
+可用位置：✔表单 / ✘列表
+
+![logo](../img/Button-Click-Form.png ':size=20%')</br>
+<!-- tabs:start -->
+#### **前端代码**
+
+``` js
+  // 提交前事件
+    BeforeSubmit: function( action, postValue ) {
+    //按钮编码F0000004点击后执行的
+        if( action == "F0000004" ) {
+           //访问后端
+            $.SmartForm.PostForm( "actionName", {}, function(){
+
+            }, function(){
+                
+            }, false )
+
+            $.IShowSuccess( "成功", "这是一条成功消息" );
+
+        }
+        //按钮编码F0000005点击后执行的
+        if( action == "F0000005" ) {
+            $.IShowWarn( "警告", "这是一条警告消息" )
+        }
+        //按钮编码F0000006点击后执行的
+        if( action == "F0000006" ) {
+            $.IShowError( "错误", "这是一条错误消息" );
+        }
+    },
+```
+
+#### **后端代码**
+``` cs
+protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
+    {
+        if(actionName == "actionName") 
+        {
+           //创建一条业务数据
+            H3.IEngine engine = this.Request.Engine;
+            string systemUserId = H3.Organization.User.SystemUserId;
+            string currentUserId = this.Request.UserContext.UserId;
+            H3.DataModel.BizObjectSchema aSchema = engine.BizObjectManager.GetPublishedSchema("表单编码");
+            H3.DataModel.BizObject aBo = new H3.DataModel.BizObject(engine, aSchema, systemUserId);
+            aBo.CreatedBy = currentUserId;
+            aBo.OwnerId = currentUserId;
+            aBo["F0000001"] = "https://www.h3yun.com/";
+            aBo["F0000002"] = "https://www.h3yun.com/";
+            aBo.Status = H3.DataModel.BizObjectStatus.Effective;
+            aBo.Create();
+        }
+        base.OnSubmit(actionName, postValue, response);
+    }
+```
+<!-- tabs:end -->
+
