@@ -143,11 +143,9 @@ AfterSubmit: function( action, responseValue ) {
 OnLoad: function() {
 	var that = this;
 
-	//是否只读，true：可写，false：只读
-	var isEdit = that.控件编码.Editable;//获取控件可写状态
+	var isEdit = that.控件编码.Editable;//获取控件可写状态，true：可写，false：只读
 
-	//是否隐藏，true：显示，false：隐藏
-	var isVis = that.控件编码.Visible;//获取控件隐藏状态
+	var isVis = that.控件编码.Visible;//获取控件隐藏状态，true：显示，false：隐藏
 
 	that.控件编码.SetReadonly(true);//设置控件只读
 	that.控件编码.SetReadonly(false);//设置控件可写
@@ -181,36 +179,37 @@ OnLoad: function() {
 ```
 
 ## [表单]表单内按钮控件点击（触发）实例
+
 可用位置：✔表单 / ✘列表
 
-![logo](../img/Button-Click-Form.png ':size=20%')</br>
+![logo](../img/Button-Click-Form.png ':size=20%')
+
 <!-- tabs:start -->
 #### **前端代码**
 
 ``` js
-  // 提交前事件
-    BeforeSubmit: function( action, postValue ) {
-    //按钮编码F0000004点击后执行的
-        if( action == "F0000004" ) {
-           //访问后端
-            $.SmartForm.PostForm( "actionName", {}, function(){
+// 提交前事件
+BeforeSubmit: function( action, postValue ) {
+	//按钮编码F0000004点击后执行的
+	if( action == "F0000004" ) {
+		//访问后端
+		$.SmartForm.PostForm( "actionName", {}, function(){
 
-            }, function(){
-                
-            }, false )
+		}, function(){
+			
+		}, false );
 
-            $.IShowSuccess( "成功", "这是一条成功消息" );
-
-        }
-        //按钮编码F0000005点击后执行的
-        if( action == "F0000005" ) {
-            $.IShowWarn( "警告", "这是一条警告消息" )
-        }
-        //按钮编码F0000006点击后执行的
-        if( action == "F0000006" ) {
-            $.IShowError( "错误", "这是一条错误消息" );
-        }
-    },
+		$.IShowSuccess( "成功", "这是一条成功消息" );
+	}
+	//按钮编码F0000005点击后执行的
+	if( action == "F0000005" ) {
+		$.IShowWarn( "警告", "这是一条警告消息" )
+	}
+	//按钮编码F0000006点击后执行的
+	if( action == "F0000006" ) {
+		$.IShowError( "错误", "这是一条错误消息" );
+	}
+},
 ```
 
 #### **后端代码**
