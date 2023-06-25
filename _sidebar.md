@@ -7,8 +7,8 @@
   * [开发工具](/doc/dev-tools)
   * [常见名词](/doc/noun)
   * [应用/表单/控件编码查看](/doc/check-code)
+  * [表单事件](/doc/form-events)
   * [列表事件](/doc/list-events)
-  * [表单事件](/doc/form-events)  
 
 
 * 前端API
@@ -55,3 +55,4 @@
 * 其他
   
   * [常见问答](/doc/faq)
+  * [学习视频](/doc/video)
