@@ -21,12 +21,12 @@ stages:
         commands:
           - pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
           - pip install Markdown
-          - ''
+          - mkdir build
           - python build.py
         artifacts:
           - name: BUILD_ARTIFACT
             path:
-              - ./dist
+              - ./build
         caches: []
         notify: []
         strategy:

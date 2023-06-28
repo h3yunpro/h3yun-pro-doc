@@ -127,6 +127,7 @@ engine.WorkflowInstanceManager.SendMessage(cancelMessage);
 * 事件会在业务规则执行后触发
 * 当表单配置了流程，在**导入生效数据**时，由于导入时会创建流程并结束流程，所以也会触发本事件
 * 本事件无需用户进行调用，将事件写在**表单设计-后端代码**的 ```OnSubmit``` 方法之下即可。当流程状态发生改变时，流程引擎会自动调用 ```OnWorkflowInstanceStateChanged```
+* 当导入生效数据时，由于系统会默认发起流程并结束流程，所以也会触发 ```OnWorkflowInstanceStateChanged``` 事件
 
 代码示例：
 ``` cs
@@ -149,6 +150,11 @@ protected override void OnWorkflowInstanceStateChanged(H3.Workflow.Instance.Work
 
         // 获取当前业务对象
         H3.DataModel.BizObject bo = this.Request.BizObject;
+
+        // 因为OnWorkflowInstanceStateChanged事件没有OnSubmit事件的base.OnSubmit调用
+        // 所以，如果要在本事件里修改当前业务对象的控件值，需要在修改完后，要自行调用Update来生效修改
+        this.Request.BizObject["F00000001"] = "我在流程结束时变更了";
+        this.Request.BizObject.Update();
     }
 
     // 流程重新激活
