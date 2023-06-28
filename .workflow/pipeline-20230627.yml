@@ -20,12 +20,29 @@ stages:
         pythonVersion: '3.9'
         commands:
           - pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+          - ''
           - '# 可以使用pip下载依赖'
           - import os
+          - import markdown
           - ''
-          - fileList = os.listdir("./doc")
-          - print(fileList)
+          - 'def readContent(path):'
+          - '    with open(path, "r", encoding="utf-8") as file:'
+          - '        con = "".join(file.readlines())'
+          - '        return con'
           - ''
+          - ''
+          - dirPath = "./doc"
+          - fileList = os.listdir(dirPath)
+          - ''
+          - content = readContent("./README.md") + "\n"
+          - 'for filePath in fileList:'
+          - '    content += readContent(dirPath+"/"+filePath)'
+          - '    content += "\n"'
+          - ''
+          - html = markdown.markdown(content)
+          - ''
+          - 'with open("dist.html", "w", encoding="utf-8") as file:'
+          - '    file.write(html)'
           - ''
         artifacts:
           - name: BUILD_ARTIFACT
