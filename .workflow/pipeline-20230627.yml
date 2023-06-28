@@ -31,7 +31,21 @@ stages:
         notify: []
         strategy:
           retry: '0'
-  - name: stage-5a6a2a78
+  - name: stage-8c44875e
+    displayName: 上传
+    strategy: naturally
+    trigger: auto
+    executor: []
+    steps:
+      - step: publish@general_artifacts
+        name: publish_general_artifacts
+        displayName: 上传制品
+        dependArtifact: BUILD_ARTIFACT
+        artifactName: output
+        notify: []
+        strategy:
+          retry: '0'
+  - name: stage-259f7052
     displayName: 发布
     strategy: naturally
     trigger: auto
