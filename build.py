@@ -21,7 +21,7 @@ html = markdown.markdown(content)
 
 print("convert to html complete.")
 
-with open("dist.html", "w", encoding="utf-8") as file:
+with open("./dist/index.html", "w", encoding="utf-8") as file:
     file.write(html)
 
 print("build complete.")
