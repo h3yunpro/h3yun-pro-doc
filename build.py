@@ -1,27 +1,40 @@
 import os
-import markdown
+import re
+from markdown2 import Markdown
+
 
 def readContent(path):
     with open(path, "r", encoding="utf-8") as file:
-        con = "".join(file.readlines())
-        return con
+        return file.read()
 
 
-dirPath = "./doc"
-fileList = os.listdir(dirPath)
+def mergeContent():
+    buildDir = "./build"
+    convert = Markdown()
 
-content = readContent("./README.md") + "\n"
-for filePath in fileList:
-    content += readContent(dirPath+"/"+filePath)
-    content += "\n"
+    sidebar = readContent("./_sidebar.md")
+    pathList = re.findall("\(\/doc\/.+\)", sidebar)
 
-print("load content complete.")
+    html = "<!DOCTYPE html><html lang='cn'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>氚专开发者共创文档</title></head><body>"
+    html += convert.convert(readContent("./README.md") + "\n")
+    if pathList is not None and len(pathList) > 0:
+        for filePath in pathList:
+            filePath = filePath.replace("(", "").replace(")", "")
+            filePath = "."+filePath+".md"
+            html += convert.convert(readContent(filePath) + "\n")
 
-html = markdown.markdown(content)
+    html += "</body></html>"
 
-print("convert to html complete.")
+    print("convert to html complete.")
 
-with open("./build/index.html", "w", encoding="utf-8") as file:
-    file.write(html)
+    if not os.path.exists(buildDir):
+        os.mkdir(buildDir)
 
-print("build complete.")
+    with open(buildDir+"/index.html", "w", encoding="utf-8") as file:
+        file.write(html)
+
+    print("build complete.")
+
+
+if __name__ == "__main__":
+    mergeContent()
