@@ -236,3 +236,18 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 ```
 <!-- tabs:end -->
 
+
+## [表单]新增时去除子表默认空白行
+
+可用位置：✔表单 / ✘列表
+
+``` js
+// 加载事件
+OnLoad: function() {
+	var that = this;
+
+	if( $.SmartForm.ResponseContext.IsCreateMode ) {
+		that.子表控件编码.ClearRows();
+	}
+},
+```
