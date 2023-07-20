@@ -7,7 +7,7 @@
 
 > 作者：吴登杰
 
-由于跨域原因，目前暂不支持在线播放，请通过此地址下载：
+由于跨域原因，暂不支持在线播放，请通过此地址下载：
 ``` 
 http://mediavideo.h3yun.net/0%E5%9F%BA%E7%A1%80%E7%AA%81%E7%A0%B4%E4%BB%A3%E7%A0%81%EF%BC%8C%E5%8A%A9%E4%BC%81%E4%B8%9A%E5%91%98%E5%B7%A5%E5%BB%BA%E7%AB%8BIT%E8%83%BD%E5%8A%9B.mp4?spm=a2c6h.12873639.article-detail.145.655b68b5Y1tIw3&file=0%E5%9F%BA%E7%A1%80%E7%AA%81%E7%A0%B4%E4%BB%A3%E7%A0%81%EF%BC%8C%E5%8A%A9%E4%BC%81%E4%B8%9A%E5%91%98%E5%B7%A5%E5%BB%BA%E7%AB%8BIT%E8%83%BD%E5%8A%9B.mp4
 ```
