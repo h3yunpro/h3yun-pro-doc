@@ -10,6 +10,9 @@
 
 ![](../img/req-api-2.png)
 
+!> PS：连接URL最好使用域名的方式，如果使用 IP:Port 方式，端口号可能处于氚云防火墙黑名单中。
+如条件受限，只能使用 IP:Port 方式，配置上后，连接请求一直卡死无响应，可以切换到 200-300 范围内的端口试试。
+
 2. 书写代码，代码中有一个传入参数即连接编码，用来指定使用哪个连接
 
 以下是一个请求示例：
@@ -64,11 +67,8 @@ H3.BizBus.InvokeResult res = engine.BizBus.InvokeApi(
     H3.Organization.User.SystemUserId, //固定值，无需改变
     H3.BizBus.AccessPointType.ThirdConnection, //固定值，无需改变
     "ConnectCode", //连接编码，对应 插件中心 中配置的连接的编码
-    "GET", //请求方式，取值：GET / POST
-
-    //请求数据类型
-    //注意：如果是传递json数据，这里直接用“application/json”
-    "text/html;charset=utf-8",
+    "GET", //请求方式，取值：GET | POST (注意：字母必须全大写，不可大小写混合)
+    "text/html;charset=utf-8", //请求数据类型 (注意：如果是传递json数据，这里直接用“application/json”)
     headers, querys, bodys, structureSchema);
 if(res != null)
 {
@@ -96,6 +96,3 @@ if(res != null)
     throw new Exception("接口响应数据为空！");
 }
 ```
-
-!> 注意：连接URL最好使用域名方式，如果使用 IP:Port 方式，端口号可能处于氚云防火墙黑名单中。
-如条件受限，只能使用 IP:Port 方式，配置上后，连接请求一直卡死无响应，可以切换到 200-300 范围内的端口试试。

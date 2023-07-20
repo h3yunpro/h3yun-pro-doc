@@ -13,9 +13,23 @@
 
 ```OnLoad``` 为表单页加载事件，打开表单页时，最开始触发的就是本事件，在触发完后才会到达前端的 ```OnLoad``` 事件。
 
+其中 ```base.OnLoad(response);``` 为默认处理，有以下效果：
+1. 内部将当前业务对象转换到 ```response``` 上，以响应给前端渲染
+
+!> 注意：此行代码 ```base.OnLoad(response);``` 请保证触发 ```OnLoad``` 事件时都能得到执行（不要删除该行代码，尽量不要放在if判断体内），否则将失去以上列举的效果。
+
 ### 后端OnSubmit事件
 
 ```OnSubmit``` 在**按钮点击**或**Post请求**时触发，此事件的 ```actionName``` 参数非常重要，标识了触发来源。当按钮点击时，```actionName``` 即按钮编码；当Post请求时，```actionName``` 即前端自定义的请求活动名称。
+
+其中 ```base.OnSubmit(actionName, postValue, response);``` 为默认处理，有以下效果：
+1. ```actionName``` 为 ```Save/Submit```（即 暂存/提交/同意）时，内部执行保存当前业务对象的操作（保存至数据库）
+2. ```actionName``` 为 ```Submit```（即 提交/同意）时，且导致数据生效，则内部自动触发生效的业务规则
+3. ```actionName``` 为 ```Remove```（即 删除）时，且删除的是生效数据，则内部自动触发作废的业务规则
+4. 内部根据不同的 ```actionName``` 构造不同的 ```response``` 数据，以响应给前端处理
+
+!> 注意：此行代码 ```base.OnSubmit(actionName, postValue, response);``` 请保证触发 ```OnSubmit``` 事件时都能得到执行（不要删除该行代码，尽量不要放在if判断体内），否则将失去以上列举的效果。
+
 
 ### 后端OnWorkflowInstanceStateChanged事件
 
@@ -185,7 +199,8 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
     try
     {
         //由于提交和同意按钮的actionName都是Submit，所以判断提交时需要联合当前表单状态进行判断
-        if(actionName == "Submit" && (this.Request.IsCreateMode || this.Request.BizObject.Status == H3.DataModel.BizObjectStatus.Draft))
+        //并且加上表单为无流程表单的判断
+        if(actionName == "Submit" && this.Request.FormDataType == H3.SmartForm.SmartFormDataType.BizObject && (this.Request.IsCreateMode || this.Request.BizObject.Status == H3.DataModel.BizObjectStatus.Draft))
         {
             // 业务代码
         }
