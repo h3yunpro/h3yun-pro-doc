@@ -1050,3 +1050,20 @@ code .token {
     --docsifytabs-border-color: #ededed;
     --docsifytabs-tab-highlight-color: purple;
 }
+
+/* 在文档标题前加上图标 */
+.app-name-link {
+    position: relative;
+}
+
+.app-name-link::before {
+    width: 25px;
+    height: 25px;
+    content: "";
+    background-image: url(../favicon.ico);
+    background-repeat: no-repeat;
+    background-size: 25px 25px;
+    display: block;
+    position: absolute;
+    left: -25px;
+}
