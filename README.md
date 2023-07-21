@@ -1,9 +1,6 @@
 # 氚专开发者共创文档
 
-[Gitee仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc)  |  [浏览文档](https://h3yunpro.github.io/h3yun-pro-doc/)  |  [docsify](https://docsify.js.org/#/) 
-
-!> 官方文档地址： [https://help.h3yun.com/channels/3.html](https://help.h3yun.com/channels/3.html)
-
+[文档仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc)  |  [浏览文档](https://h3yunpro.github.io/h3yun-pro-doc/)  |  [氚云官方文档](https://help.h3yun.com/channels/3.html)
 
 ## 概述
 
@@ -12,37 +9,28 @@
 
 ## 如何做出贡献
 
-如您想要为本文档做出贡献，可以前往 [Gitee仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc) 提交 PR 和 ISSUE 。
+遵照以下规范编写内容，前往 [Gitee仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc) 提交 PR 和 ISSUE 。
 
 提交pr的操作：
-
-1、fork仓库
-
-2、完成贡献后，在gitee上发起 Pull Requests
+1. fork仓库
+2. 完成贡献后，在gitee上发起 Pull Requests
 
 
 ## 文档/目录
 
 - ```index.html``` 文档主页面，此页面包含 文档样式、配置、插件引入
-
 - ```_sidebar.md``` 目录文档，在doc目录下添加了新markdown文件后，需要在此加入目录
-  
 - ```/doc``` 存放文档的markdown文件
-  
 - ```/img``` 存放markdown文件所用到的图片
-  
 - ```/file``` 存放代码量较大的项目文件，或者SDK等
-
 - ```/css``` 存放样式文件，以及自定义样式
-
 - ```/js``` 存放js插件
 
 
 ## 默认分支
 
 - ```master``` 主分支，此分支内容实时推送到线上文档
-
-- ```quick``` 快速编辑分支，用于直接在gitee在线对文档细节微调
+- ```quick``` 快速编辑分支，用于在线编写文档
 
 
 ## 本地预览
@@ -60,3 +48,9 @@
 | ```netrv.bat```  | ```netrv```  | 需要安装 ```dotnet``` 和 ```dotnet-serve``` 模块 |
 | ```noderv.bat``` | ```noderv``` | 需要安装 ```nodejs``` 和 ```http-server``` 模块  |
 | ```pyrv.bat```   | ```pyrv```   | 需要安装 ```python 3```                         |
+
+
+## 感谢名单
+
+1. [docsify](https://docsify.js.org/) 本文档基于 ```docsify``` 框架，让文档的编写、协同、部署变得如此快捷又简单
+
