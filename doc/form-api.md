@@ -24,37 +24,51 @@ OnLoad: function() {
 ```
 
 
-## GetValue
+## 获取控件值
 
-```GetValue``` 是一个控件实例上的函数，使用方式：```that.控件编码.GetValue()```。
+```GetValue``` 是一个控件实例上的函数，使用方式：
+``` js
+that.控件编码.GetValue();
+```
 
 ```GetValue``` 函数用来获取控件的值，不同类型的控件，返回值的数据类型不同。
 
 
-## SetValue
+## 设置控件值
 
-```SetValue``` 是一个控件实例上的函数，使用方式：```that.控件编码.SetValue(值)```。
+```SetValue``` 是一个控件实例上的函数，使用方式：
+``` js
+that.控件编码.SetValue(值);
+```
 
 ```SetValue``` 函数用来设置控件的值，不同类型的控件，值的数据类型不同。
 
 
-## ClearItems
+## 清空选项（下拉框/单选框/多选框）
 
-```ClearItems``` 是一个控件实例上的函数，使用方式：```that.控件编码.ClearItems()```。
+```ClearItems``` 是一个控件实例上的函数，使用方式：
+``` js
+that.控件编码.ClearItems();
+```
 
 ```ClearItems``` 函数只能用于单选框/复选框/下拉框，作用是将控件的选项全部清空。
 
 
-## AddItem
+## 添加选项（下拉框/单选框/多选框）
 
-```AddItem``` 是一个控件实例上的函数，使用方式：```that.控件编码.AddItem("选项")```。
+```AddItem``` 是一个控件实例上的函数，使用方式：
+``` js
+that.控件编码.AddItem("选项");
+```
 
 ```AddItem``` 函数只能用于单选框/复选框/下拉框，作用是给控件增加一个选项，函数的传入参数必须是一个字符串。
 
 
-## BindChange
+## 给控件绑定值改变事件
 
-```BindChange``` 是一个控件实例上的函数，使用方式：
+```BindChange``` 是一个事件，一般写在 ```OnLoad``` 事件中，用来在表单打开时绑定上事件监听控件值的改变。
+
+使用方式：
 ``` js
 var that = this;
 that.控件编码.BindChange( "key", function() {
@@ -65,7 +79,7 @@ that.控件编码.BindChange( "key", function() {
 ```BindChange``` 函数用于绑定一个值改变事件，但是和js的 ```onchange``` 事件不一样。```onchange``` 函数触发时机为实时的值改变，而 ```BindChange``` 在值改变时不触发，在控件焦点离开后才触发。
 
 
-## $.SmartForm.PostForm
+## Ajax前端请求后端
 
 利用Ajax技术，异步请求后端，触发表单后端OnSubmit事件，[使用示例](/doc/js-example?id=表单前端onload事件-bindchange-post-请求后端)。
 
@@ -81,6 +95,7 @@ $.SmartForm.PostForm(
 
 
 ## 弹窗
+
 ``` js
 $.IShowSuccess( "成功", "这是一条成功消息" );//弹出成功消息
 
@@ -99,7 +114,8 @@ $.IConfirm( "提示", "是否确认？", function( data ) {
 ```
 
 
-## $.IShowForm 以全屏模式打开表单
+## 以全屏模式打开表单
+
 ``` js
 var schemaCode = "xxx";// 表单编码
 var objectId = "xx-xx-xx";// 表单数据Id，传 "" 时表示以新增模式打开，传具体数据Id表示打开该条数据表单详情页
@@ -108,11 +124,12 @@ $.IShowForm(schemaCode, objectId, checkIsChange);
 ```
 
 
-## $.IShowForm 以弹窗模式打开表单
+## 以弹窗模式打开表单
+
 ``` js
-var schemaCode = "";// 表单编码
+var schemaCode = "xxx";// 表单编码
 var objectId = ""; // 表单数据Id，传 "" 时表示以新增模式打开，传具体数据Id表示打开该条数据表单详情页
-var params = { "param1": "参数1" };// 传递到表单的参数，JSON对象格式
+var params = { "param1": "参数值1", "param2": 200 };// 传递到表单的参数，JSON对象格式
 var checkIsChange = false;// 是否检查修改
 var showlist = false;// 兼容移动端是否显示列表
 var showInModal = true;// 是否弹出框中显示，如果为false，title height width OnShowCallback OnHiddenCallback 等属性不起作用
@@ -120,15 +137,25 @@ $.IShowForm(schemaCode, objectId, params, checkIsChange, showlist, {
   showInModal: showInModal, title: "表单页标题", height: 500, width: 800,
   OnShowCallback: function( da ) { },// OnShowCallback 表单打开时事件
   onHiddenCallback: function( data ) {// onHiddenCallback 表单关闭时事件
-    
+        //当用户关闭表单后，会触发此事件，并且可以从data参数中获取用户在弹窗中输入的值
+        //比如，弹窗表单中有一个控件编码为F0000001的单行文本控件，则获取值方式如下：
+        var inputValue = data.Data["F0000001"];
+        if(inputValue){
+            //用户输入了值
+        }else{
+            //用户没输入值，进行提示
+            $.IShowError( "错误", "请输入xxx的值！" );
+        }
   }
 });
 ```
 
 
-## $.ILocation
+## 获取设备经纬度
 
-用于获取用户当前定位（其精度和位置控件一致），但是仅限移动端，所以使用前，需要判断一下当前表单所处环境，示例：
+用于获取用户当前定位（其精度和位置控件一致），但是仅限移动端，所以使用前，需要判断一下当前表单所处环境。
+
+示例：
 ``` js
 if($.SmartForm.ResponseContext.IsMobile){
     //此函数返回值为一个对象，对象格式和位置控件值一致，如下：
@@ -141,8 +168,8 @@ if($.SmartForm.ResponseContext.IsMobile){
 ```
 
 
-## $.SmartForm.ClosePage
+## 关闭表单
 
-用于关闭当前表单，示例：```$.SmartForm.ClosePage();```。
+用于关闭当前表单，示例：```$.SmartForm.ClosePage();```
 
 不过新版表单已不适用此接口，改为了：```this.ClosePage();```

@@ -65,9 +65,9 @@ $.IShowForm(schemaCode, objectId, checkIsChange);
 
 ## 以弹窗模式打开表单
 ``` js
-var schemaCode = "";// 表单编码
+var schemaCode = "xxx";// 表单编码
 var objectId = ""; // 表单数据Id，传 "" 时表示以新增模式打开，传具体数据Id表示打开该条数据表单详情页
-var params = { "param1": "参数1" };// 传递到表单的参数，JSON对象格式
+var params = { "param1": "参数值1", "param2": 200 };// 传递到表单的参数，JSON对象格式
 var checkIsChange = false;// 是否检查修改
 var showlist = false;// 兼容移动端是否显示列表
 var showInModal = true;// 是否弹出框中显示，如果为false，title height width OnShowCallback OnHiddenCallback 等属性不起作用
@@ -75,7 +75,15 @@ $.IShowForm(schemaCode, objectId, params, checkIsChange, showlist, {
   showInModal: showInModal, title: "表单页标题", height: 500, width: 800,
   OnShowCallback: function( da ) { },// OnShowCallback 表单打开时事件
   onHiddenCallback: function( data ) {// onHiddenCallback 表单关闭时事件
-    
+        //当用户关闭表单后，会触发此事件，并且可以从data参数中获取用户在弹窗中输入的值
+        //比如，弹窗表单中有一个控件编码为F0000001的单行文本控件，则获取值方式如下：
+        var inputValue = data.Data["F0000001"];
+        if(inputValue){
+            //用户输入了值
+        }else{
+            //用户没输入值，进行提示
+            $.IShowError( "错误", "请输入xxx的值！" );
+        }
   }
 });
 ```

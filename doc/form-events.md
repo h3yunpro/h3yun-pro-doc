@@ -2,7 +2,25 @@
 
 表单页面中的所有操作，都需要在表单设计页面中编写代码，代码需要编写在各种事件内，当对应操作产生时，系统会自动触发事件，以执行用户的自定义代码。
 
+
+## 表单页加载时的事件触发顺序图
+
+> 制作中...
+
+
+## 表单按钮点击时的事件触发顺序图
+
+> 制作中...
+
+
 ## 前端事件
+
+表单前端共有5个事件：
+- ```OnLoad```：加载事件，在后端OnLoad事件执行完后，前端会收到响应数据并渲染表单，渲染完成后触发前端的OnLoad事件
+- ```OnLoadActions```：在前端OnLoad事件执行完后，会渲染表单头部按钮，每一个按钮会触发一次前端OnLoadActions事件
+- ```OnValidate```：在用户点击表单上的按钮时，会触发前端OnValidate事件，此处可以写代码来校验用户填写的数据，以及给控件赋值，```actionControl.Action``` 的值即按钮编码
+- ```BeforeSubmit```：在前端OnValidate事件执行完成后，会触发前端BeforeSubmit事件
+- ```AfterSubmit```：在后端OnSubmit事件执行完成后，前端会收到响应数据并触发前端AfterSubmit事件
 
 
 ## 后端事件
@@ -37,6 +55,8 @@
 
 
 ## 判断表单的各种状态
+
+以下状态判断，可用于表单后端的 ```OnLoad```、```OnSubmit``` 两个事件中。
 
 1. 判断当前表单数据的数据状态
 ``` cs
@@ -103,7 +123,7 @@ if(this.Request.IsMobile)
 }
 ```
 
-6. 判断当前表单是否开启了流程
+6. 判断当前表单是否开启了流程审批
 ``` cs
 if(this.Request.FormDataType == H3.SmartForm.SmartFormDataType.BizObject)
 {

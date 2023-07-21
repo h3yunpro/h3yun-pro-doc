@@ -325,7 +325,9 @@ engine.BizObjectManager.RemoveFile("附件Id", true);
 
 此控件值是 ```H3.DataModel.BizObject[]``` 类型
 
-由于子表的类型是业务对象数组，跟业务对象操作有关，都要用上 ```H3.IEngine``` 实例，下面的示例中 ```engine``` 变量即 ```H3.IEngine``` 实例，参考 [H3.IEngine](/doc/cs-instance?id=H3IEngine)。
+由于子表的类型是业务对象数组，跟业务对象操作有关，都要用上 ```H3.IEngine``` 实例，下面的示例中 ```engine``` 变量即 ```H3.IEngine``` 实例，参考 [H3.IEngine](/doc/cs-instance?id=H3IEngine)
+
+虽然子表在数据库中是另一张表，但是业务对象对其进行了抽象。子表数据集合被当做了主表数据的一个字段，所以操作子表数据，大部分情况下都要通过主表的业务对象进行取值/赋值。
 
 取值：
 ``` cs
