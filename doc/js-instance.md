@@ -8,19 +8,19 @@
 
 | **属性名**            | **数据类型** | **说明**                                                       | **示例** |
 |--------------------|----------|--------------------------------------------------------------|--------|
-| ActivityCode       |          | 流程节点编码                                                       |        |
-| DisplayName        |          | 表单名称                                                         |        |
-| FormDataType       |          | 表单数据类型                                                       |        |
-| FormMode           |          |  表单模式，0为审批/办理 ，1为办理完结 ，2为创建 ，4为查阅                        |        |
-| InstanceId         |          | 当前表单数据的流程实例                                            |        |
-| IsCreateMode       |          | 是否创建模式，true：创建模式                                       |        |
-| BizObjectId        |          | 当前对象ID                                                       |        |
-| BizObjectStatus    |          | 当前对象状态，取值及释义：0 草稿；1 生效/流程结束；2 流程进行中；3 作废|        |
-| SchemaCode         |          | 当前表单的SchemaCode                                                 |        |
-| IsMobile           |          | 是否移动端，true：移动端                                           |        |
-| Originator         |          | 发起人用户ID                                                      |        |
-| OriginatorCode     |          | 发起人用户名                                                       |        |
-| OriginatorParentId |          | 发起人所在部门ID                                                    |        |
+| ActivityCode       |  string        | 流程节点编码                                                       |        |
+| DisplayName        |  string        | 表单名称                                                         |        |
+| FormDataType       |  number        | 表单数据类型                                                       |        |
+| FormMode           |  number        | 表单模式，0为审批/办理 ，1为办理完结 ，2为创建 ，4为查阅                        |        |
+| InstanceId         |  string        | 当前表单数据的流程实例                                            |        |
+| IsCreateMode       |  boolean       | 是否创建模式，true：创建模式                                       |        |
+| BizObjectId        |  string        | 当前对象ID                                                       |        |
+| BizObjectStatus    |  number        | 当前对象状态，取值及释义：0 草稿；1 生效/流程结束；2 流程进行中；3 作废|        |
+| SchemaCode         |  string        | 当前表单的SchemaCode                                                 |        |
+| IsMobile           |  boolean       | 是否移动端，true：移动端                                           |        |
+| Originator         |  string        | 发起人用户ID                                                      |        |
+| OriginatorCode     |  string        | 发起人用户名                                                       |        |
+| OriginatorParentId |  string        | 发起人所在部门ID                                                    |        |
 
 ### 示例
 
@@ -86,10 +86,21 @@ var ctCon = that.D000726F0001;
 //D000726F0001 是子表控件编码
 //D000726F0001.F0000002 是子表内控件的编码
 
-//获取子表第一行数据的ObjectId
-var firstRowId = that.D000726F0001.GetValue()[ 0 ].ObjectId;
+//获取子表所有行的数据集合
+var rows = that.D000726F0001.GetValue();
 
-//获取子表第一行数据 D000726F0001.F0000002 控件的实例
-var cellCon = that.D000726F0001.GetCellManager(firstRowId, "D000726F0001.F0000002" );
+//判断子表数据集合是否有值
+if( rows && rows.length ) {
+    //获取子表第一行数据的ObjectId
+    var firstRowId = rows[ 0 ].ObjectId;
+
+    //获取子表第一行数据 D000726F0001.F0000002 控件的实例
+    var cellCon = that.D000726F0001.GetCellManager( firstRowId, "D000726F0001.F0000002" );
+
+    //循环子表每行的数据
+    for( var i = 0;i < rows.length;i++ ) {
+        var currRowData = rows[ i ];
+    }
+}
 ```
 
