@@ -52,5 +52,5 @@
 
 ## 感谢名单
 
-1. [docsify](https://docsify.js.org/) 本文档基于 ```docsify``` 框架，让文档的编写、协同、部署变得如此快捷又简单
+1. [docsify](https://docsify.js.org/) 本文档基于 ```docsify``` 框架，提供了一套快捷又简单的文档编写、协同、部署方案
 
