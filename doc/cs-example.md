@@ -171,6 +171,23 @@ public static List < H3.DataModel.BizObject > GetAllBizObject(H3.IEngine engine,
 ```
 
 
+## [通用]CopyFiles图片到目标数据，图片在移动端列表显示
+
+可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
+
+``` cs
+H3.DataModel.BizObject sourceBo = （省略）;//源数据业务对象
+H3.DataModel.BizObject toBo = （省略）;//目标数据业务对象
+
+//将源数据中某图片控件下的图片，复制到目标数据的某图片控件中，并得到复制后的图片信息数组
+H3.DataModel.BizObjectFileHeader[] files = this.Engine.BizObjectManager.CopyFiles(sourceBo.Schema.SchemaCode, "", "源数据图片控件编码", sourceBo.ObjectId, toBo.Schema.SchemaCode, "", "目标数据图片控件编码", toBo.ObjectId, true, true);
+//将控件中第一张图片设置为移动端列表上的数据图片
+toBo.IconId = files[0].FileId;
+//更新目标业务对象，提交以上设置
+toBo.Update();
+```
+
+
 ## [表单]提交时汇总子表金额
 
 可用位置：✔表单 / ✘列表 / ✘定时器 / ✘自定义接口
