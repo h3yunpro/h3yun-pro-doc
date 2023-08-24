@@ -5,7 +5,7 @@
 
 步骤：
 
-1. 在 **插件中心** 新建连接（注意：编码框内填该连接的Code，不是填UTF-8、ASCII等数据编码）
+1. 在 **插件中心** 新建连接（注意：编码框内自定义一个该连接的Code，不是填UTF-8、ASCII等数据编码）
 ![](../img/req-api-1.png)
 
 ![](../img/req-api-2.png)
@@ -15,14 +15,19 @@
 
 2. 书写代码，代码中有一个传入参数即连接编码，用来指定使用哪个连接
 
-以下是一个请求示例：
+!> 建议先通过非代码的连接调试一下接口，以确定接口连通性、响应数据的结构
+
+![](../img/req-api-3.png)
+
+
+## 请求示例
 
 ``` cs
 //本示例是在表单后端事件中调用，所以H3.IEngine实例可以用this.Engine获取
 H3.IEngine engine = this.Engine;
 
-
 //header 请求参数初始化，此实例会添加到请求的 Headers 中
+//注意：请勿给headers设置Content-Type属性，否则可能导致接口调用失败
 Dictionary < string, string > headers = new Dictionary<string, string>();
 
 //query 请求参数初始化，此处添加的参数会附加在请求Url后（例：?code=654028207203）
@@ -31,7 +36,6 @@ querys.Add("code", "654028207203");
 
 //body 请求数据初始化，此实例会转换为JSON格式发送给接口
 Dictionary < string, object > bodys = new Dictionary<string, object>();
-
 
 /*
     氚云的接口请求，响应数据一定要为JSON格式，并且需要在此定义响应JSON的结构，第三方接口的响应JSON，会自动按照定义的结构，反序列化成H3.BizBus.BizStructure类的实例。
@@ -68,7 +72,7 @@ H3.BizBus.InvokeResult res = engine.BizBus.InvokeApi(
     H3.BizBus.AccessPointType.ThirdConnection, //固定值，无需改变
     "ConnectCode", //连接编码，对应 插件中心 中配置的连接的编码
     "GET", //请求方式，取值：GET | POST (注意：字母必须全大写，不可大小写混合)
-    "text/html;charset=utf-8", //请求数据类型 (注意：如果是传递json数据，这里直接用“application/json”)
+    "text/html", //请求数据类型 (注意：如果是传递json数据，这里用“application/json”)
     headers, querys, bodys, structureSchema);
 if(res != null)
 {

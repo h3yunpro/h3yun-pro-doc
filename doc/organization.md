@@ -61,5 +61,30 @@ bool isAncestor = this.Engine.Organization.IsAncestor("子孙部门Id", "祖先�
         H3.Organization.NameType.FullName   完整名称，/Company/OU1/OU2 格式
 */
 H3.Organization.NameType type = H3.Organization.NameType.Name;
-string name=this.Engine.Organization.GetName("部门Id", type);
+string name = this.Engine.Organization.GetName("部门Id", type);
+```
+
+7. 根据父部门Id获取子孙部门
+
+``` cs
+string[] parentUnitIds = new string[]{ "父部门Id" };
+
+/*
+    GetChildUnits方法参数说明：
+        System.String[] ids：父部门Id数组
+        H3.Organization.UnitType childUnitType：获取的子节点类型，H3.Organization.UnitType.OrganizationUnit 为获取部门节点
+        bool recursive：是否递归获取，传true递归获取子孙部门，传false只获取子部门
+        H3.Organization.State state：部门状态，H3.Organization.State.Active 为生效状态
+*/
+H3.Organization.Unit[] childUnits = this.Engine.Organization.GetChildUnits(parentUnitIds, H3.Organization.UnitType.OrganizationUnit, true, H3.Organization.State.Active);
+if(childUnits == null || childUnits.Length == 0)
+{
+    throw new Exception("未找到子部门！");
+}
+foreach(H3.Organization.Unit unit in childUnits) 
+{
+    string unitId = unit.ObjectId;//子部门Id
+    string unitName = unit.Name;//子部门名称
+    string unitManagerId = unit.ManagerId;//子部门主管人员Id
+}
 ```
