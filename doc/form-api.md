@@ -28,7 +28,7 @@ OnLoad: function() {
 
 ```GetValue``` 是一个控件实例上的函数，使用方式：
 ``` js
-that.控件编码.GetValue();
+var conValue = that.控件编码.GetValue();
 ```
 
 ```GetValue``` 函数用来获取控件的值，不同类型的控件，返回值的数据类型不同。
@@ -68,10 +68,16 @@ that.控件编码.AddItem("选项");
 
 ```BindChange``` 是一个事件，一般写在 ```OnLoad``` 事件中，用来在表单打开时绑定上事件监听控件值的改变。
 
+!> 注意，函数的第一个参数 ```key``` 是自定义的一个事件标识，但是不可重复。
+
 使用方式：
 ``` js
-var that = this;
 that.控件编码.BindChange( "key", function() {
+    var v = that.控件编码.GetValue();
+});
+
+//如果不想命名key，可以使用 $.IGuid() 来保证key的唯一
+that.控件编码.BindChange( $.IGuid(), function() {
     var v = that.控件编码.GetValue();
 });
 ```
@@ -79,7 +85,59 @@ that.控件编码.BindChange( "key", function() {
 ```BindChange``` 函数用于绑定一个值改变事件，但是和js的 ```onchange``` 事件不一样。```onchange``` 函数触发时机为实时的值改变，而 ```BindChange``` 在值改变时不触发，在控件焦点离开后才触发。
 
 
-## Ajax前端请求后端
+## 取消绑定值改变事件
+
+```UnbindChange``` 专门用来取消 ```BindChange``` 事件，在 ```BindChange``` 时指定的 ```key``` 在这里就有用处了。
+
+使用方式：
+``` js
+that.控件编码.UnbindChange( "key");
+```
+
+
+## 绑定控件值变化事件
+
+``` js
+that.控件编码.OnTempChange(callback)
+```
+
+
+## 添加一行子表数据
+
+``` js
+that.子表编码.AddRow($.IGuid(), {"子表内控件编码": value})
+```
+
+
+## 清空子表数据
+
+``` js
+that.子表编码.ClearRows()
+```
+
+
+## 更新子表某行数据
+
+``` js
+that.子表编码.UpdateRow(subObjectId, {"子表内控件编码": value})
+```
+
+
+## 获取子表内控件
+
+``` js
+var cellManager = that.子表编码.GetCellManager(subObjectId, "子表内控件编码")
+```
+
+
+## 获取子表数据条数
+
+``` js
+var rowCount = that.子表编码.GetRowsCount();
+```
+
+
+## 前端Ajax请求后端
 
 利用Ajax技术，异步请求后端，触发表单后端OnSubmit事件，[使用示例](/doc/js-example?id=表单前端onload事件-bindchange-post-请求后端)。
 
@@ -103,7 +161,10 @@ $.IShowWarn( "警告", "这是一条警告消息" );//弹出警告消息
 
 $.IShowError( "错误", "这是一条错误消息" );//弹出错误消息
 
-//注意：$.IConfirm弹窗是属于回调式的，而非阻塞式，弹窗后的代码依然会被执行，所以请勿用在用户提交时
+/*
+    注意：$.IConfirm弹窗是属于回调式的，而非阻塞式，调用完此函数，会立马执行后续代码，
+        而不会等待用户点击按钮后再执行，所以请勿用在用户提交时
+*/
 $.IConfirm( "提示", "是否确认？", function( data ) {
     if( data ) {
         //点击确认按钮
@@ -151,6 +212,13 @@ $.IShowForm(schemaCode, objectId, params, checkIsChange, showlist, {
 ```
 
 
+## 获取弹窗调用方传递的参数
+
+``` js
+var paramValue = $.IGetParams("参数名");
+```
+
+
 ## 获取设备经纬度
 
 用于获取用户当前定位（其精度和位置控件一致），但是仅限移动端，所以使用前，需要判断一下当前表单所处环境。
@@ -173,3 +241,4 @@ if($.SmartForm.ResponseContext.IsMobile){
 用于关闭当前表单，示例：```$.SmartForm.ClosePage();```
 
 不过新版表单已不适用此接口，改为了：```this.ClosePage();```
+

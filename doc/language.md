@@ -20,9 +20,9 @@
 ?> PS：如果您的集成第三方需求可以只通过标准接口或者配置连接实现，则不要求技术栈。
 
 
-## 氚云支持语言版本
+## 氚云二开语言版本
 
 - 后端 .NET Framework 版本：```.NET Framework 4.6.2```
 - 前端 JavaScript 版本：```ECMAScript 5 / ECMAScript 2009```
-- MySQL 数据库版本，自行根据此语句查询：```SELECT VERSION()```
+- MySQL 数据库不同用户有不同版本，请自行根据此语句查询：```SELECT VERSION()```
 
