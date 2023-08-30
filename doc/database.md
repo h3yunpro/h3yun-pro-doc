@@ -94,13 +94,13 @@
 | 3      | Name                | 用户姓名           |                                  |
 | 4      | ParentId            | 主部门Id           | 对应H_Organizationunit表ObjectId字段  |
 | 5      | ManagerId           | 部门经理用户Id     | 对应H_User表ObjectId字段              |
-| 6      | DingTalkAccount     | 对应钉钉用户Id      | 跟钉钉对接时可用，字段值格式：钉钉corpId.钉钉userId    |
+| 6      | DingTalkAccount     | 对应钉钉用户Id     | 跟钉钉对接时可用，字段值格式：```钉钉userId.钉钉corpId```（注意：对接时需截取出点号之前的钉钉userId）   |
 | 7      | WechatUserId        | 对应企微用户Id     |                                  |
 | 8      | Position            | 职位             |                                  |
 | 9      | Mobile              | 手机号            |                                  |
 | 10     | Email               | 邮箱             |                                  |
 | 11     | EmployeeNumber      | 工号             |                                  |
-| 12     | Title               | 用户的职务          |                                  |
+| 12     | Title               | 用户的职务       |                                  |
 | 13     | Birthday            | 生日             |                                  |
 | 14     | Gender              | 性别             |                                  |
 | 15     | EntryDate           | 入职日期           |                                  |
