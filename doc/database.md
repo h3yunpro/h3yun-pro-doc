@@ -235,32 +235,6 @@
 | 27     | Notify                | 流程是否发送消息提醒           |                                                              |
 
 
-## [系统-流程步骤表] H_Token
-
-数据库表名：H_Token
-
-> 流程每激活一个流程节点，对应此表一条数据
-
-| **序号** | **字段编码**           | **字段释义**    | **备注**                            |
-|--------|--------------------|-------------|-----------------------------------|
-| 1      | ObjectId           | 流程步骤Id      | 主键，流程步骤的唯一标识                      |
-| 2      | TokenId            | 令牌Id        |                                   |
-| 3      | Activity           | 令牌对应的活动编码   | 即流程设计中的节点编码                       |
-| 4      | Approval           | 审批结果        | 1：同意，0：不同意，-1：审批人还未处理/取消节点        |
-| 5      | SkippedExecution   | 是否跳过的       |                                   |
-| 6      | Exceptional        | 是否出现了异常     |                                   |
-| 7      | Retrievable        | 是否可以被撤回     |                                   |
-| 8      | CreatedTime        | 创建时间        |                                   |
-| 9      | PreTokens          | 前驱的令牌Id     |                                   |
-| 10     | FinishedTime       | 完成时间        |                                   |
-| 11     | State              | 状态          | 0：等待中，1：进行中，2：已完成，3：已取消，6：已转交     |
-| 12     | Participants       | 当前的审批人      | 由于一个节点可以由多个人审批，所以此字段是xml格式的用户Id数组 |
-| 13     | UsedTime           | 使用的时间       | 可通过 UsedTime/10000000 得到秒级单位的时间   |
-| 14     | ParentObjectId     | 流程实例Id      | 对应H_WorkflowInstance表ObjectId字段   |
-| 15     | ParentPropertyName | 属性名称        |                                   |
-| 16     | ParentIndex        | 对应流程实例中的排序值 |                                   |
-
-
 ## [系统-流程工作项表] H_WorkItem
 
 数据库表名：H_WorkItem
@@ -279,7 +253,7 @@
 | 8      | AppCode             | 应用编码                |                                 |
 | 9      | SchemaCode          | 业务对象模式编码            |                                 |
 | 10     | BizObjectId         | 业务对象Id              | 对应表单表ObjectId字段                 |
-| 11     | TokenId             | 流程中的步骤Id            | 对应H_Token表ObjectId字段            |
+| 11     | TokenId             | 流程中的步骤Id         | 该节点激活序号，同一个流程下此字段最大值就代表是最新的节点，可用于查询流程当前节点  |
 | 12     | ActivityCode        | 活动编码                | 即流程设计中节点的编码                     |
 | 13     | ActivityDisplayName | 活动名称                | 即流程设计中节点的名称                     |
 | 14     | DisplayName         | 显示名称（包含流程数据项的组合字符串） |                                 |
@@ -301,6 +275,32 @@
 | 30     | PreActionEventType  | 上一个操作的时间类型          |                                 |
 | 31     | ActionEventType     | 操作事件类型              |                                 |
 | 32     | AllowedTime         | 许可完成时间，到期自动审批       |                                 |
+
+
+## [系统-流程步骤表] H_Token
+
+数据库表名：H_Token
+
+> 流程每激活一个流程节点，对应此表一条数据
+
+| **序号** | **字段编码**           | **字段释义**    | **备注**                            |
+|--------|--------------------|-------------|-----------------------------------|
+| 1      | ObjectId           | 流程步骤Id      | 主键，流程步骤的唯一标识                      |
+| 2      | TokenId            | 令牌Id        |  该节点激活序号，同一个流程下此字段最大值就代表是最新的节点，可用于查询流程当前节点  |
+| 3      | Activity           | 令牌对应的活动编码   | 即流程设计中的节点编码                       |
+| 4      | Approval           | 审批结果        | 1：同意，0：不同意，-1：审批人还未处理/取消节点        |
+| 5      | SkippedExecution   | 是否跳过的       |                                   |
+| 6      | Exceptional        | 是否出现了异常     |                                   |
+| 7      | Retrievable        | 是否可以被撤回     |                                   |
+| 8      | CreatedTime        | 创建时间        |                                   |
+| 9      | PreTokens          | 前驱的令牌Id     |                                   |
+| 10     | FinishedTime       | 完成时间        |                                   |
+| 11     | State              | 状态          | 0：等待中，1：进行中，2：已完成，3：已取消，6：已转交     |
+| 12     | Participants       | 当前的审批人      | 由于一个节点可以由多个人审批，所以此字段是xml格式的用户Id数组 |
+| 13     | UsedTime           | 使用的时间       | 可通过 UsedTime/10000000 得到秒级单位的时间   |
+| 14     | ParentObjectId     | 流程实例Id      | 对应H_WorkflowInstance表ObjectId字段   |
+| 15     | ParentPropertyName | 属性名称        |                                   |
+| 16     | ParentIndex        | 对应流程实例中的排序值 |                                   |
 
 
 ## [系统-审批意见记录表] H_Comment
