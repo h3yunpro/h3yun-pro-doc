@@ -114,18 +114,34 @@ if(string.IsNullOrWhiteSpace(timeStr))
 
 此控件值是 ```decimal``` 类型，
 
-取值：
+取值示例一：
 ``` cs
 string numStr = bo["控件编码"] + string.Empty;
 if(string.IsNullOrWhiteSpace(numStr))
 {
-    //此控件值为null
+    //此控件值为null，此处可以写相关处理逻辑或抛异常处理
 } else
 {
     //有值时转换成 decimal 类型
     //因为氚云数字控件可配置最多16位小数，所以转成decimal类型（不管配置里小数位数多少，精度都足够）
     decimal num = decimal.Parse(numStr);
 }
+```
+
+取值示例二：
+``` cs
+//此示例跟一的区别在于，本示例不处理数字控件值为空的情况，为空时默认获取结果值为0
+string numStr = bo["控件编码"] + string.Empty;
+decimal num = 0m;
+if(!string.IsNullOrWhiteSpace(numStr))
+{
+    //有值时转换成 decimal 类型
+    //因为氚云数字控件可配置最多16位小数，所以转成decimal类型（不管配置里小数位数多少，精度都足够）
+    num = decimal.Parse(numStr);
+}
+
+//上面已经获取到了数字控件的值，在此继续写对该值操作的业务代码
+//但是注意num值可能为0，所以把num作为除数（会抛异常）前，需要判断一下num值是否为0
 ```
 
 赋值：
