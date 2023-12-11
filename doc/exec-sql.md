@@ -32,7 +32,7 @@ SELECT VERSION()
 
 ``` cs
 string sql = "SELECT ObjectId, Status FROM i_D00001ABC WHERE Status=1; ";
-System.Data.DataTable dtAccount = engine.Query.QueryTable(sql, null);
+System.Data.DataTable dt = engine.Query.QueryTable(sql, null);
 if(dt == null || dt.Rows.Count == 0)
 {
     //未查询到数据
