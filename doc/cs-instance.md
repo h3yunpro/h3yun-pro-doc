@@ -100,7 +100,7 @@ foreach(H3.DataModel.PropertySchema pro in schema.Properties)
 | DisplayName       | String                       | 控件名称                               |
 | Name              | String                       | 控件编码                               |
 | DataType          | H3.Data.BizDataType          | 控件类型，该属性数据类型为枚举                    |
-| IsCustom          | Boolean                      | 该控件是否是自定义的，true: 自定义控件，false: 系统控件 |
+| IsCustom          | Boolean                      | 此属性已废弃，请勿使用                   |
 | IsMappingProperty | Boolean                      | 该控件是否是关联属性控件，true: 关联属性控件          |
 | StorageByteCount  | Int32                        | 该控件占用空间大小                          |
 | MaxLength         | Int32                        | 该控件内容最大长度                          |
