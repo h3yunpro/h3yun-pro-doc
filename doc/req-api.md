@@ -93,7 +93,7 @@
 
 ``` cs
 /*
-    参照示例的响应JSON结构，会发现响应的JSON有多层（外层、$.data对象参数层、$.neighbors数组参数层），所以这里需要定义多个H3.BizBus.BizStructureSchema
+    参照示例的响应JSON结构，会发现响应的JSON有多层（$层、$.data参数层、$.data.neighbors参数层），所以这里需要定义3个H3.BizBus.BizStructureSchema
 */
 
 //定义响应数据最外层的结构体，后续以 $ 表示该层
