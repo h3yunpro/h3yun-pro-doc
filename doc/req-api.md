@@ -3,9 +3,17 @@
 
 第三方Api要求：http/https协议，请求参数和响应数据不支持文件类型，且响应数据必须是JSON格式
 
-步骤：
+## 通过非代码的连接调试接口
 
-1. 在 **插件中心** 新建连接（注意：编码框内自定义一个该连接的Code，不是填UTF-8、ASCII等数据编码）
+通过非代码的连接调试一下接口，可以确定接口连通性、响应数据的结构，也可以大概判断一下氚云支不支持直接连接该服务（若不支持可以通过在外部服务器开发并部署一个中间服务来做转接）
+
+![](../img/req-api-3.png)
+
+
+## 新建一个第三方连接（代码）
+
+在 **插件中心** 新建连接（注意：编码框内自定义一个该连接的Code，不是填UTF-8、ASCII等数据编码）
+
 ![](../img/req-api-1.png)
 
 ![](../img/req-api-2.png)
@@ -13,16 +21,112 @@
 !> PS：连接URL最好使用域名的方式，如果使用 IP:Port 方式，端口号可能处于氚云防火墙黑名单中。
 如条件受限，只能使用 IP:Port 方式，配置上后，连接请求一直卡死无响应，可以切换到 200-300 范围内的端口试试。
 
-2. 书写代码，代码中有一个传入参数即连接编码，用来指定使用哪个连接
 
-!> 建议先通过非代码的连接调试一下接口，以确定接口连通性、响应数据的结构
+## 代码调用第三方连接示例
 
-![](../img/req-api-3.png)
+<!-- tabs:start -->
+
+#### **响应数据示例**
+
+氚云的接口请求，响应数据一定要为JSON对象格式，下面是调用代码示例中对应响应数据：
+
+``` json
+{
+  "code": 200,
+  "ID": "654028207203",
+  "msg": "查询成功，查询花费0.0002秒",
+  "data": {
+    "Name": "阔克托干村",
+    "Province": "新疆维吾尔自治区",
+    "City": "伊犁哈萨克自治州",
+    "District": "尼勒克县",
+    "Tow": "喀拉托别乡",
+    "Villag": "阔克托干村",
+    "LevelType": "5"
+  },
+  "neighbors": [
+    {
+      "ID": "654028208000",
+      "Villag": "胡吉尔台乡",
+      "LevelType": "5"
+    },
+    {
+      "ID": "654028202000",
+      "Villag": "加哈乌拉斯台乡",
+      "LevelType": "5"
+    }
+  ],
+  "infos": [
+    "新疆维吾尔自治区",
+    "伊犁哈萨克自治州",
+    "尼勒克县",
+    "喀拉托别乡",
+    "阔克托干村"
+  ]
+}
+```
+
+下面是一些氚云不支持第三方连接响应数据：
+
+1. 非JSON格式的纯文本信息（氚云要求响应数据为JSON格式）
+```
+请求成功！
+```
+
+2. 最外层为数组格式（氚云要求响应数据最外层为对象格式）
+
+``` json
+[
+  {
+    "a": 1
+  },
+  {
+    "a": 2
+  }
+]
+```
+
+3. 文件格式（氚云二次代码开发层面已禁止IO操作相关功能，响应文件给氚云没有意义，若需要传文件给氚云请通过氚云OpenApi上传附件）
 
 
-## 请求示例
+#### **调用代码示例**
 
 ``` cs
+/*
+    参照示例的响应JSON结构，会发现响应的JSON有多层（外层、$.data对象参数层、$.neighbors数组参数层），所以这里需要定义多个H3.BizBus.BizStructureSchema
+*/
+
+//定义响应数据最外层的结构体，后续以 $ 表示该层
+H3.BizBus.BizStructureSchema structureSchema = new H3.BizBus.BizStructureSchema();
+structureSchema.Add(new H3.BizBus.ItemSchema("code", "结果状态码", H3.Data.BizDataType.Int, null));
+structureSchema.Add(new H3.BizBus.ItemSchema("ID", "行政区划代码", H3.Data.BizDataType.String, null));
+structureSchema.Add(new H3.BizBus.ItemSchema("msg", "描述", H3.Data.BizDataType.String, null));
+
+//定义响应数据的 $.data 属性的结构体
+H3.BizBus.BizStructureSchema dataSchema = new H3.BizBus.BizStructureSchema();
+dataSchema.Add(new H3.BizBus.ItemSchema("Name", "名称", H3.Data.BizDataType.String, null));
+dataSchema.Add(new H3.BizBus.ItemSchema("Province", "省级名称", H3.Data.BizDataType.String, null));
+dataSchema.Add(new H3.BizBus.ItemSchema("City", "市级名称", H3.Data.BizDataType.String, null));
+dataSchema.Add(new H3.BizBus.ItemSchema("District", "区县名称", H3.Data.BizDataType.String, null));
+dataSchema.Add(new H3.BizBus.ItemSchema("Tow", "镇级名称", H3.Data.BizDataType.String, null));
+dataSchema.Add(new H3.BizBus.ItemSchema("Villag", "村级名称", H3.Data.BizDataType.String, null));
+dataSchema.Add(new H3.BizBus.ItemSchema("LevelType", "层级类型", H3.Data.BizDataType.Int, null));
+
+//定义响应数据的 $.data.neighbors 属性的结构体
+H3.BizBus.BizStructureSchema neighborsSchema = new H3.BizBus.BizStructureSchema();
+neighborsSchema.Add(new H3.BizBus.ItemSchema("ID", "行政区划代码", H3.Data.BizDataType.String, null));
+neighborsSchema.Add(new H3.BizBus.ItemSchema("Villag", "村级名称", H3.Data.BizDataType.String, null));
+neighborsSchema.Add(new H3.BizBus.ItemSchema("LevelType", "层级类型", H3.Data.BizDataType.Int, null));
+//将 neighbors 属性的结构体添加进 $.data 的响应数据结构体（注意：neighbors 属性是对象数组格式，所以用的是H3.Data.BizDataType.BizStructureArray）
+dataSchema.Add(new H3.BizBus.ItemSchema("neighbors", "邻村信息数组", H3.Data.BizDataType.BizStructureArray, neighborsSchema));
+
+//将 $.data.infos 属性添加进 $.data 的响应数据结构体（$.data.infos 是个字符串数组，但氚云没有对应接收的类型，不过可以用string类型来接收）
+dataSchema.Add(new H3.BizBus.ItemSchema("infos", "重要信息数组", H3.Data.BizDataType.String, null));
+
+//将 $.data 属性的结构体添加进最外层的响应数据结构体
+structureSchema.Add(new H3.BizBus.ItemSchema("data", "地区数据", H3.Data.BizDataType.BizStructure, dataSchema));
+
+
 //本示例是在表单后端事件中调用，所以H3.IEngine实例可以用this.Engine获取
 H3.IEngine engine = this.Engine;
 
@@ -34,69 +138,78 @@ Dictionary < string, string > headers = new Dictionary<string, string>();
 Dictionary < string, string > querys = new Dictionary<string, string>();
 querys.Add("code", "654028207203");
 
-//body 请求数据初始化，此实例会转换为JSON格式发送给接口
+//body 请求数据初始化，此键值对数据会转换为JSON对象格式传给第三方接口
 Dictionary < string, object > bodys = new Dictionary<string, object>();
-
-/*
-    氚云的接口请求，响应数据一定要为JSON格式，并且需要在此定义响应JSON的结构，第三方接口的响应JSON，会自动按照定义的结构，反序列化成H3.BizBus.BizStructure类的实例。
-
-    如响应JSON为：
-
-    {"code":200,"ID":"654028207203","msg":"查询成功，查询花费0.0002秒","data":{"Name":"阔克托干村","Province":"新疆维吾尔自治区","City":"伊犁哈萨克自治州","District":"尼勒克县","Tow":"喀拉托别乡","Villag":"阔克托干村","LevelType":"5"}}
-
-    则按以下代码进行定义响应JSON结构，看以上的示例JSON，会发现响应JSON有两层（外层与data参数层），所以这里需要定义两个H3.BizBus.BizStructureSchema
-*/
-
-//定义响应数据整体结构体
-H3.BizBus.BizStructureSchema structureSchema = new H3.BizBus.BizStructureSchema();
-structureSchema.Add(new H3.BizBus.ItemSchema("code", "结果状态码", H3.Data.BizDataType.Int, null));
-structureSchema.Add(new H3.BizBus.ItemSchema("ID", "数据ID", H3.Data.BizDataType.String, null));
-structureSchema.Add(new H3.BizBus.ItemSchema("msg", "描述", H3.Data.BizDataType.String, null));
-
-//定义响应数据的 data 属性 的结构体
-H3.BizBus.BizStructureSchema dataSchema = new H3.BizBus.BizStructureSchema();
-dataSchema.Add(new H3.BizBus.ItemSchema("Name", "名称", H3.Data.BizDataType.String, null));
-dataSchema.Add(new H3.BizBus.ItemSchema("Province", "省级名称", H3.Data.BizDataType.String, null));
-dataSchema.Add(new H3.BizBus.ItemSchema("City", "市级名称", H3.Data.BizDataType.String, null));
-dataSchema.Add(new H3.BizBus.ItemSchema("District", "区县名称", H3.Data.BizDataType.String, null));
-dataSchema.Add(new H3.BizBus.ItemSchema("Tow", "镇级名称", H3.Data.BizDataType.String, null));
-dataSchema.Add(new H3.BizBus.ItemSchema("Villag", "村级名称", H3.Data.BizDataType.String, null));
-dataSchema.Add(new H3.BizBus.ItemSchema("LevelType", "层级类型", H3.Data.BizDataType.String, null));
-//将 data 属性的结构体添加进整体的响应数据结构体
-structureSchema.Add(new H3.BizBus.ItemSchema("data", "地区数据", H3.Data.BizDataType.BizStructure, dataSchema));
-
 
 //调用Invoke接口，系统底层访问第三方接口的Invoke方法
 H3.BizBus.InvokeResult res = engine.BizBus.InvokeApi(
     H3.Organization.User.SystemUserId, //固定值，无需改变
     H3.BizBus.AccessPointType.ThirdConnection, //固定值，无需改变
     "ConnectCode", //连接编码，对应 插件中心 中配置的连接的编码
-    "GET", //请求方式，取值：GET | POST (注意：字母必须全大写，不可大小写混合)
+    "GET", //请求方式，取值：GET | POST (注意：字母必须全大写，不可大小写混合，不支持PUT/DELETE等请求方式)
     "text/html", //请求数据类型 (注意：如果是传递json数据，这里用“application/json”)
     headers, querys, bodys, structureSchema);
-if(res != null)
-{
-    int resCode = res.Code; //调用是否成功
-    if(resCode == 0)
-    {
-        //获取返回数据，此实例对应完整的响应JSON
-        H3.BizBus.BizStructure resData = res.Data;
-
-        //获取响应数据中的 ID 属性值
-        string ID = resData["ID"] + string.Empty;
-
-        //获取响应数据中的 data.Name 属性值
-        H3.BizBus.BizStructure d = (H3.BizBus.BizStructure) resData["data"];
-        string n = d["Name"] + string.Empty;
-    }
-    else
-    {
-        //获取错误信息
-        string resMessage = res.Message;
-        throw new Exception("接口调用失败：" + resMessage);
-    }
-} else
+if(res == null)
 {
     throw new Exception("接口响应数据为空！");
 }
+
+if(res.Code != 0) //判断调用是否成功，0代表成功，其他为失败
+{
+    //调用失败，抛出失败原因
+    string resMessage = res.Message;
+    throw new Exception("接口调用失败：" + resMessage);
+}
+
+//获取返回数据，此实例对应响应JSON的最外层，后续以 $ 表示
+H3.BizBus.BizStructure resData = res.Data;
+
+//获取响应数据中的 $.ID 属性值
+string ID = resData["ID"] + string.Empty;
+
+//获取响应数据中的 $.data 属性值
+H3.BizBus.BizStructure data = (H3.BizBus.BizStructure) resData["data"];
+if(data != null)
+{
+    //获取响应数据中的 $.data.Name 属性值
+    string dataName = data["Name"] + string.Empty;
+    //获取响应数据中的 $.data.Province 属性值
+    string dataProvince = data["Province"] + string.Empty;
+
+    //获取响应数据中的 $.data.neighbors 属性值
+    H3.BizBus.BizStructure[] neighbors = (H3.BizBus.BizStructure[]) data["neighbors"];
+    if(neighbors != null && neighbors.Length > 0) 
+    {
+        //获取响应数据中的 $.data.neighbors[0].Villag 属性值
+        string firstNeighborVillag = neighbors[0]["Villag"] + string.Empty;
+
+        //循环获取响应数据中的 $.data.neighbors[?].ID 属性值
+        foreach(H3.BizBus.BizStructure n in neighbors) 
+        {
+            string nID = n["ID"] + string.Empty;
+        }
+    }
+
+    //获取响应数据中的 $.data.infos 属性值（$.data.infos 是个字符串数组，但氚云没有对应接收的类型，不过可以用string类型来接收）
+    string infos_Str = data["infos"] + string.Empty;
+    if(!string.IsNullOrWhiteSpace(infos_Str)) 
+    {
+        //通过string来接收到 $.data.infos 属性值，会得到一个JSON字符串，这里通过反序列化得到字符串数组
+        string[] infos = this.Deserialize<string[]>(infos_Str);
+        if(infos != null && infos.Length > 0)
+        {
+            //获取响应数据中的 $.data.infos[0] 的值
+            string firstInfoValue = infos[0];
+
+            //循环获取  $.data.infos[?] 的值
+            for(int i = 0;i < infos.Length; i++)
+            {
+                string infoValue = infos[i];
+            }
+        }
+    }
+
+}
 ```
+
+<!-- tabs:end -->
