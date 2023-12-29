@@ -77,7 +77,7 @@ FROM h_dingtalkisv
 
 ## 获取用户的钉钉userId
 
-!> 注意：仅限钉钉版氚云，【钉钉用户账号】字段值由 ```钉钉userId.企业corpId``` 组成，实际使用时需要截取 ```.``` 前面的部分。
+!> 注意：仅限钉钉端开通氚云的企业，【钉钉用户账号】字段值由 ```钉钉userId.企业corpId``` 组成，实际使用时需要截取 ```.``` 前面的部分。
 
 ``` sql
 SELECT ObjectId AS `氚云用户Id`, Name AS `人员姓名`, dingtalkaccount AS `钉钉用户账号`, state AS `在离职状态`

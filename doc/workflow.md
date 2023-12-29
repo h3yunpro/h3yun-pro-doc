@@ -122,12 +122,11 @@ engine.WorkflowInstanceManager.SendMessage(cancelMessage);
 
 当流程状态发生改变时，会触发 ```OnWorkflowInstanceStateChanged``` 事件，该事件有两个传入参数：```oldState```、```newState```，所以就能用来判断当前为结束时触发，还是重新激活时触发。
 
-补充条例：
+注意事项：
 
 * 事件会在业务规则执行后触发
-* 当表单配置了流程，在**导入生效数据**时，由于导入时会创建流程并结束流程，所以也会触发本事件
+* 当表单配置了流程，在**导入生效数据**时，由于导入时会创建流程并结束流程，所以也会触发 ```OnWorkflowInstanceStateChanged``` 事件
 * 本事件无需用户进行调用，将事件写在**表单设计-后端代码**的 ```OnSubmit``` 方法之下即可。当流程状态发生改变时，流程引擎会自动调用 ```OnWorkflowInstanceStateChanged```
-* 当导入生效数据时，由于系统会默认发起流程并结束流程，所以也会触发 ```OnWorkflowInstanceStateChanged``` 事件
 
 代码示例：
 ``` cs

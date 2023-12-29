@@ -34,17 +34,37 @@ public class Dxxx: H3.SmartForm.SmartFormController
 
     protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
     {
-        if(actionName == "Submit")
+        //写在base.OnSubmit上面
+        if(actionName == "Save" || actionName == "Submit")
         {
-            //当用户点击提交/同意按钮时，获取当前表单业务对象
+            //当用户点击暂存/提交/同意按钮时，获取当前表单业务对象
             H3.DataModel.BizObject bo = this.Request.BizObject;
             //获取当前数据单行文本控件的值
             string val = bo["控件编码"] + string.Empty;
             //设置当前数据单行文本控件的值
             bo["控件编码"] = "testValue";
+
+            //注意：actionName == "Save" || actionName == "Submit"，且修改当前业务对象的代码写在base.OnSubmit之上，此处无需写 bo.Update() ，base.OnSubmit内部会自动将当前业务对象保存到数据库
         }
 
         base.OnSubmit(actionName, postValue, response);
+
+        //写在base.OnSubmit下面
+        if(actionName == "Save" || actionName == "Submit")
+        {
+            //当用户点击暂存/提交/同意按钮时，获取当前表单业务对象
+            H3.DataModel.BizObject bo = this.Request.BizObject;
+            //写在base.OnSubmit之下，最好重新加载一次当前业务对象，因为base.OnSubmit中对当前业务对象进行了保存，可能会引发系统字段的变化
+            bo.Load();
+
+            //获取当前数据单行文本控件的值
+            string val = bo["控件编码"] + string.Empty;
+            //设置当前数据单行文本控件的值
+            bo["控件编码"] = "testValue";
+
+            //注意：写在base.OnSubmit下面，并修改了当前业务对象，此处需要写 bo.Update() 来将修改数据保存到数据库
+            bo.Update();
+        }
     }
 
     protected override void OnWorkflowInstanceStateChanged(H3.Workflow.Instance.WorkflowInstanceState oldState, H3.Workflow.Instance.WorkflowInstanceState newState)
@@ -53,12 +73,22 @@ public class Dxxx: H3.SmartForm.SmartFormController
         {
             // 流程数据生效时获取当前业务对象
             H3.DataModel.BizObject bo = this.Request.BizObject;
+
+            //修改当前业务对象的值
+            bo["控件编码"] = "testValue";
+            //提交修改数据，更到到数据库
+            bo.Update();
         }
 
         if(oldState == H3.Workflow.Instance.WorkflowInstanceState.Finished && newState == H3.Workflow.Instance.WorkflowInstanceState.Running)
         {
             // 流程数据重新激活时获取当前业务对象
             H3.DataModel.BizObject bo = this.Request.BizObject;
+
+            //修改当前业务对象的值
+            bo["控件编码"] = "testValue";
+            //提交修改数据，更到到数据库
+            bo.Update();
         }
 
         base.OnWorkflowInstanceStateChanged(oldState, newState);
@@ -66,7 +96,7 @@ public class Dxxx: H3.SmartForm.SmartFormController
 }
 ```
 
-!> 注：前端通过Post请求后端时，后端 ```this.Request.BizObject``` 可以获取，但无控件数据，正确做法应该是通过前端传参，后端获取请求参数。
+!> 注：前端通过Post请求后端时，后端虽然可以使用 ```this.Request.BizObject```，但数据不全，正确做法应该是通过前端传参，后端获取请求参数。
 
 
 ## 系统属性
@@ -94,7 +124,7 @@ string boId = bo.ObjectId;
 
 | 属性名                | 数据类型                         | 释义                                                          | 是否必填 |
 |--------------------|------------------------------|--------------------------------------------------------------------|--------|
-| ObjectId           | ```String```                 | 数据Id，用于标识表单数据的唯一值，在new H3.DataModel.BizObject()时系统自动通过GUID生成                         | 必填   |
+| ObjectId           | ```String```                 | 数据Id，表单数据唯一值，在new H3.DataModel.BizObject()时系统自动通过GUID生成                         | 必填   |
 | Name               | ```String```                 | 数据标题，显示在列表页和关联表单控件上，方便用户浏览和选择               |      |
 | OwnerId            | ```String```                 | 拥有者，值为氚云用户Id                                               | 必填   |
 | OwnerDeptId        | ```String```                 | 所属部门，值为氚云部门Id                                              | 必填   |

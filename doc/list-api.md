@@ -24,18 +24,20 @@ $.ListView.Post(
 
 
 ## 刷新列表数据
+
 ``` js
 $.ListView.RefreshView();
 ```
 
 
 ## 初始化列表筛选条件
+
 ``` js
 $.ListView.InitQueryItems();
 ```
 
 
-## 弹窗
+## 消息弹窗
 ``` js
 $.IShowSuccess( "成功", "这是一条成功消息" );//弹出成功消息
 

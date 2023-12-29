@@ -37,32 +37,34 @@
   "msg": "查询成功，查询花费0.0002秒",
   "data": {
     "Name": "阔克托干村",
+    "Longitude": 82.640110,
+    "Latitude": 43.755200,
     "Province": "新疆维吾尔自治区",
     "City": "伊犁哈萨克自治州",
     "District": "尼勒克县",
     "Tow": "喀拉托别乡",
     "Villag": "阔克托干村",
-    "LevelType": "5"
-  },
-  "neighbors": [
-    {
-      "ID": "654028208000",
-      "Villag": "胡吉尔台乡",
-      "LevelType": "5"
-    },
-    {
-      "ID": "654028202000",
-      "Villag": "加哈乌拉斯台乡",
-      "LevelType": "5"
-    }
-  ],
-  "infos": [
-    "新疆维吾尔自治区",
-    "伊犁哈萨克自治州",
-    "尼勒克县",
-    "喀拉托别乡",
-    "阔克托干村"
-  ]
+    "LevelType": 5,
+    "neighbors": [
+      {
+        "ID": "654028208000",
+        "Villag": "胡吉尔台乡",
+        "LevelType": 5
+      },
+      {
+        "ID": "654028202000",
+        "Villag": "加哈乌拉斯台乡",
+        "LevelType": 5
+      }
+    ],
+    "infos": [
+      "新疆维吾尔自治区",
+      "伊犁哈萨克自治州",
+      "尼勒克县",
+      "喀拉托别乡",
+      "阔克托干村"
+    ]
+  }
 }
 ```
 
@@ -105,6 +107,8 @@ structureSchema.Add(new H3.BizBus.ItemSchema("msg", "描述", H3.Data.BizDataTyp
 //定义响应数据的 $.data 属性的结构体
 H3.BizBus.BizStructureSchema dataSchema = new H3.BizBus.BizStructureSchema();
 dataSchema.Add(new H3.BizBus.ItemSchema("Name", "名称", H3.Data.BizDataType.String, null));
+dataSchema.Add(new H3.BizBus.ItemSchema("Longitude", "经度", H3.Data.BizDataType.Double, null));
+dataSchema.Add(new H3.BizBus.ItemSchema("Latitude", "纬度", H3.Data.BizDataType.Double, null));
 dataSchema.Add(new H3.BizBus.ItemSchema("Province", "省级名称", H3.Data.BizDataType.String, null));
 dataSchema.Add(new H3.BizBus.ItemSchema("City", "市级名称", H3.Data.BizDataType.String, null));
 dataSchema.Add(new H3.BizBus.ItemSchema("District", "区县名称", H3.Data.BizDataType.String, null));
@@ -117,13 +121,13 @@ H3.BizBus.BizStructureSchema neighborsSchema = new H3.BizBus.BizStructureSchema(
 neighborsSchema.Add(new H3.BizBus.ItemSchema("ID", "行政区划代码", H3.Data.BizDataType.String, null));
 neighborsSchema.Add(new H3.BizBus.ItemSchema("Villag", "村级名称", H3.Data.BizDataType.String, null));
 neighborsSchema.Add(new H3.BizBus.ItemSchema("LevelType", "层级类型", H3.Data.BizDataType.Int, null));
-//将 neighbors 属性的结构体添加进 $.data 的响应数据结构体（注意：neighbors 属性是对象数组格式，所以用的是H3.Data.BizDataType.BizStructureArray）
+//将 $.data.neighbors 属性的结构体添加进 $.data 的响应数据结构体（注意：neighbors 属性是对象数组格式，类型是H3.Data.BizDataType.BizStructureArray）
 dataSchema.Add(new H3.BizBus.ItemSchema("neighbors", "邻村信息数组", H3.Data.BizDataType.BizStructureArray, neighborsSchema));
 
-//将 $.data.infos 属性添加进 $.data 的响应数据结构体（$.data.infos 是个字符串数组，但氚云没有对应接收的类型，不过可以用string类型来接收）
+//将 $.data.infos 属性添加进 $.data 的响应数据结构体（注意：infos 是个字符串数组，但氚云没有对应接收的类型，不过可以用string类型来接收）
 dataSchema.Add(new H3.BizBus.ItemSchema("infos", "重要信息数组", H3.Data.BizDataType.String, null));
 
-//将 $.data 属性的结构体添加进最外层的响应数据结构体
+//将 $.data 属性的结构体添加进最外层的响应数据结构体（注意：data 属性是对象格式，类型是H3.Data.BizDataType.BizStructure）
 structureSchema.Add(new H3.BizBus.ItemSchema("data", "地区数据", H3.Data.BizDataType.BizStructure, dataSchema));
 
 
@@ -145,9 +149,9 @@ Dictionary < string, object > bodys = new Dictionary<string, object>();
 H3.BizBus.InvokeResult res = engine.BizBus.InvokeApi(
     H3.Organization.User.SystemUserId, //固定值，无需改变
     H3.BizBus.AccessPointType.ThirdConnection, //固定值，无需改变
-    "ConnectCode", //连接编码，对应 插件中心 中配置的连接的编码
-    "GET", //请求方式，取值：GET | POST (注意：字母必须全大写，不可大小写混合，不支持PUT/DELETE等请求方式)
-    "text/html", //请求数据类型 (注意：如果是传递json数据，这里用“application/json”)
+    "ConnectCode", //连接编码，对应 插件中心 中配置的连接的编码（注意：大小写敏感，必须和第三方连接配置的一样）
+    "GET", //请求Method，取值：GET | POST (注意：字母必须全大写，不可大小写混合，仅支持GET | POST两种请求方式)
+    "application/x-www-form-urlencoded", //请求Content-Type (注意：传递json数据这里用“application/json”)
     headers, querys, bodys, structureSchema);
 if(res == null)
 {
@@ -190,11 +194,11 @@ if(data != null)
         }
     }
 
-    //获取响应数据中的 $.data.infos 属性值（$.data.infos 是个字符串数组，但氚云没有对应接收的类型，不过可以用string类型来接收）
+    //获取响应数据中的 $.data.infos 属性值（由于 $.data.infos 用string类型来接收的，所以这里会得到infos的JSON字符串）
     string infos_Str = data["infos"] + string.Empty;
     if(!string.IsNullOrWhiteSpace(infos_Str)) 
     {
-        //通过string来接收到 $.data.infos 属性值，会得到一个JSON字符串，这里通过反序列化得到字符串数组
+        //将JSON字符串反序列化得到字符串数组
         string[] infos = this.Deserialize<string[]>(infos_Str);
         if(infos != null && infos.Length > 0)
         {

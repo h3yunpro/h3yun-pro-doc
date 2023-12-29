@@ -152,7 +152,7 @@ $.SmartForm.PostForm(
 ```
 
 
-## 弹窗
+## 消息弹窗
 
 ``` js
 $.IShowSuccess( "成功", "这是一条成功消息" );//弹出成功消息
@@ -164,6 +164,17 @@ $.IShowError( "错误", "这是一条错误消息" );//弹出错误消息
 /*
     注意：$.IConfirm弹窗是属于回调式的，而非阻塞式，调用完此函数，会立马执行后续代码，
         而不会等待用户点击按钮后再执行，所以请勿用在用户提交时
+
+        需要阻塞提交动作，请使用js自带的confirm：
+        var r=confirm("弹窗内容");
+        if (r==true)
+        {
+            //点击了确认按钮
+        }
+        else
+        {
+            //点击了取消按钮
+        }
 */
 $.IConfirm( "提示", "是否确认？", function( data ) {
     if( data ) {
@@ -190,7 +201,7 @@ $.IShowForm(schemaCode, objectId, checkIsChange);
 ``` js
 var schemaCode = "xxx";// 表单编码
 var objectId = ""; // 表单数据Id，传 "" 时表示以新增模式打开，传具体数据Id表示打开该条数据表单详情页
-var params = { "param1": "参数值1", "param2": 200 };// 传递到表单的参数，JSON对象格式
+var params = { "param1": "参数值1", "param2": 200 };// 传递到表单的参数，JSON对象格式（如果要将本表单数据传给弹窗，需先使用GetValue函数获取控件值，再放入params中）
 var checkIsChange = false;// 是否检查修改
 var showlist = false;// 兼容移动端是否显示列表
 var showInModal = true;// 是否弹出框中显示，如果为false，title height width OnShowCallback OnHiddenCallback 等属性不起作用
@@ -214,8 +225,10 @@ $.IShowForm(schemaCode, objectId, params, checkIsChange, showlist, {
 
 ## 获取弹窗调用方传递的参数
 
+如果本表单是其他表单，通过$.IShowForm打开的，并且有传递params，则可以通过 ```$.IGetParams``` 获取params中指定属性名对应的属性值。
+
 ``` js
-var paramValue = $.IGetParams("参数名");
+var param1 = $.IGetParams("param1");
 ```
 
 
@@ -238,7 +251,7 @@ if($.SmartForm.ResponseContext.IsMobile){
 
 ## 关闭表单
 
-用于关闭当前表单，示例：```$.SmartForm.ClosePage();```
+旧版表单：```$.SmartForm.ClosePage();```
 
-不过新版表单已不适用此接口，改为了：```this.ClosePage();```
+新版表单：```this.ClosePage();```
 
