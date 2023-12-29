@@ -167,3 +167,25 @@ protected override void OnWorkflowInstanceStateChanged(H3.Workflow.Instance.Work
 }
 ```
 
+## 获取当前流程运行节点
+
+由于 ```this.Request.ActivityCode``` 方法，获取的只是当前登录人所在的流程节点，会导致审批流节点的错乱，故使用：```this.Request.WorkflowInstance.RunningActivties```，获取当前流程的活动节点。
+
+补充条例：
+
+* this.Request.WorkflowInstance.RunningActivties，获取到的值是一个[]数组，取值需做循环或者是通过索引获取。
+
+代码示例：
+``` cs
+ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
+{
+    string[] workCode = this.Request.WorkflowInstance.RunningActivties;
+    if(actionName == "Submit" && workCode[0] == "Activity1")
+    {
+        this.Request.BizObject["F0000001"] = "当前流程为:"+ workCode[0];
+    }
+}
+```
+
+
+
