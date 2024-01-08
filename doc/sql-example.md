@@ -25,8 +25,11 @@ FROM (
 	JOIN mysql.help_topic b ON b.help_topic_id < length(a.userIds) - length(REPLACE(a.userIds, ' ', '')) + 1
 ```
 
-!> 注：关联 ```mysql.help_topic``` 表的目的是因为里面有一个 0 - 699 的自增字段 ```help_topic_id```。
-所以，如果有的企业```mysql.help_topic``` 表无数据，只需用户自建一个表单并导入0-999，且增量为1的数据，以模拟出 ```mysql.help_topic``` 表。
+> 注：关联 ```mysql.help_topic``` 表的目的是因为里面有一个 0 - 699 的自增字段 ```help_topic_id```。
+> 
+> 所以，如果有的企业```mysql.help_topic``` 表无数据，只需用户自建一个表单并导入0-999，且增量为1的数据，
+> 
+> 以模拟出 ```mysql.help_topic``` 表。
 
 
 ## 根据表单编码查询表单名称
@@ -57,14 +60,6 @@ FROM H_PublishedListViewSetting
 WHERE schemacode = '表单编码'
 ```
 
-查询表单后端代码中使用了某类的表单：
-``` sql
-SELECT fs.SchemaCode AS `表单编码`, sch.displayname AS `表单名称`, fs.behindcode AS `后端代码`
-FROM H_PublishedFormSetting fs
-	LEFT JOIN H_PublishedBizObjectSchema sch ON sch.SchemaCode = fs.SchemaCode
-WHERE behindcode LIKE '%类名%'
-```
-
 
 ## 获取氚云应用在钉钉中的appId
 
@@ -75,26 +70,15 @@ FROM h_dingtalkisv
 ```
 
 
-## 获取用户的钉钉userId
-
-!> 注意：仅限钉钉端开通氚云的企业，【钉钉用户账号】字段值由 ```钉钉userId.企业corpId``` 组成，实际使用时需要截取 ```.``` 前面的部分。
-
-``` sql
-SELECT ObjectId AS `氚云用户Id`, Name AS `人员姓名`, dingtalkaccount AS `钉钉用户账号`, state AS `在离职状态`
-FROM H_User
-WHERE Name = '张三'
-```
-
-
 ## 获取氚云流程表单审批通过时间
 
-```sql
-select
-    date_format(b.finishtime, '%Y-%m-%d %H:%i:%s') as `审批通过时间`,
+``` sql
+SELECT
+    date_format(b.finishtime, '%Y-%m-%d %H:%i:%s') AS `审批通过时间`,
     Approval `是否最终审批通过`
-from
+FROM
     i_表单编码 a
-    left join H_WorkflowInstance b on a.workflowinstanceid = b.ObjectId
-where
+    LEFT JOIN H_WorkflowInstance b ON a.workflowinstanceid = b.ObjectId
+WHERE
     b.Approval = 1
 ```
