@@ -171,7 +171,7 @@ $.ListView.ActionPreDo = function( actionCode ) {
 
         var seDatas = $.ListView.GetSelected();
         if( seDatas && seDatas.length ) {
-            if( seDatas.length > maxSelectedCount ) {
+            if( seDatas.length <= maxSelectedCount ) {
                 var seIds = [];
                 for( var i = 0;i < seDatas.length;i++ ) {
                     seIds.push( seDatas[ i ][ "ObjectId" ] );
