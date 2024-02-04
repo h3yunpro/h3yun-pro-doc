@@ -251,3 +251,77 @@ OnLoad: function() {
 	}
 },
 ```
+
+
+## [表单]监听子表内某列控件值变更
+
+``` js
+// 加载事件
+OnLoad: function() {
+	var that = this;
+
+	//定义一个前端字符串转数值的函数，以供后续获取数字控件值用
+	function convertNumber( v ) {
+		if( typeof v === "string" ) {
+			if( v && v.length ) {
+				try {
+					return parseFloat( v );
+				} catch( e ) {
+					return 0;
+				}
+			}
+		} else if( typeof v === "number" ) {
+			return v;
+		}
+
+		return 0;
+	}
+
+	//给子表控件绑定BindChange事件（子表内新增行、删除行、编辑控件数据都会触发子表控件的BindChange事件）
+	that.Dxxxxx.BindChange( $.IGuid(), function( data ) {
+		//获取触发本事件的子表数据行
+		var row = data[ 0 ];
+
+		//判断触发本事件的来源是否是 Dxxxxx.F0000003 控件
+		if( row && row.DataField == "Dxxxxx.F0000003" ) {
+			//获取触发本事件的子表数据行ObjectId
+			var currentRowId = row.ObjectId;
+
+			//获取本行数据的 Dxxxxx.F0000003 控件实例（子表内控件在每一行中都有，所以获取时，需要指定 子表数据行ObjectId 和 子表内控件编码）
+			var quantityCon = that.Dxxxxx.GetCellManager( currentRowId, "Dxxxxx.F0000003" );
+
+			//获取到了控件实例，那接下来就可以用控件实例相关的函数了（比如：GetValue、SetValue、ClearItems、AddItem）
+			//获取本行中 Dxxxxx.F0000003 控件的值
+			var quantity = quantityCon.GetValue();
+			//转成Number类型
+			quantity = convertNumber( quantity );
+
+			//获取本行 Dxxxxx.F0000004 控件的值
+			var unitPriceCon = that.Dxxxxx.GetCellManager( currentRowId, "Dxxxxx.F0000004" );
+			var unitPrice = unitPriceCon.GetValue();
+			//转成Number类型
+			unitPrice = convertNumber( unitPrice );
+
+			var amount = quantity * unitPrice;
+
+			//1、通过UpdateRow给本行 Dxxxxx.F0000005、Dxxxxx.F0000006 控件赋值
+			//注意：代码更新子表数据同样会触发子表BindChange事件，请注意循环触发的可能，请不要监听 Dxxxxx.F0000005、Dxxxxx.F0000006 控件
+			that.Dxxxxx.UpdateRow( currentRowId, {
+				"Dxxxxx.F0000005": amount,
+				"Dxxxxx.F0000006": amount
+			});
+
+			//2、也可以用控件SetValue的方式
+			//注意：代码更新子表数据同样会触发子表BindChange事件，请注意循环触发的可能，请不要监听 Dxxxxx.F0000005、Dxxxxx.F0000006 控件
+			var amountCon = that.Dxxxxx.GetCellManager( currentRowId, "Dxxxxx.F0000005" );
+			amountCon.SetValue(amount);
+		}
+
+
+		//判断触发本事件的来源是否是 Dxxxxx.F0000004 控件
+		if( row && row.DataField == "Dxxxxx.F0000004" ) {
+			//业务代码
+		}
+	});
+},
+```
