@@ -2,12 +2,10 @@
 
 氚云中想要定时执行一段代码去处理数据，可以利用定时器。
 
-氚云有一个定时器引擎，此引擎会每隔4小时（此间隔为底层设定，不可更改），检测用户编写的代码。
-
+氚云有一个定时器引擎，此引擎会每隔4小时（**此间隔时间为平台底层设定，不支持用户自定义，解决方案请参照下方代码示例**），检测用户编写的代码。<br/>
 当检测到代码中有继承 ```H3.SmartForm.Timer``` 类的子类，将会动态实例化此子类，并且自动调用子类中的 ```OnWork``` 方法。
 
-如果应用内定义了多个 ```H3.SmartForm.Timer``` 类的子类，并不是同时执行，而是会按定义的顺序逐个执行。
-
+如果应用内定义了多个 ```H3.SmartForm.Timer``` 类的子类，并不是同时执行，而是会按定义的顺序逐个执行。<br/>
 利用这个特性，我们只需要，定义一个类，并且继承 ```H3.SmartForm.Timer```，那我们的代码就可以每隔4小时执行一次了。
 
 
@@ -97,6 +95,60 @@ public class MyTest_Timer: H3.SmartForm.Timer
 1. 执行结果如何知晓？
 
     可以搭建一个日志表单，定时器中将执行结果写入到该表单（即创建表单数据，将执行时间、结果等赋值到表单中的控件内）
+
+    示例：
+
+``` cs
+public class MyTest_Timer: H3.SmartForm.Timer
+{
+    public MyTest_Timer() { }
+
+    protected override void OnWork(H3.IEngine engine)
+    {
+        /*
+        需要新建一个表单，表单名字为日志表，里面拖入4个控件：
+        ExeTime：日志记录时间        日期控件
+        Title：日志记录标题          单行文本
+        Result：执行结果             单行文本
+        Message：日志记录详细信息     多行文本
+        */
+
+        H3.DataModel.BizObjectSchema exeSchema = engine.BizObjectManager.GetPublishedSchema("日志表单编码");
+        H3.DataModel.BizObject exeBo = new H3.DataModel.BizObject(engine, exeSchema, H3.Organization.User.SystemUserId);
+        exeBo.Status = H3.DataModel.BizObjectStatus.Effective;
+        exeBo["ExeTime"] = DateTime.Now;
+        exeBo["Title"] = "MyTest_Timer的执行日志";
+
+        try 
+        {
+            //这里编写定时处理的业务代码
+
+
+            //当业务代码执行无异常，则记录下执行成功时的结果和信息
+            exeBo["Result"] = "成功";
+            exeBo["Message"] = string.Format("完成执行时间：{0}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+        } catch(Exception ex) 
+        {
+            //当业务代码执行出现异常，则记录下执行失败时的结果和异常原因
+            exeBo["Result"] = "失败";
+            exeBo["Message"] = g2000Str(ex.ToString());
+        }
+
+        exeBo.Create();//创建一条日志记录数据
+    }
+
+    //由于多行文本最多存放2000字的内容，所以这个方法对字符串做一个截取处理
+    //当传入字符串不超过2000字则原样返回，当超过则返回前2000字
+    private string g2000Str(string str)
+    {
+        if(!string.IsNullOrWhiteSpace(str) && str.Length > 2000)
+        {
+            return str.Substring(0, 2000);
+        }
+        return str;
+    }
+}
+```
 
 2. 如何调试定时器里的代码？
    
