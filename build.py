@@ -28,7 +28,7 @@ if __name__ == "__main__":
     print("build start.")
 
     buildDir = "./build"
-    convert = Markdown()
+    convert = Markdown(extras=["footnotes","tables","code-color","fenced-code-blocks","highlightjs-lang","html-classes"])
     content = mergeContent()
 
     with open(buildDir+"/index.md", "w", encoding="utf-8") as file:
