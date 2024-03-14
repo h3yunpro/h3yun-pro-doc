@@ -4,7 +4,9 @@
 
 ## 概述
 
-此文档库建立，是希望以另一种编排方式，引导开发者上手氚云专业版。并且欢迎所有开发人员参与进来，一起补充、完善文档，互帮互助。后续本文档将会作为群机器人训练数据。
+此文档库建立，是希望以另一种编排方式，引导开发者上手氚云专业版。并且欢迎所有开发人员参与进来，一起补充、完善文档，互帮互助。
+
+**本文档AI助理（在钉钉中打开此链接）：[https://applink.dingtalk.com/client/aiAgent?assistantId=470fe45f326b46b08bb77df404f31fc8&from=share](https://applink.dingtalk.com/client/aiAgent?assistantId=470fe45f326b46b08bb77df404f31fc8&from=share)**
 
 
 ## 如何做出贡献
