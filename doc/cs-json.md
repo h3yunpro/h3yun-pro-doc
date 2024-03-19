@@ -79,4 +79,18 @@ Dictionary<string, object> data = this.Deserialize<Dictionary<string, object>>("
 
 //将Json字符串反序列化成object[]（反序列化对象数组）
 object[] objArray = this.Deserialize<object[]>("[{\"key1\":\"value1\",\"key2\":\"value2\"},{\"key1\":\"value3\",\"key2\":\"value4\"}]");
+if(objArray != null && objArray.Length > 0) 
+{
+    //循环数组元素
+    foreach(object obj in objArray) 
+    {
+        //将每个数组元素转成Dictionary < string, object >
+        string dataStr = obj + string.Empty;
+        Dictionary < string, object > data = this.Deserialize<Dictionary<string, object>>(dataStr);
+
+        //获取键值对中的键值
+        string val1 = data["key1"] + string.Empty;
+        string val2 = data["key2"] + string.Empty;
+    }
+}
 ```
