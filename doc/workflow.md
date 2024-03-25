@@ -68,8 +68,8 @@ engine.WorkflowInstanceManager.SendMessage(actInsMessage);
 
 ``` cs
 H3.Workflow.Instance.WorkflowInstance instance = engine.WorkflowInstanceManager.GetWorkflowInstance("流程Id");
-H3.Workflow.Messages.FinishInstanceMessage cancelMessage = new H3.Workflow.Messages.FinishInstanceMessage("流程Id",(int)instance.FinalTokenId);
-engine.WorkflowInstanceManager.SendMessage(cancelMessage);
+H3.Workflow.Messages.FinishInstanceMessage finishMessage = new H3.Workflow.Messages.FinishInstanceMessage("流程Id",(int)instance.FinalTokenId);
+engine.WorkflowInstanceManager.SendMessage(finishMessage);
 ```
 
 

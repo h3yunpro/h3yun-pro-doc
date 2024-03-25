@@ -288,4 +288,4 @@ var ctData = this.子表编码.GetValue();//ctData是一个对象数组，数组
 
 
 ## 后端使用业务对象Create/Update/Remove时，会触发自动化吗？
-会触发的
+会触发

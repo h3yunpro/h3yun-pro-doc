@@ -2,6 +2,7 @@
 
 [文档仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc)  |  [浏览文档](https://h3yunpro.github.io/h3yun-pro-doc/)  |  [氚云官方文档](https://help.h3yun.com/channels/3.html)
 
+
 ## 概述
 
 此文档库建立，是希望以另一种编排方式，引导开发者上手氚云专业版。并且欢迎所有开发人员参与进来，一起补充、完善文档，互帮互助。
@@ -16,12 +17,11 @@
 
 ## 如何做出贡献
 
-遵照以下规范编写内容，前往 [Gitee仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc) 提交 PR 和 ISSUE 。<br/>
-如您有对文档建设的idea，或是代码示例的需求，也欢迎您提交ISSUE，让我们一起获得进步的力量！
+1. 快捷编辑功能：在每个文档头部都有【在线编辑】按钮，任意人拥有编辑权限（注：需注册gitee账号），提交后将保存到 ```quick``` 分支，待仓库管理员合并到 ```master``` 即可应用到线上
 
-提交pr的操作：
-1. fork仓库
-2. 完成贡献后，在gitee上发起 Pull Requests
+2. 前往 [Gitee仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc) 提交 PR 和 ISSUE 
+
+> PS：如您有对文档建设的idea，或是代码示例的需求，也欢迎您提交ISSUE，让我们一起获得进步的力量！
 
 
 ## 文档/目录
@@ -35,7 +35,7 @@
 - ```/js``` 存放js插件
 
 
-## 默认分支
+## 分支介绍
 
 - ```master``` 主分支，此分支内容实时推送到线上文档
 - ```quick``` 快速编辑分支，用于在线编写文档
@@ -44,7 +44,7 @@
 
 ## 本地预览
 
-本地预览只需要一个可挂载静态文件的服务，所以可以利用一些语言的简易Web服务模块。
+如果您 ```clone``` 了本仓库，在本地预览需要一个可挂载静态文件的服务，可以利用一些语言的简易Web服务模块。
 
 文档内已内置三个bat文件：```netrv.bat``` 、 ```noderv.bat``` 、 ```pyrv.bat```，您可以取用任意一个。
 
@@ -52,7 +52,7 @@
 
 文件对应命令及依赖：
 
-|  文件            |  cmd命令        |        依赖                                 |
+|  文件            |  cmd命令      |        依赖                                    |
 |  ----            | ----         | ----                                           |
 | ```netrv.bat```  | ```netrv```  | 需要安装 ```dotnet``` 和 ```dotnet-serve``` 模块 |
 | ```noderv.bat``` | ```noderv``` | 需要安装 ```nodejs``` 和 ```http-server``` 模块  |
@@ -61,5 +61,5 @@
 
 ## 感谢名单
 
-* 本文档基于 [docsify](https://docsify.js.org/) 框架构建
+* [docsify](https://docsify.js.org/) 本文档基于docsify框架构建
 
