@@ -1,5 +1,6 @@
 # 表单设计中的前端API
 
+
 ## this
 
 在前端事件 ```OnLoad```、```OnLoadActions```、```OnValidate```、```BeforeSubmit```、```AfterSubmit``` 中，均可以通过 ```this``` 关键字得到当前表单实例对象。
@@ -15,11 +16,28 @@
 OnLoad: function() {
     var that = this;//使用that变量将this实例转存，供回调函数中使用
 
+    //在BindChange的回调函数中，需将this替换为that
     that.F0000002.BindChange( $.IGuid(), function() {
-        //此处回调函数中，需要将this替换为that
 
+        //此处将this替换为that
         var projectId = that.F0000002.GetValue();
     });
+
+    //在PostForm的回调函数中，需将this替换为that
+    $.SmartForm.PostForm( "GetLatestProjectId_Post", {
+        "xx": 11
+    }, function( data ) {
+        if( data.Errors && data.Errors.length ) {
+            $.IShowError( "错误", JSON.stringify( data.Errors ) );
+        } else {
+            var result = data.ReturnData;
+
+            //此处将this替换为that
+            that.F0000002.SetValue(result["projectId"]);
+        }
+    }, function( error ) {
+        $.IShowError( "错误", JSON.stringify( error ) );
+    }, false );
 },
 ```
 
@@ -38,13 +56,37 @@ var conValue = that.控件编码.GetValue();
 
 ```SetValue``` 是一个控件实例上的函数，使用方式：
 ``` js
-that.控件编码.SetValue(值);
+that.控件编码.SetValue(控件值);
 ```
 
 ```SetValue``` 函数用来设置控件的值，不同类型的控件，值的数据类型不同。
 
 
+## 设置控件显示/隐藏
+
+```SetVisible``` 是一个控件实例上的函数，使用方式：
+``` js
+that.控件编码.SetVisible(true);//显示控件
+that.控件编码.SetVisible(false);//隐藏控件
+```
+
+```SetVisible``` 可用来 显示/隐藏 子表控件（即整个子表），但如果是设置子表内的控件，请先获取子表内的控件的实例
+
+
+## 设置控件只读/可写
+
+```SetReadonly``` 是一个控件实例上的函数，使用方式：
+``` js
+that.控件编码.SetReadonly(true);//设置控件只读
+that.控件编码.SetReadonly(false);//设置控件可写
+```
+
+```SetReadonly``` 可用来设置 只读/可写 子表控件（即控制子表是否有新增、删除按钮），但如果是设置子表内的控件，请先获取子表内的控件的实例
+
+
 ## 清空选项（下拉框/单选框/多选框）
+
+支持的控件类型：下拉框/单选框/多选框
 
 ```ClearItems``` 是一个控件实例上的函数，使用方式：
 ``` js
@@ -55,6 +97,8 @@ that.控件编码.ClearItems();
 
 
 ## 添加选项（下拉框/单选框/多选框）
+
+支持的控件类型：下拉框/单选框/多选框
 
 ```AddItem``` 是一个控件实例上的函数，使用方式：
 ``` js
@@ -91,46 +135,81 @@ that.控件编码.BindChange( $.IGuid(), function() {
 
 使用方式：
 ``` js
-that.控件编码.UnbindChange( "key");
+that.控件编码.UnbindChange("key");
 ```
 
 
 ## 绑定控件值变化事件
 
+支持的控件类型：单行文本、多行文本、数值
+
+当控件值发生改变后，会立即触发本事件，而 ```BindChange``` 需要在焦点离开控件后才会触发
+
 ``` js
-that.控件编码.OnTempChange(callback)
+that.控件编码.OnTempChange(function(){
+
+});
+```
+
+
+## 绑定控件内键盘按下事件
+
+支持的控件类型：单行文本、多行文本、数值
+
+``` js
+that.控件编码.OnKeyDown(function(event){
+
+    //可通过判断 event.keyCode 的值来确定用户按下哪个按键，如 event.keyCode == "enter" 为回车键
+
+    //可先通过console输出按下的按键，来确定需要监听的按键对应的编码
+    console.log(event.keyCode);
+});
 ```
 
 
 ## 添加一行子表数据
 
+支持的控件类型：子表
+
 ``` js
-that.子表编码.AddRow($.IGuid(), {"子表内控件编码": value})
+that.子表编码.AddRow($.IGuid(), {
+    "子表内控件编码": "控件值"
+});
 ```
 
 
 ## 清空子表数据
 
+支持的控件类型：子表
+
 ``` js
-that.子表编码.ClearRows()
+that.子表编码.ClearRows();
 ```
 
 
 ## 更新子表某行数据
 
+支持的控件类型：子表
+
 ``` js
-that.子表编码.UpdateRow(subObjectId, {"子表内控件编码": value})
+that.子表编码.UpdateRow(子表数据Id, {
+    "子表内控件编码": "控件值"
+});
 ```
 
 
 ## 获取子表内控件
 
+支持的控件类型：子表
+
 ``` js
-var cellManager = that.子表编码.GetCellManager(subObjectId, "子表内控件编码")
+var cellManager = that.子表编码.GetCellManager(子表数据Id, "子表内控件编码");
 ```
 
 
 ## 获取子表数据条数
+
+支持的控件类型：子表
 
 ``` js
 var rowCount = that.子表编码.GetRowsCount();
@@ -190,7 +269,7 @@ $.IConfirm( "提示", "是否确认？", function( data ) {
 
 ``` js
 var schemaCode = "xxx";// 表单编码
-var objectId = "xx-xx-xx";// 表单数据Id，传 "" 时表示以新增模式打开，传具体数据Id表示打开该条数据表单详情页
+var objectId = "";// 表单数据Id，传 "" 时表示以新增模式打开，传具体数据Id表示打开该条数据表单详情查看页
 var checkIsChange = true;// 关闭时是否感知变化，固定传 true
 $.IShowForm(schemaCode, objectId, checkIsChange);
 ```
@@ -200,7 +279,7 @@ $.IShowForm(schemaCode, objectId, checkIsChange);
 
 ``` js
 var schemaCode = "xxx";// 表单编码
-var objectId = ""; // 表单数据Id，传 "" 时表示以新增模式打开，传具体数据Id表示打开该条数据表单详情页
+var objectId = ""; // 表单数据Id，传 "" 时表示以新增模式打开，传具体数据Id表示打开该条数据表单详情查看页
 var params = { "param1": "参数值1", "param2": 200 };// 传递到表单的参数，JSON对象格式（如果要将本表单数据传给弹窗，需先使用GetValue函数获取控件值，再放入params中）
 var checkIsChange = false;// 是否检查修改
 var showlist = false;// 兼容移动端是否显示列表
@@ -225,7 +304,7 @@ $.IShowForm(schemaCode, objectId, params, checkIsChange, showlist, {
 
 ## 获取弹窗调用方传递的参数
 
-如果本表单是其他表单，通过$.IShowForm打开的，并且有传递params，则可以通过 ```$.IGetParams``` 获取params中指定属性名对应的属性值。
+如果本表单是通过$.IShowForm打开的，并且有传递params，则可以通过 ```$.IGetParams``` 获取params中指定属性名对应的属性值。
 
 ``` js
 var param1 = $.IGetParams("param1");
@@ -255,3 +334,109 @@ if($.SmartForm.ResponseContext.IsMobile){
 
 新版表单：```this.ClosePage();```
 
+
+## 设置控件内容的字体颜色
+
+支持的控件类型：单行文本、多行文本、日期、数值
+
+``` js
+that.控件编码.SetColor(Color.Blue);
+
+/*
+支持的颜色
+Color.Default 默认颜色
+Color.Blue    蓝色
+Color.Green   绿色
+Color.Yellow  黄色
+Color.Red     红色
+Color.Cyan    青色
+Color.Purple  紫色
+*/
+```
+
+
+## 设置控件内容的背景颜色
+
+支持的控件类型：单行文本、多行文本、日期、数值
+
+``` js
+that.控件编码.SetBgColor(BgColor.Success);
+
+/*
+支持的颜色
+BgColor.Success   成功消息（绿色）
+BgColor.Info      普通消息（）
+BgColor.Warning   警告消息（）
+BgColor.Error     异常消息（）
+*/
+```
+
+
+## 设置控件内容的字体大小
+
+支持的控件类型：单行文本、多行文本、日期、数值
+
+``` js
+that.控件编码.SetFontSize(FontSize.Large);
+
+/*
+支持的字体大小
+FontSize.Small   小号
+FontSize.Medium  中等
+FontSize.Large   大号
+*/
+```
+
+
+## 设置控件内容的字重
+
+支持的控件类型：单行文本、多行文本、日期、数值
+
+``` js
+that.控件编码.SetFontWeight(FontWeight.Bold);
+
+/*
+支持的字重
+FontWeight.Light    对应font-weight 300
+FontWeight.Medium   对应font-weight 500
+FontWeight.Bold     对应font-weight 700
+*/
+```
+
+
+## 设置控件内容的线类型
+
+支持的控件类型：单行文本、多行文本、日期、数值
+
+``` js
+that.控件编码.SetLine(LineType.Underline);
+
+/*
+支持的字重
+LineType.Underline    下划线
+LineType.Strikeline   删除线
+*/
+```
+
+
+## 表单页面聚焦到指定控件处
+
+支持的控件类型：单行文本、多行文本、数值
+
+``` js
+that.控件编码.SetFocus(true);//聚焦并自动滚动到指定控件处
+that.控件编码.SetFocus(true);//只聚焦，不自动滚动到指定控件处
+```
+
+
+## 绑定控件聚焦事件
+
+支持的控件类型：单行文本、多行文本、数值
+
+只支持编辑态控件，可以配合 ```SetFocus``` 一起使用，先定义 ```OnFocus``` 监听，后执行 ```SetFocus```
+
+``` js
+that.控件编码.OnFocus(function(){
+
+});
+```
