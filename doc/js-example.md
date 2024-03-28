@@ -178,7 +178,7 @@ OnLoad: function() {
 },
 ```
 
-## [表单]表单内按钮控件点击（触发）实例
+## [表单]前端按钮控件点击（触发）实例
 
 可用位置：✔表单 / ✘列表
 
@@ -237,7 +237,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 <!-- tabs:end -->
 
 
-## [表单]新增时去除子表默认空白行
+## [表单]前端新增页面去除子表默认空白行
 
 可用位置：✔表单 / ✘列表
 
@@ -253,7 +253,7 @@ OnLoad: function() {
 ```
 
 
-## [表单]监听子表内某列控件值变更
+## [表单]前端监听子表内某列控件值变更
 
 ``` js
 // 加载事件

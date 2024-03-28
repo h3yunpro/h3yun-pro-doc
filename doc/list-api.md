@@ -2,7 +2,7 @@
 
 列表前端只有一个事件，即列表按钮点击事件：```$.ListView.ActionPreDo```，所以本节的API都是用在按钮点击后的处理上。
 
-## 获取列表选中的数据
+## 列表前端获取选中的数据
 ``` js
 var selectedDatas = $.ListView.GetSelected();
 ```
@@ -23,21 +23,21 @@ $.ListView.Post(
 ```
 
 
-## 刷新列表数据
+## 列表前端刷新数据
 
 ``` js
 $.ListView.RefreshView();
 ```
 
 
-## 初始化列表筛选条件
+## 列表前端初始化筛选条件
 
 ``` js
 $.ListView.InitQueryItems();
 ```
 
 
-## 消息弹窗
+## 列表前端消息弹窗
 ``` js
 $.IShowSuccess( "成功", "这是一条成功消息" );//弹出成功消息
 
@@ -56,7 +56,7 @@ $.IConfirm( "提示", "是否确认？", function( data ) {
 ```
 
 
-## 以全屏模式打开表单
+## 列表前端以全屏模式打开表单
 ``` js
 var schemaCode = "xxx";// 表单编码
 var objectId = "xx-xx-xx";// 表单数据Id，传 "" 时表示以新增模式打开，传具体数据Id表示打开该条数据表单详情页
@@ -65,7 +65,7 @@ $.IShowForm(schemaCode, objectId, checkIsChange);
 ```
 
 
-## 以弹窗模式打开表单
+## 列表前端以弹窗模式打开表单
 ``` js
 var schemaCode = "xxx";// 表单编码
 var objectId = ""; // 表单数据Id，传 "" 时表示以新增模式打开，传具体数据Id表示打开该条数据表单详情页

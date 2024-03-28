@@ -10,7 +10,7 @@
 > 制作中...
 
 
-## 前端事件
+## 列表前端事件
 
 列表前端只有一个事件：```$.ListView.ActionPreDo```，在点击列表按钮时触发该事件，```actionCode``` 参数为按钮编码。
 
@@ -59,5 +59,5 @@ $.ListView.ActionPreDo = function( actionCode ) {
 ```
 
 
-## 后端事件
+## 列表后端事件
 
