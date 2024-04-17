@@ -214,7 +214,7 @@ public static bool gBool(object val)
 }
 
 //业务对象["字段名"] 转数值
-//用法：T val = gNum<T>(业务对象["控件编码"])
+//用法：decimal val = gNum<decimal>(业务对象["控件编码"])
 public static T gNum<T>(object val) where T: struct
 {
     string valStr = gStr(val);
@@ -225,8 +225,8 @@ public static T gNum<T>(object val) where T: struct
     return (T) Convert.ChangeType(val, typeof (T));
 }
 
-//Sum子表内某个控件值
-//用法：T val = gSum<T>(业务对象["子表编码"], "子表内控件编码")
+//将子表内某个控件值相加得到数值
+//用法：decimal val = gSum<decimal>(业务对象["子表编码"], "子表内控件编码")
 public static T gSum<T>(object objArray, string field) where T: struct
 {
     object val = 0;
@@ -249,7 +249,7 @@ public static T gSum<T>(object objArray, string field) where T: struct
     return (T) Convert.ChangeType(val, typeof (T));
 }
 
-//业务对象["字段名"] 转DateTime
+//业务对象["字段名"] 转DateTime，返回true代表转换成功
 //用法：DateTime val = DateTime.MinValue;  if(tTime(业务对象["子表编码"], out val)){ }
 public static bool tTime(object val, out DateTime time)
 {
@@ -257,7 +257,7 @@ public static bool tTime(object val, out DateTime time)
     return DateTime.TryParse(valStr, out time);
 }
 
-//业务对象["字段名"] 转DateTime
+//业务对象["字段名"] 转DateTime，转换成功返回日期，转换失败返回传入的默认值
 //用法：DateTime val = gTime(业务对象["子表编码"], DateTime.MinValue);
 public static DateTime gTime(object val, DateTime defaultTime)
 {
@@ -277,6 +277,7 @@ public static DateTime gTime(object val, DateTime defaultTime)
 }
 
 //当字符串长度超过200，截取前200字符，适用于给单行文本控件赋值时
+//用法：string val = g200Str("很长的字符串");
 public static string g200Str(string str)
 {
     if(!string.IsNullOrWhiteSpace(str) && str.Length > 200)
@@ -287,6 +288,7 @@ public static string g200Str(string str)
 }
 
 //当字符串长度超过2000，截取前2000字符，适用于给多行文本控件赋值时
+//用法：string val = g2000Str("很长的字符串");
 public static string g2000Str(string str)
 {
     if(!string.IsNullOrWhiteSpace(str) && str.Length > 2000)
@@ -297,6 +299,7 @@ public static string g2000Str(string str)
 }
 
 //中国式四舍五入，num参数为金额，digits为需要保留的小数位
+//用法：decimal val = gRound(123.456m, 2);
 public static decimal gRound(decimal num, int digits)
 {
     return System.Math.Round(num, digits, System.MidpointRounding.AwayFromZero);
