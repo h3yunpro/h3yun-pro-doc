@@ -37,13 +37,6 @@
   * [第三方调用氚云OpenApi](/doc/open-api)
 
 
-* 扩展
-
-  * [前端实例详解](/doc/js-instance)
-  * [后端实例详解](/doc/cs-instance)
-  * [数据库表结构详解](/doc/database)
-
-
 * 代码示例
 
   * [前端代码示例](/doc/js-example)
@@ -51,6 +44,13 @@
   * [前后端交互示例](/doc/interactive-example)
   * [数据库代码示例](/doc/sql-example)
   * [纯净代码示例](/doc/pure-example)
+
+
+* 扩展
+
+  * [前端实例详解](/doc/js-instance)
+  * [后端实例详解](/doc/cs-instance)
+  * [数据库表结构详解](/doc/database)
 
 
 * 其他
