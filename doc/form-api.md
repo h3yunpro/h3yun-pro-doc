@@ -49,7 +49,7 @@ OnLoad: function() {
 var conValue = that.控件编码.GetValue();
 ```
 
-```GetValue``` 函数用来获取控件的值，不同类型的控件，返回值的数据类型不同。
+```GetValue``` 函数用来获取控件的值，不同类型的控件，返回值的数据类型或格式不同。
 
 
 ## 设置控件值

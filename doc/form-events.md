@@ -27,7 +27,7 @@
 
 表单后端共有3个事件，其中初始代码中会有2个事件：```OnLoad``` 和 ```OnSubmit```，还有一个 ```OnWorkflowInstanceStateChanged``` 事件在需要时由开发者自行添加到表单类中。
 
-### 后端OnLoad事件
+### 表单后端OnLoad事件
 
 ```OnLoad``` 为表单页加载事件，打开表单页时，最开始触发的就是本事件，在触发完后才会到达前端的 ```OnLoad``` 事件。
 
@@ -36,7 +36,7 @@
 
 !> 注意：此行代码 ```base.OnLoad(response);``` 请保证触发 ```OnLoad``` 事件时都能得到执行（不要删除该行代码，尽量不要放在if判断体内），否则将失去以上列举的效果。
 
-### 后端OnSubmit事件
+### 表单后端OnSubmit事件
 
 ```OnSubmit``` 在**按钮点击**或**Post请求**时触发，此事件的 ```actionName``` 参数非常重要，标识了触发来源。当按钮点击时，```actionName``` 即按钮编码；当Post请求时，```actionName``` 即前端自定义的请求活动名称。
 
@@ -49,7 +49,7 @@
 !> 注意：此行代码 ```base.OnSubmit(actionName, postValue, response);``` 请保证触发 ```OnSubmit``` 事件时都能得到执行（不要删除该行代码，尽量不要放在if判断体内），否则将失去以上列举的效果。
 
 
-### 后端OnWorkflowInstanceStateChanged事件
+### 表单后端OnWorkflowInstanceStateChanged事件
 
 当流程状态发生改变时，会触发 ```OnWorkflowInstanceStateChanged``` 事件，该事件有两个传入参数：```oldState```、```newState```，所以就能用来判断当前为结束时触发，还是重新激活时触发。关于此事件的说明，请参考此文档[流程结束/重新激活 事件](/doc/workflow?id=流程结束重新激活-事件)
 

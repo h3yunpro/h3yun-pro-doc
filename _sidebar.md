@@ -30,13 +30,6 @@
   * [Json序列化/反序列化](doc/cs-json)
 
 
-* 第三方系统集成
-
-  * [氚云调用WebService](/doc/req-ws)
-  * [氚云调用WebAPI](/doc/req-api)
-  * [第三方调用氚云OpenApi](/doc/open-api)
-
-
 * 代码示例
 
   * [前端代码示例](/doc/js-example)
@@ -44,6 +37,13 @@
   * [前后端交互示例](/doc/interactive-example)
   * [数据库代码示例](/doc/sql-example)
   * [纯净代码示例](/doc/pure-example)
+
+
+* 第三方系统集成
+
+  * [氚云调用WebService](/doc/req-ws)
+  * [氚云调用WebAPI](/doc/req-api)
+  * [第三方调用氚云OpenApi](/doc/open-api)
 
 
 * 扩展
