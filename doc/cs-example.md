@@ -491,45 +491,42 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
-    if(actionName == "Submit") 
+    try
     {
-        try
+        //点提交按钮，有三种情况会发起流程，所以三种情况都需判断
+        //三种情况分别是：新增提交、先暂存后提交，流程回到发起节点重新提交
+        //一般在做销售出库冻结库存时，经常会在流程发起时冻结库存，所以会用到此示例
+        if(
+            (actionName == "Submit" && this.Request.IsCreateMode) ||
+            (actionName == "Submit" && this.Request.BizObject.Status == H3.DataModel.BizObjectStatus.Draft) ||
+            (actionName == "Submit" && this.Request.ActivityCode == "Activity2")
+        )
         {
-            //点提交按钮，有三种情况会发起流程，所以三种情况都需判断
-            //三种情况分别是：新增提交、先暂存后提交，流程回到发起节点重新提交
-            //一般在做销售出库冻结库存时，经常会在流程发起时冻结库存，所以会用到此示例
-            if(
-                (actionName == "Submit" && this.Request.IsCreateMode) ||
-                (actionName == "Submit" && this.Request.BizObject.Status == H3.DataModel.BizObjectStatus.Draft) ||
-                (actionName == "Submit" && this.Request.ActivityCode == "Activity2")
-            )
+            H3.IEngine engine = this.Engine;
+            H3.DataModel.BizObject thisBo = this.Request.BizObject;
+            DateTime todayTime = DateTime.Now;//获取今天日期
+
+            DateTime startTime = todayTime.Date;//获取今天 0点0分0秒
+            DateTime endTime = DateTime.Parse(todayTime.ToString("yyyy-MM-dd 23:59:59"));//获取今天 23点59分59秒
+
+            //通过SQL查询今天是否有提交数据
+            System.Data.DataTable dt = engine.Query.QueryTable("SELECT ObjectId, Name, Status, CreatedTime FROM i_" + thisBo.Schema.SchemaCode + " WHERE Status IN (1, 2) AND CreatedTime >= @startTime AND CreatedTime <= @endTime AND ObjectId != @thisId", new H3.Data.Database.Parameter[]{
+                new H3.Data.Database.Parameter("@startTime", System.Data.DbType.DateTime, startTime),
+                new H3.Data.Database.Parameter("@endTime", System.Data.DbType.DateTime, endTime),
+                new H3.Data.Database.Parameter("@thisId", System.Data.DbType.String, thisBo.ObjectId)//避免先暂存后提交时，SQL查到本条数据
+            });
+
+            //若有查出数据，则代表今天已提交数据
+            if(dt != null && dt.Rows.Count > 0) 
             {
-                H3.IEngine engine = this.Engine;
-                H3.DataModel.BizObject thisBo = this.Request.BizObject;
-                DateTime todayTime = DateTime.Now;//获取今天日期
-
-                DateTime startTime = todayTime.Date;//获取今天 0点0分0秒
-                DateTime endTime = DateTime.Parse(todayTime.ToString("yyyy-MM-dd 23:59:59"));//获取今天 23点59分59秒
-
-                //通过SQL查询今天是否有提交数据
-                System.Data.DataTable dt = engine.Query.QueryTable("SELECT ObjectId, Name, Status, CreatedTime FROM i_" + thisBo.Schema.SchemaCode + " WHERE Status IN (1, 2) AND CreatedTime >= @startTime AND CreatedTime <= @endTime AND ObjectId != @thisId", new H3.Data.Database.Parameter[]{
-                    new H3.Data.Database.Parameter("@startTime", System.Data.DbType.DateTime, startTime),
-                    new H3.Data.Database.Parameter("@endTime", System.Data.DbType.DateTime, endTime),
-                    new H3.Data.Database.Parameter("@thisId", System.Data.DbType.String, thisBo.ObjectId)//避免先暂存后提交时，SQL查到本条数据
-                });
-
-                //若有查出数据，则代表今天已提交数据
-                if(dt != null && dt.Rows.Count > 0) 
-                {
-                    throw new Exception("今天已提交数据，请勿再次提交！");//抛出异常，此异常信息将被catch块捕获并响应给前端进行弹窗展示
-                }
+                throw new Exception("今天已提交数据，请勿再次提交！");//抛出异常，此异常信息将被catch块捕获并响应给前端进行弹窗展示
             }
-        } catch(Exception ex)
-        {
-            response.Errors.Add(ex.Message);//将异常信息响应到前端，弹窗提示
-            base.OnSubmit(actionName, postValue, response);//此句代码有系统的默认处理动作，所以有异常时也不可少
-            return;
         }
+    } catch(Exception ex)
+    {
+        response.Errors.Add(ex.Message);//将异常信息响应到前端，弹窗提示
+        base.OnSubmit(actionName, postValue, response);//此句代码有系统的默认处理动作，所以有异常时也不可少
+        return;
     }
 
     base.OnSubmit(actionName, postValue, response);//此句代码有系统的默认处理动作，所以通过上面的校验时，也要执行此句代码
