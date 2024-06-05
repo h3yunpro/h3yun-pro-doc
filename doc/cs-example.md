@@ -67,6 +67,7 @@ H3.Workflow.Messages.WorkflowInstanceChangeSet OriginateInstance(
 string input = "1851 1999 1958 1905 2003";
 string pattern = @"(?<=19)\d{2}\b";
 
+// 遍历所有匹配到的结果，并对每个匹配项进行处理
 foreach(System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(input, pattern))
 {
 	string a = match.Value.ToString();
@@ -378,7 +379,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 ```
 
 
-## [表单]OnLoad事件中获取控件名或设置不可见不可写
+## [表单]OnLoad事件中获取控件名和设置控件不可见不可写
 
 可用位置：✔表单 / ✘列表 / ✘定时器 / ✘自定义接口
 
@@ -510,7 +511,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
             DateTime endTime = DateTime.Parse(todayTime.ToString("yyyy-MM-dd 23:59:59"));//获取今天 23点59分59秒
 
             //通过SQL查询今天是否有提交数据
-            System.Data.DataTable dt = engine.Query.QueryTable("SELECT ObjectId, Name, Status, CreatedTime FROM i_" + thisBo.Schema.SchemaCode + " WHERE Status IN (1, 2) AND CreatedTime >= @startTime AND CreatedTime <= @endTime AND ObjectId != @thisId", new H3.Data.Database.Parameter[]{
+            System.Data.DataTable dt = engine.Query.QueryTable("SELECT ObjectId, Name, Status, CreatedTime FROM i_当前表单编码 WHERE Status IN (1, 2) AND CreatedTime >= @startTime AND CreatedTime <= @endTime AND ObjectId != @thisId", new H3.Data.Database.Parameter[]{
                 new H3.Data.Database.Parameter("@startTime", System.Data.DbType.DateTime, startTime),
                 new H3.Data.Database.Parameter("@endTime", System.Data.DbType.DateTime, endTime),
                 new H3.Data.Database.Parameter("@thisId", System.Data.DbType.String, thisBo.ObjectId)//避免先暂存后提交时，SQL查到本条数据

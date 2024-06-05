@@ -1,6 +1,7 @@
 # 后端执行SQL
 
 氚云数据库采用MySQL，不同企业MYSQL版本可能不同，您可以通过执行此语句进行MySQL版本查询：
+
 ``` sql
 SELECT VERSION()
 ```

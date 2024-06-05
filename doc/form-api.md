@@ -1,9 +1,8 @@
 # 表单前端API
 
-
 ## this
 
-在前端事件 ```OnLoad```、```OnLoadActions```、```OnValidate```、```BeforeSubmit```、```AfterSubmit``` 中，均可以通过 ```this``` 关键字得到当前表单实例对象。
+在表单前端事件 ```OnLoad```、```OnLoadActions```、```OnValidate```、```BeforeSubmit```、```AfterSubmit``` 中，均可以通过 ```this``` 关键字得到当前表单实例对象。
 
 ```this``` 对象的属性包含当前表单的所有控件实例，比如下面这个控件，就可以使用 ```this.F0000017``` 获取其控件实例对象。
 
@@ -38,6 +37,74 @@ OnLoad: function() {
     }, function( error ) {
         $.IShowError( "错误", JSON.stringify( error ) );
     }, false );
+},
+```
+
+
+## $.SmartForm.ResponseContext
+
+在表单前端代码中，有一个全局变量 ```$.SmartForm.ResponseContext```，该变量是一个对象，可用于获取到表单的相关信息，包含表单的基本信息（如：表单数据Id、表单数据状态、表单模式、是否移动端等）。
+
+此处只做常用属性介绍，完整说明请移步：[前端实例详解：$.SmartForm.ResponseContext](/doc/js-instance?id=smartformresponsecontext)
+
+### 示例
+
+1. 在表单打开时，判断是否处于新增模式（即通过新增按钮点开的）：
+
+``` js
+// 加载事件
+OnLoad: function() {
+
+    var that = this;
+    if( $.SmartForm.ResponseContext.IsCreateMode ) {
+        
+    }
+},
+```
+
+2. 在表单打开时，判断是否处于数据查看模式（即通过列表页数据标题点开的）：
+
+``` js
+// 加载事件
+OnLoad: function() {
+
+    var that = this;
+    if( $.SmartForm.ResponseContext.FormMode == 4 ) {
+        
+    }
+},
+```
+
+3. 判断表单所有编辑情况
+
+``` js
+// 加载事件
+OnLoad: function() {
+
+    var that = this;
+    if(
+        $.SmartForm.ResponseContext.IsCreateMode || //新增
+        $.SmartForm.ResponseContext.BizObjectStatus == 0 || //打开草稿数据
+        ( $.SmartForm.ResponseContext.BizObjectStatus == 2 && $.SmartForm.ResponseContext.FormMode == 0 ) || //流程审批中打开
+        ( $.SmartForm.ResponseContext.BizObjectStatus == 1 && $.SmartForm.ResponseContext.FormMode == 0 ) //编辑生效数据
+    ) {
+
+    }
+},
+```
+
+4. 在点击 提交/同意 按钮时，判断是否是在某个审批节点点击的：
+
+``` js
+// 提交校验
+OnValidate: function( actionControl ) {
+
+    var that = this;
+    if( actionControl.Action == "Submit" && $.SmartForm.ResponseContext.ActivityCode == "流程节点编码" ) {
+         
+    }
+
+    return true;
 },
 ```
 

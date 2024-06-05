@@ -3,6 +3,7 @@
 
 * 基础
 
+  * [产品架构](/doc/arch)
   * [技术栈](/doc/language)
   * [开发工具](/doc/dev-tools)
   * [常见名词](/doc/noun)
@@ -13,8 +14,9 @@
 
 * 前端API
 
-  * [表单相关API](/doc/form-api)
-  * [列表相关API](/doc/list-api)
+  * [表单前端API](/doc/form-api)
+  * [列表前端API](/doc/list-api)
+  * [前端实例详解](/doc/js-instance)
 
 
 * 后端API
@@ -26,8 +28,15 @@
   * [消息通知/提醒](/doc/notification)
   * [定时器](/doc/timer)
   * [后端执行SQL](/doc/exec-sql)
-  * [SQL报表/SQL高级数据源](doc/sql-report)
   * [Json序列化/反序列化](doc/cs-json)
+  * [后端实例详解](/doc/cs-instance)
+
+
+* 数据库
+
+  * [SQL报表](doc/sql-report)
+  * [SQL高级数据源](doc/sql-dashboard)
+  * [数据库表结构详解](/doc/database)
 
 
 * 代码示例
@@ -44,13 +53,6 @@
   * [氚云调用WebService](/doc/req-ws)
   * [氚云调用WebAPI](/doc/req-api)
   * [第三方调用氚云OpenApi](/doc/open-api)
-
-
-* 扩展
-
-  * [前端实例详解](/doc/js-instance)
-  * [后端实例详解](/doc/cs-instance)
-  * [数据库表结构详解](/doc/database)
 
 
 * 其他

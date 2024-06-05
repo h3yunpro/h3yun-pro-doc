@@ -2,8 +2,8 @@
  
 开发者可以通过3种方式查询数据库数据：
 1. [后端代码中执行SQL](/doc/exec-sql)
-2. [SQL报表](/doc/sql-report?id=sql报表)
-3. [SQL高级数据源](/doc/sql-report)
+2. [SQL报表](/doc/sql-report)
+3. [SQL高级数据源](/doc/sql-dashboard)
 
 ## [表单]主表
 
