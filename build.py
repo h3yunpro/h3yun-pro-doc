@@ -111,7 +111,7 @@ if __name__ == "__main__":
     # 读取index.html文件内容
     html = readContent("./index.html")
     # 截取<body>标签之前的内容
-    html = html[: html.find("<body>") + 6]
+    html = html[: html.find("</head>")]
     # 去除<link>标签
     html = re.sub(r"<link.*?>", "", html)
     # 去除<style>标签
@@ -121,8 +121,11 @@ if __name__ == "__main__":
     # 去除注释
     html = re.sub(r"<!--.*?-->", "", html)
 
-    html += "\n\n" + convert.convert(content)
-    html += "\n\n</body></html>"
+    html += (
+        "<link rel='icon' href='../favicon.ico' /><link rel='stylesheet' href='../css/vue.css'>\n\n</head>\n\n<body class='ready sticky'>\n\n<div id='app' style='text-align: left;'>"
+        + convert.convert(content)
+    )
+    html += "\n\n</div></body></html>"
     writeContent(buildDir + "/index.html", html)
 
     print("save html.")
