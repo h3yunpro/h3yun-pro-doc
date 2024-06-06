@@ -86,7 +86,7 @@ def remove_script_tags(html):
 if __name__ == "__main__":
     print("build start.")
 
-    buildDir = "./build"
+    buildDir = "./dist"
     convert = Markdown(
         extras=[
             "footnotes",
@@ -101,7 +101,7 @@ if __name__ == "__main__":
 
     chinese_count, english_count = count_words_and_chars(content)
     print(
-        f"中文字符数: {chinese_count}，英文单词数: {english_count}，总计：{chinese_count+english_count}"
+        f"Chinese words count: {chinese_count}, English words count: {english_count}, Total words count: {chinese_count+english_count}."
     )
 
     writeContent(buildDir + "/index.md", content)
