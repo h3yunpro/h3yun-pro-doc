@@ -5,23 +5,25 @@
 
 ## 概述
 
-此文档库建立，是希望以另一种编排方式，引导开发者上手氚云专业版。并且欢迎所有开发人员参与进来，一起补充、完善文档，互帮互助。
+:book:此文档库建立，是希望以另一种编排方式，引导开发者上手氚云专业版。并且欢迎所有开发人员参与进来，一起补充、完善文档，互帮互助:clap:。
 
 
-## 本文档AI助手
+## 本文档AI助手：氚小丫
 
-如果您不想翻文档，欢迎您使用本文档的专属AI助手（目前处于实验期）。
-
-在钉钉中打开此链接：[https://applink.dingtalk.com/client/aiAgent?assistantId=470fe45f326b46b08bb77df404f31fc8&from=share](https://applink.dingtalk.com/client/aiAgent?assistantId=470fe45f326b46b08bb77df404f31fc8&from=share)
+:cat:如果不想翻文档，可以尝试使用本文档的专属AI助手（实验中）：[氚小丫](https://applink.dingtalk.com/client/aiAgent?assistantId=470fe45f326b46b08bb77df404f31fc8&from=share):fairy:，使用方式：<br/>
+在钉钉中打开此链接：
+```
+https://applink.dingtalk.com/client/aiAgent?assistantId=470fe45f326b46b08bb77df404f31fc8&from=share
+```
 
 
 ## 如何做出贡献
 
 1. 快捷编辑功能：在每个文档头部都有【在线编辑】按钮，任意人拥有编辑权限（注：需注册gitee账号），提交后将保存到 ```quick``` 分支，待仓库管理员合并到 ```master``` 即可应用到线上
 
-2. 前往 [Gitee仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc) 提交 PR 和 ISSUE 
+2. 前往 [Gitee仓库](https://gitee.com/h3yun-pro-public/h3yun-pro-doc) 提交 PR 和 ISSUE :100:
 
-> PS：如您有对文档建设的idea，或是代码示例的需求，也欢迎您提交ISSUE，让我们一起获得进步的力量！
+:star2:如您有对文档建设的idea，:cowboy_hat_face:或是代码示例的需求，:sunglasses:也欢迎您提交ISSUE，让我们一起获得进步的力量:+1:！
 
 
 ## 文档/目录
@@ -44,11 +46,10 @@
 
 ## 本地预览
 
-如果您 ```clone``` 了本仓库，在本地预览需要一个可挂载静态文件的服务，可以利用一些语言的简易Web服务模块。
+:carousel_horse:如果您 ```clone``` 了本仓库，在本地预览需要一个可挂载静态文件的服务，可以利用一些语言的简易Web服务模块。
 
-文档内已内置三个bat文件：```netrv.bat```、```noderv.bat```、```pyrv.bat```，您可以取用任意一个。
-
-在本地编写文档，需要预览时，打开 ```cmd```，```cd``` 到文档根目录，则可以直接使用命令启动一个本地的静态文件服务。
+:blush:文档内已内置三个bat文件：```netrv.bat```、```noderv.bat```、```pyrv.bat```，您可以按照自己的情况取用一个，使用方式：
+<br/>打开 ```cmd```，```cd``` 到文档根目录，则可以直接使用命令启动一个本地的静态文件服务。
 
 文件对应命令及依赖：
 

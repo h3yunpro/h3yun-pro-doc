@@ -47,7 +47,7 @@ OnLoad: function() {
 
 此处只做常用属性介绍，完整说明请移步：[前端实例详解：$.SmartForm.ResponseContext](/doc/js-instance?id=smartformresponsecontext)
 
-### 示例
+**示例**
 
 1. 在表单打开时，判断是否处于新增模式（即通过新增按钮点开的）：
 
@@ -116,7 +116,7 @@ OnValidate: function( actionControl ) {
 var conValue = that.控件编码.GetValue();
 ```
 
-```GetValue``` 函数用来获取控件的值，不同类型的控件，返回值的数据类型或格式不同。
+不同类型控件，```GetValue``` 返回的值数据结构不同，具体请移步：[表单前端控件GetValue/SetValue](/doc/form-js-set-get)
 
 
 ## 设置控件值
@@ -126,7 +126,7 @@ var conValue = that.控件编码.GetValue();
 that.控件编码.SetValue(控件值);
 ```
 
-```SetValue``` 函数用来设置控件的值，不同类型的控件，值的数据类型不同。
+不同类型控件，```SetValue``` 要求传入的值不同，具体请移步：[表单前端控件GetValue/SetValue](/doc/form-js-set-get)
 
 
 ## 设置控件显示/隐藏

@@ -14,8 +14,9 @@
 
 * 前端API
 
-  * [表单前端API](/doc/form-api)
-  * [列表前端API](/doc/list-api)
+  * [表单前端API](/doc/form-js-api)
+  * [表单前端控件GetValue/SetValue](/doc/form-js-set-get)
+  * [列表前端API](/doc/list-js-api)
   * [前端实例详解](/doc/js-instance)
 
 
