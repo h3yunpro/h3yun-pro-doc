@@ -45,8 +45,9 @@
   * [前端代码示例](/doc/js-example)
   * [后端代码示例](/doc/cs-example)
   * [前后端交互示例](/doc/interactive-example)
-  * [数据库代码示例](/doc/sql-example)
+  * [数据库SQL示例](/doc/sql-example)
   * [纯净代码示例](/doc/pure-example)
+  * [工具方法合集](/doc/tool-function.md)
 
 
 * 第三方系统集成

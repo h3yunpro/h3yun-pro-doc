@@ -259,8 +259,9 @@ that.子表编码.ClearRows();
 支持的控件类型：子表
 
 ``` js
+// 注：此处的子表内控件编码是完整的控件编码，格式：子表编码.控件编码
 that.子表编码.UpdateRow(子表数据Id, {
-    "子表内控件编码": "控件值"
+    "子表编码.控件编码": "控件值"
 });
 ```
 
@@ -270,7 +271,8 @@ that.子表编码.UpdateRow(子表数据Id, {
 支持的控件类型：子表
 
 ``` js
-var cellManager = that.子表编码.GetCellManager(子表数据Id, "子表内控件编码");
+// 注：此处的子表内控件编码是完整的控件编码，格式：子表编码.控件编码
+var cellManager = that.子表编码.GetCellManager(子表数据Id, "子表编码.控件编码");
 ```
 
 

@@ -895,8 +895,9 @@ that.子表编码.ClearRows();
 支持的控件类型：子表
 
 ``` js
+// 注：此处的子表内控件编码是完整的控件编码，格式：子表编码.控件编码
 that.子表编码.UpdateRow(子表数据Id, {
-    "子表内控件编码": "控件值"
+    "子表编码.控件编码": "控件值"
 });
 ```
 
@@ -906,7 +907,8 @@ that.子表编码.UpdateRow(子表数据Id, {
 支持的控件类型：子表
 
 ``` js
-var cellManager = that.子表编码.GetCellManager(子表数据Id, "子表内控件编码");
+// 注：此处的子表内控件编码是完整的控件编码，格式：子表编码.控件编码
+var cellManager = that.子表编码.GetCellManager(子表数据Id, "子表编码.控件编码");
 ```
 
 
@@ -4166,8 +4168,7 @@ string workItemID = string.Empty;
 string errorMsg = string.Empty;
 //获取流程模板
 H3.Workflow.Template.WorkflowTemplate wfTemp = engine.WorkflowTemplateManager.GetDefaultWorkflow(schema.SchemaCode);
-//发起流程
-//注意：第1个参数是流程发起人，此参数必须传真实用户Id，不可以是H3.Organization.User.SystemUserId，否则系统会随机选取一名用户作为发起人
+//发起流程（注意：第1个参数是流程发起人，此参数必须传真实用户Id，不可以是H3.Organization.User.SystemUserId，否则系统会随机选取一名用户作为发起人）
 engine.Interactor.OriginateInstance(newBo.OwnerId, schema.SchemaCode, wfTemp.WorkflowVersion, newBo.ObjectId, newBo.WorkflowInstanceId, H3.Workflow.WorkItem.AccessMethod.Web, true, string.Empty, true, out workItemID, out errorMsg);
 if(!string.IsNullOrEmpty(errorMsg))
 {
@@ -4175,9 +4176,8 @@ if(!string.IsNullOrEmpty(errorMsg))
 }
 ```
 
-### OriginateInstance方法说明：
+OriginateInstance方法说明：
 
-方法定义：
 ``` cs
 H3.Workflow.Messages.WorkflowInstanceChangeSet OriginateInstance(
     string userId, //流程发起人，此参数请传业务对象的归属人，传其他用户Id无效
@@ -4192,6 +4192,37 @@ H3.Workflow.Messages.WorkflowInstanceChangeSet OriginateInstance(
     out string workItemId, //返回的流程项Id
     out string errorMessage //创建流程实例失败的异常信息
 )
+```
+
+
+## [通用]批量创建/更新/删除业务对象
+
+可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
+
+``` cs
+H3.IEngine engine = this.Engine;
+H3.DataModel.BizObjectSchema schema = engine.BizObjectManager.GetPublishedSchema("表单编码");//获取表单实例
+
+H3.DataModel.BulkCommit commit = new H3.DataModel.BulkCommit();
+for(int i = 0;i < 500; i++)
+{
+    H3.DataModel.BizObject bo = new H3.DataModel.BizObject(engine, schema, H3.Organization.User.SystemUserId);
+    bo.CreatedBy = H3.Organization.User.SystemUserId;
+    bo.OwnerId = H3.Organization.User.SystemUserId;
+    bo.Status = H3.DataModel.BizObjectStatus.Effective;
+    bo["F000001"] = 1;
+    bo["F000002"] = "xxx";
+
+    //注意：这里不能直接用 bo.Create()，而是将批量提交实例传入
+    bo.Create(commit);
+}
+//注意：虽然是批量提交，但是建议一次Commit最多500条数据，否则还是很容易造成超时
+string errorMsg = null;
+commit.Commit(engine.BizObjectManager, out errorMsg);
+if(!string.IsNullOrEmpty(errorMsg)) 
+{
+    throw new Exception("批量操作失败：" + errorMsg);
+}
 ```
 
 
@@ -4322,125 +4353,6 @@ H3.DataModel.BizObjectFileHeader[] files = this.Engine.BizObjectManager.CopyFile
 toBo.IconId = files[0].FileId;
 //更新目标业务对象，提交以上设置
 toBo.Update();
-```
-
-
-## [通用]常用的一些Helper方法
-
-可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
-
-``` cs
-//业务对象["字段名"] 转string
-//用法：string val = gStr(业务对象["控件编码"])
-public static string gStr(object val)
-{
-    return val + string.Empty;
-}
-
-//业务对象["字段名"] 转bool
-//用法：bool val = gBool(业务对象["控件编码"])
-public static bool gBool(object val)
-{
-    string valStr = gStr(val).ToLower();
-    if(valStr == "true" || valStr == "1")
-    {
-        return true;
-    }
-
-    return false;
-}
-
-//业务对象["字段名"] 转数值
-//用法：decimal val = gNum<decimal>(业务对象["控件编码"])
-public static T gNum<T>(object val) where T: struct
-{
-    string valStr = gStr(val);
-    if(string.IsNullOrWhiteSpace(valStr))
-    {
-        val = 0;
-    }
-    return (T) Convert.ChangeType(val, typeof (T));
-}
-
-//将子表内某个控件值相加得到数值
-//用法：decimal val = gSum<decimal>(业务对象["子表编码"], "子表内控件编码")
-public static T gSum<T>(object objArray, string field) where T: struct
-{
-    object val = 0;
-    if(objArray == null)
-    {
-        return (T) Convert.ChangeType(val, typeof (T));
-    }
-    H3.DataModel.BizObject[] bObjArray = (H3.DataModel.BizObject[]) objArray;
-    if(bObjArray == null || bObjArray.Length == 0)
-    {
-        return (T) Convert.ChangeType(val, typeof (T));
-    }
-    decimal sVal = 0;
-    foreach(H3.DataModel.BizObject bObj in bObjArray) 
-    {
-        decimal v = gNum<decimal>(bObj[field]);
-        sVal += v;
-    }
-    val = sVal;
-    return (T) Convert.ChangeType(val, typeof (T));
-}
-
-//业务对象["字段名"] 转DateTime，返回true代表转换成功
-//用法：DateTime val = DateTime.MinValue;  if(tTime(业务对象["子表编码"], out val)){ }
-public static bool tTime(object val, out DateTime time)
-{
-    string valStr = gStr(val);
-    return DateTime.TryParse(valStr, out time);
-}
-
-//业务对象["字段名"] 转DateTime，转换成功返回日期，转换失败返回传入的默认值
-//用法：DateTime val = gTime(业务对象["子表编码"], DateTime.MinValue);
-public static DateTime gTime(object val, DateTime defaultTime)
-{
-    string valStr = gStr(val);
-    if(string.IsNullOrWhiteSpace(valStr))
-    {
-        return defaultTime;
-    }
-    DateTime outTime = defaultTime;
-    if(DateTime.TryParse(valStr, out outTime)) 
-    {
-        return outTime;
-    } else
-    {
-        return defaultTime;
-    }
-}
-
-//当字符串长度超过200，截取前200字符，适用于给单行文本控件赋值时
-//用法：string val = g200Str("很长的字符串");
-public static string g200Str(string str)
-{
-    if(!string.IsNullOrWhiteSpace(str) && str.Length > 200)
-    {
-        return str.Substring(0, 200);
-    }
-    return str;
-}
-
-//当字符串长度超过2000，截取前2000字符，适用于给多行文本控件赋值时
-//用法：string val = g2000Str("很长的字符串");
-public static string g2000Str(string str)
-{
-    if(!string.IsNullOrWhiteSpace(str) && str.Length > 2000)
-    {
-        return str.Substring(0, 2000);
-    }
-    return str;
-}
-
-//中国式四舍五入，num参数为金额，digits为需要保留的小数位
-//用法：decimal val = gRound(123.456m, 2);
-public static decimal gRound(decimal num, int digits)
-{
-    return System.Math.Round(num, digits, System.MidpointRounding.AwayFromZero);
-}
 ```
 
 
@@ -5509,6 +5421,8 @@ public void TestBtn_Post(string actionName, H3.SmartForm.ListViewRequest request
 ```
 
 <!-- tabs:end -->
+
+
 
 
 
