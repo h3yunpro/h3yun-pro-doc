@@ -213,24 +213,25 @@ filter.Matcher = andMatcher;
 
 ### H3.Data.ComparisonOperatorType比较器枚举值
 
-| **后端枚举值**                              | **对应OpenApi LoadBizObjects接口Operator值** | **对应SQL（A为字段，?为筛选值）**     | **释义**                             |
-|---------------------------------------------|:-----------------------------------------:|---------------------------|------------------------------------|
+| **后端枚举值**                                   | **对应OpenApi LoadBizObjects接口Operator值** | **对应SQL（A为字段，?为筛选值）**     | **释义**                             |
+|---------------------------------------------|-----------------------------------------|---------------------------|------------------------------------|
 | H3.Data.ComparisonOperatorType.Above        | 0                                       | A > ?                     | 大于，用于数值、日期时间类型控件值的比较               |
+| H3.Data.ComparisonOperatorType.NotBelow     | 1                                       | A >= ?                    | 大于等于，用于数值、日期时间类型控件值的比较             |
+| H3.Data.ComparisonOperatorType.Equal        | 2                                       | A = ?                     | 等于，用于文本、数值、日期时间类型控件值的比较            |
+| H3.Data.ComparisonOperatorType.NotAbove     | 3                                       | A <= ?                    | 小于等于，用于数值、日期时间类型控件值的比较             |
 | H3.Data.ComparisonOperatorType.Below        | 4                                       | A < ?                     | 小于，用于数值、日期时间类型控件值的比较               |
-| H3.Data.ComparisonOperatorType.Contains     | 8                                       | A like '%?%'              | 文本包含指定字符串，用于文本类型控件值的比较           |
-| H3.Data.ComparisonOperatorType.EndWith      | 14                                      | A like '%?'               | 文本以?为结尾，用于文本类型控件值的比较               |
-| H3.Data.ComparisonOperatorType.Equal        | 2                                       | A = ?                     | 等于，用于文本、数值、日期时间类型控件值的比较         |
+| H3.Data.ComparisonOperatorType.NotEqual     | 5                                       | A != ?                    | 不等于，用于文本、数值、日期时间类型控件值的比较           |
 | H3.Data.ComparisonOperatorType.In           | 6                                       | A in (?, ?)               | 和列表中任意值匹配，用于文本、数值、日期时间类型控件值的比较     |
-| H3.Data.ComparisonOperatorType.IsNone       | 20                                      | A is null or A = ''       | 判断值为null 或者 为空字符串，用于文本、数值类型控件值的比较  |
-| H3.Data.ComparisonOperatorType.IsNull       | 18                                      | A is null                 | 判断值为null，可用于任意类型控件值的比较             |
-| H3.Data.ComparisonOperatorType.NotAbove     | 3                                       | A <= ?                    | 小于等于，用于数值、日期时间类型控件值的比较           |
-| H3.Data.ComparisonOperatorType.NotBelow     | 1                                       | A >= ?                    | 大于等于，用于数值、日期时间类型控件值的比较           |
-| H3.Data.ComparisonOperatorType.NotContains  | 24                                      | A not like '%?%'          | 文本不包含指定字符串，用于文本类型控件值的比较         |
-| H3.Data.ComparisonOperatorType.NotEndWith   | 23                                      | A not like '%?'           | 文本不以?结尾，用于文本类型控件值的比较               |
-| H3.Data.ComparisonOperatorType.NotEqual     | 5                                       | A != ?                    | 不等于，用于文本、数值、日期时间类型控件值的比较      |
 | H3.Data.ComparisonOperatorType.NotIn        | 7                                       | A not in (?, ?)           | 不和列表中任意值匹配，用于文本、数值、日期时间类型控件值的比较    |
+| H3.Data.ComparisonOperatorType.Contains     | 8                                       | A like '%?%'              | 文本包含指定字符串，用于文本类型控件值的比较             |
+| H3.Data.ComparisonOperatorType.StartWith    | 13                                      | A like '?%'               | 文本以?开始，用于文本类型控件值的比较                |
+| H3.Data.ComparisonOperatorType.EndWith      | 14                                      | A like '%?'               | 文本以?为结尾，用于文本类型控件值的比较               |
+| H3.Data.ComparisonOperatorType.IsNull       | 18                                      | A is null                 | 判断值为null，可用于任意类型控件值的比较             |
+| H3.Data.ComparisonOperatorType.NotNull      | 19                                      | A is not null             | 判断值不为null，可用于任意类型控件值的比较            |
+| H3.Data.ComparisonOperatorType.IsNone       | 20                                      | A is null or A = ''       | 判断值为null 或者 为空字符串，用于文本、数值类型控件值的比较  |
 | H3.Data.ComparisonOperatorType.NotNone      | 21                                      | A is not null and A != '' | 判断值不为null 且 不为空字符串，用于文本、数值类型控件值的比较 |
-| H3.Data.ComparisonOperatorType.NotNull      | 19                                      | A is not null             | 判断值不为null，可用于任意类型控件值的比较       |
 | H3.Data.ComparisonOperatorType.NotStartWith | 22                                      | A not like '?%'           | 文本不以?开始，用于文本类型控件值的比较               |
-| H3.Data.ComparisonOperatorType.StartWith    | 13                                      | A like '?%'               | 文本以?开始，用于文本类型控件值的比较                 |
+| H3.Data.ComparisonOperatorType.NotEndWith   | 23                                      | A not like '%?'           | 文本不以?结尾，用于文本类型控件值的比较               |
+| H3.Data.ComparisonOperatorType.NotContains  | 24                                      | A not like '%?%'          | 文本不包含指定字符串，用于文本类型控件值的比较            |
+
 

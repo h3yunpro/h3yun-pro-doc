@@ -305,18 +305,6 @@ $.ListView.ActionPreDo = function( actionCode ) {
 
 <p>表单页面中的所有操作，都需要在表单设计页面中编写代码，代码需要编写在各种事件内，当对应操作产生时，系统会自动触发事件，以执行用户的自定义代码。</p>
 
-<h2>表单页加载时的事件触发顺序图</h2>
-
-<blockquote>
-  <p>制作中...</p>
-</blockquote>
-
-<h2>表单按钮点击时的事件触发顺序图</h2>
-
-<blockquote>
-  <p>制作中...</p>
-</blockquote>
-
 <h2>表单前端事件</h2>
 
 <p>表单前端共有5个事件：
@@ -643,19 +631,15 @@ if(this.Request.FormDataType == H3.SmartForm.SmartFormDataType.Workflow)
 }
 </code></pre>
 
+<h2>表单页加载时的事件触发顺序图</h2>
+
+<p><img src="/img/form-events-1.png" alt="表单页加载时的事件触发顺序图" /></p>
+
+<h2>表单按钮点击时的事件触发顺序图</h2>
+
+<p><img src="/img/form-events-2.png" alt="表单按钮点击时的事件触发顺序图" /></p>
+
 <h1>列表事件</h1>
-
-<h2>列表页加载时的事件触发顺序图</h2>
-
-<blockquote>
-  <p>制作中...</p>
-</blockquote>
-
-<h2>列表按钮点击时的事件触发顺序图</h2>
-
-<blockquote>
-  <p>制作中...</p>
-</blockquote>
 
 <h2>列表前端事件</h2>
 
@@ -733,6 +717,18 @@ $.ListView.ActionPreDo = function( actionCode ) {
 <p>当列表页初始打开时，会触发 <code>OnInit</code> 事件，并且执行时机上比 <code>OnLoad</code> 更早一步（先加载列表页面再加载列表数据）。</p>
 
 <p>这个事件主要用于设置列表初始按钮显示/隐藏、初始筛选条件、初始排序字段、初始分页设置等，这些操作都会在 <code>base.OnInit(response);</code> 中完成，所以如果要二次开发调整这些设置，也应该在 <code>base.OnInit(response);</code> 之后写代码。</p>
+
+<h2>列表页加载时的事件触发顺序图</h2>
+
+<blockquote>
+  <p>制作中...</p>
+</blockquote>
+
+<h2>列表按钮点击时的事件触发顺序图</h2>
+
+<blockquote>
+  <p>制作中...</p>
+</blockquote>
 
 <h1>表单前端API</h1>
 
@@ -2294,7 +2290,7 @@ if(string.IsNullOrWhiteSpace(numStr))
 
 <p>取值示例二：</p>
 
-<pre><code class="cs language-cs">//此示例跟一的区别在于，本示例不处理数字控件值为空的情况，为空时默认获取结果值为0
+<pre><code class="cs language-cs">//此示例跟一的区别在于，本示例不处理数字控件值为空的情况，为空时默认结果值为0
 string numStr = bo["控件编码"] + string.Empty;
 decimal num = 0m;
 if(!string.IsNullOrWhiteSpace(numStr))
@@ -2348,15 +2344,24 @@ if(!string.IsNullOrWhiteSpace(str))
 
 if(value == null || value.Length == 0)
 {
-    //结果无值
+    //未选择选项
 } else
 {
-    //结果有值
-    //循环获取每个选项值
+    //有选择选择，则循环获取每个选项值
     foreach(string item in value) 
     {
 
     }
+}
+</code></pre>
+
+<p>判断是否选择了某个选项：</p>
+
+<pre><code class="cs language-cs">//如果需要判断是否选择了某个选项，可以用Contains方法判断
+string str = bo["控件编码"] + string.Empty;
+if(str.Contains("选项1"))
+{
+    //选择了选项1
 }
 </code></pre>
 
@@ -3676,7 +3681,7 @@ filter.Matcher = andMatcher;
 <thead>
 <tr>
   <th><strong>后端枚举值</strong></th>
-  <th style="text-align:center;"><strong>对应OpenApi LoadBizObjects接口Operator值</strong></th>
+  <th><strong>对应OpenApi LoadBizObjects接口Operator值</strong></th>
   <th><strong>对应SQL（A为字段，?为筛选值）</strong></th>
   <th><strong>释义</strong></th>
 </tr>
@@ -3684,111 +3689,111 @@ filter.Matcher = andMatcher;
 <tbody>
 <tr>
   <td>H3.Data.ComparisonOperatorType.Above</td>
-  <td style="text-align:center;">0</td>
+  <td>0</td>
   <td>A &gt; ?</td>
   <td>大于，用于数值、日期时间类型控件值的比较</td>
 </tr>
 <tr>
-  <td>H3.Data.ComparisonOperatorType.Below</td>
-  <td style="text-align:center;">4</td>
-  <td>A &lt; ?</td>
-  <td>小于，用于数值、日期时间类型控件值的比较</td>
-</tr>
-<tr>
-  <td>H3.Data.ComparisonOperatorType.Contains</td>
-  <td style="text-align:center;">8</td>
-  <td>A like '%?%'</td>
-  <td>文本包含指定字符串，用于文本类型控件值的比较</td>
-</tr>
-<tr>
-  <td>H3.Data.ComparisonOperatorType.EndWith</td>
-  <td style="text-align:center;">14</td>
-  <td>A like '%?'</td>
-  <td>文本以?为结尾，用于文本类型控件值的比较</td>
-</tr>
-<tr>
-  <td>H3.Data.ComparisonOperatorType.Equal</td>
-  <td style="text-align:center;">2</td>
-  <td>A = ?</td>
-  <td>等于，用于文本、数值、日期时间类型控件值的比较</td>
-</tr>
-<tr>
-  <td>H3.Data.ComparisonOperatorType.In</td>
-  <td style="text-align:center;">6</td>
-  <td>A in (?, ?)</td>
-  <td>和列表中任意值匹配，用于文本、数值、日期时间类型控件值的比较</td>
-</tr>
-<tr>
-  <td>H3.Data.ComparisonOperatorType.IsNone</td>
-  <td style="text-align:center;">20</td>
-  <td>A is null or A = ''</td>
-  <td>判断值为null 或者 为空字符串，用于文本、数值类型控件值的比较</td>
-</tr>
-<tr>
-  <td>H3.Data.ComparisonOperatorType.IsNull</td>
-  <td style="text-align:center;">18</td>
-  <td>A is null</td>
-  <td>判断值为null，可用于任意类型控件值的比较</td>
-</tr>
-<tr>
-  <td>H3.Data.ComparisonOperatorType.NotAbove</td>
-  <td style="text-align:center;">3</td>
-  <td>A &lt;= ?</td>
-  <td>小于等于，用于数值、日期时间类型控件值的比较</td>
-</tr>
-<tr>
   <td>H3.Data.ComparisonOperatorType.NotBelow</td>
-  <td style="text-align:center;">1</td>
+  <td>1</td>
   <td>A &gt;= ?</td>
   <td>大于等于，用于数值、日期时间类型控件值的比较</td>
 </tr>
 <tr>
-  <td>H3.Data.ComparisonOperatorType.NotContains</td>
-  <td style="text-align:center;">24</td>
-  <td>A not like '%?%'</td>
-  <td>文本不包含指定字符串，用于文本类型控件值的比较</td>
+  <td>H3.Data.ComparisonOperatorType.Equal</td>
+  <td>2</td>
+  <td>A = ?</td>
+  <td>等于，用于文本、数值、日期时间类型控件值的比较</td>
 </tr>
 <tr>
-  <td>H3.Data.ComparisonOperatorType.NotEndWith</td>
-  <td style="text-align:center;">23</td>
-  <td>A not like '%?'</td>
-  <td>文本不以?结尾，用于文本类型控件值的比较</td>
+  <td>H3.Data.ComparisonOperatorType.NotAbove</td>
+  <td>3</td>
+  <td>A &lt;= ?</td>
+  <td>小于等于，用于数值、日期时间类型控件值的比较</td>
+</tr>
+<tr>
+  <td>H3.Data.ComparisonOperatorType.Below</td>
+  <td>4</td>
+  <td>A &lt; ?</td>
+  <td>小于，用于数值、日期时间类型控件值的比较</td>
 </tr>
 <tr>
   <td>H3.Data.ComparisonOperatorType.NotEqual</td>
-  <td style="text-align:center;">5</td>
+  <td>5</td>
   <td>A != ?</td>
   <td>不等于，用于文本、数值、日期时间类型控件值的比较</td>
 </tr>
 <tr>
+  <td>H3.Data.ComparisonOperatorType.In</td>
+  <td>6</td>
+  <td>A in (?, ?)</td>
+  <td>和列表中任意值匹配，用于文本、数值、日期时间类型控件值的比较</td>
+</tr>
+<tr>
   <td>H3.Data.ComparisonOperatorType.NotIn</td>
-  <td style="text-align:center;">7</td>
+  <td>7</td>
   <td>A not in (?, ?)</td>
   <td>不和列表中任意值匹配，用于文本、数值、日期时间类型控件值的比较</td>
 </tr>
 <tr>
-  <td>H3.Data.ComparisonOperatorType.NotNone</td>
-  <td style="text-align:center;">21</td>
-  <td>A is not null and A != ''</td>
-  <td>判断值不为null 且 不为空字符串，用于文本、数值类型控件值的比较</td>
+  <td>H3.Data.ComparisonOperatorType.Contains</td>
+  <td>8</td>
+  <td>A like '%?%'</td>
+  <td>文本包含指定字符串，用于文本类型控件值的比较</td>
+</tr>
+<tr>
+  <td>H3.Data.ComparisonOperatorType.StartWith</td>
+  <td>13</td>
+  <td>A like '?%'</td>
+  <td>文本以?开始，用于文本类型控件值的比较</td>
+</tr>
+<tr>
+  <td>H3.Data.ComparisonOperatorType.EndWith</td>
+  <td>14</td>
+  <td>A like '%?'</td>
+  <td>文本以?为结尾，用于文本类型控件值的比较</td>
+</tr>
+<tr>
+  <td>H3.Data.ComparisonOperatorType.IsNull</td>
+  <td>18</td>
+  <td>A is null</td>
+  <td>判断值为null，可用于任意类型控件值的比较</td>
 </tr>
 <tr>
   <td>H3.Data.ComparisonOperatorType.NotNull</td>
-  <td style="text-align:center;">19</td>
+  <td>19</td>
   <td>A is not null</td>
   <td>判断值不为null，可用于任意类型控件值的比较</td>
 </tr>
 <tr>
+  <td>H3.Data.ComparisonOperatorType.IsNone</td>
+  <td>20</td>
+  <td>A is null or A = ''</td>
+  <td>判断值为null 或者 为空字符串，用于文本、数值类型控件值的比较</td>
+</tr>
+<tr>
+  <td>H3.Data.ComparisonOperatorType.NotNone</td>
+  <td>21</td>
+  <td>A is not null and A != ''</td>
+  <td>判断值不为null 且 不为空字符串，用于文本、数值类型控件值的比较</td>
+</tr>
+<tr>
   <td>H3.Data.ComparisonOperatorType.NotStartWith</td>
-  <td style="text-align:center;">22</td>
+  <td>22</td>
   <td>A not like '?%'</td>
   <td>文本不以?开始，用于文本类型控件值的比较</td>
 </tr>
 <tr>
-  <td>H3.Data.ComparisonOperatorType.StartWith</td>
-  <td style="text-align:center;">13</td>
-  <td>A like '?%'</td>
-  <td>文本以?开始，用于文本类型控件值的比较</td>
+  <td>H3.Data.ComparisonOperatorType.NotEndWith</td>
+  <td>23</td>
+  <td>A not like '%?'</td>
+  <td>文本不以?结尾，用于文本类型控件值的比较</td>
+</tr>
+<tr>
+  <td>H3.Data.ComparisonOperatorType.NotContains</td>
+  <td>24</td>
+  <td>A not like '%?%'</td>
+  <td>文本不包含指定字符串，用于文本类型控件值的比较</td>
 </tr>
 </tbody>
 </table>
@@ -6226,6 +6231,16 @@ OnLoad: function() {
 },
 </code></pre>
 
+<h2>[通用]附件批量下载</h2>
+
+<p>可用位置：✔表单 / ✔列表</p>
+
+<pre><code class="js language-js">//此函数是在表单/列表前端调用，而前端无法获得附件Id，所以此处附件Id需通过Post请求后端获取
+$.IDownloadAttachments( ["附件Id_1", "附件Id_2" ] );
+</code></pre>
+
+<p>!> 注意：此函数仅支持浏览器中使用，钉钉工作台、企微工作台不支持。</p>
+
 <h1>后端代码示例</h1>
 
 <h2>[通用]创建带流程的表单数据</h2>
@@ -7437,7 +7452,7 @@ public void TestBtn_Post(string actionName, H3.SmartForm.ListViewRequest request
         filter.FromRowNum = 0;
         filter.ToRowNum = 1000;
         H3.DataModel.BizObject[] boArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId, schema, H3.DataModel.GetListScopeType.GlobalAll, filter);
-        if(boArray == null || boArray.Length != ids.Length)
+        if(boArray == null || boArray.Length != seIds.Length)
         {
             throw new Exception("数据加载失败！");
         }

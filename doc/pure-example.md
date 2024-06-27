@@ -243,7 +243,7 @@ public void TestBtn_Post(string actionName, H3.SmartForm.ListViewRequest request
         filter.FromRowNum = 0;
         filter.ToRowNum = 1000;
         H3.DataModel.BizObject[] boArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId, schema, H3.DataModel.GetListScopeType.GlobalAll, filter);
-        if(boArray == null || boArray.Length != ids.Length)
+        if(boArray == null || boArray.Length != seIds.Length)
         {
             throw new Exception("数据加载失败！");
         }

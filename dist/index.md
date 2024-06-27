@@ -233,16 +233,6 @@ $.ListView.ActionPreDo = function( actionCode ) {
 表单页面中的所有操作，都需要在表单设计页面中编写代码，代码需要编写在各种事件内，当对应操作产生时，系统会自动触发事件，以执行用户的自定义代码。
 
 
-## 表单页加载时的事件触发顺序图
-
-> 制作中...
-
-
-## 表单按钮点击时的事件触发顺序图
-
-> 制作中...
-
-
 ## 表单前端事件
 
 表单前端共有5个事件：
@@ -545,16 +535,17 @@ protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 }
 ```
 
+
+## 表单页加载时的事件触发顺序图
+
+![表单页加载时的事件触发顺序图](/img/form-events-1.png)
+
+
+## 表单按钮点击时的事件触发顺序图
+
+![表单按钮点击时的事件触发顺序图](/img/form-events-2.png)
+
 # 列表事件
-
-## 列表页加载时的事件触发顺序图
-
-> 制作中...
-
-
-## 列表按钮点击时的事件触发顺序图
-
-> 制作中...
 
 
 ## 列表前端事件
@@ -633,6 +624,16 @@ $.ListView.ActionPreDo = function( actionCode ) {
 当列表页初始打开时，会触发 ```OnInit``` 事件，并且执行时机上比 ```OnLoad``` 更早一步（先加载列表页面再加载列表数据）。
 
 这个事件主要用于设置列表初始按钮显示/隐藏、初始筛选条件、初始排序字段、初始分页设置等，这些操作都会在 ```base.OnInit(response);``` 中完成，所以如果要二次开发调整这些设置，也应该在 ```base.OnInit(response);``` 之后写代码。
+
+
+## 列表页加载时的事件触发顺序图
+
+> 制作中...
+
+
+## 列表按钮点击时的事件触发顺序图
+
+> 制作中...
 
 # 表单前端API
 
@@ -2121,7 +2122,7 @@ if(string.IsNullOrWhiteSpace(numStr))
 
 取值示例二：
 ``` cs
-//此示例跟一的区别在于，本示例不处理数字控件值为空的情况，为空时默认获取结果值为0
+//此示例跟一的区别在于，本示例不处理数字控件值为空的情况，为空时默认结果值为0
 string numStr = bo["控件编码"] + string.Empty;
 decimal num = 0m;
 if(!string.IsNullOrWhiteSpace(numStr))
@@ -2174,15 +2175,24 @@ if(!string.IsNullOrWhiteSpace(str))
 
 if(value == null || value.Length == 0)
 {
-    //结果无值
+    //未选择选项
 } else
 {
-    //结果有值
-    //循环获取每个选项值
+    //有选择选择，则循环获取每个选项值
     foreach(string item in value) 
     {
 
     }
+}
+```
+
+判断是否选择了某个选项：
+``` cs
+//如果需要判断是否选择了某个选项，可以用Contains方法判断
+string str = bo["控件编码"] + string.Empty;
+if(str.Contains("选项1"))
+{
+    //选择了选项1
 }
 ```
 
@@ -3333,26 +3343,27 @@ filter.Matcher = andMatcher;
 
 ### H3.Data.ComparisonOperatorType比较器枚举值
 
-| **后端枚举值**                              | **对应OpenApi LoadBizObjects接口Operator值** | **对应SQL（A为字段，?为筛选值）**     | **释义**                             |
-|---------------------------------------------|:-----------------------------------------:|---------------------------|------------------------------------|
+| **后端枚举值**                                   | **对应OpenApi LoadBizObjects接口Operator值** | **对应SQL（A为字段，?为筛选值）**     | **释义**                             |
+|---------------------------------------------|-----------------------------------------|---------------------------|------------------------------------|
 | H3.Data.ComparisonOperatorType.Above        | 0                                       | A > ?                     | 大于，用于数值、日期时间类型控件值的比较               |
+| H3.Data.ComparisonOperatorType.NotBelow     | 1                                       | A >= ?                    | 大于等于，用于数值、日期时间类型控件值的比较             |
+| H3.Data.ComparisonOperatorType.Equal        | 2                                       | A = ?                     | 等于，用于文本、数值、日期时间类型控件值的比较            |
+| H3.Data.ComparisonOperatorType.NotAbove     | 3                                       | A <= ?                    | 小于等于，用于数值、日期时间类型控件值的比较             |
 | H3.Data.ComparisonOperatorType.Below        | 4                                       | A < ?                     | 小于，用于数值、日期时间类型控件值的比较               |
-| H3.Data.ComparisonOperatorType.Contains     | 8                                       | A like '%?%'              | 文本包含指定字符串，用于文本类型控件值的比较           |
-| H3.Data.ComparisonOperatorType.EndWith      | 14                                      | A like '%?'               | 文本以?为结尾，用于文本类型控件值的比较               |
-| H3.Data.ComparisonOperatorType.Equal        | 2                                       | A = ?                     | 等于，用于文本、数值、日期时间类型控件值的比较         |
+| H3.Data.ComparisonOperatorType.NotEqual     | 5                                       | A != ?                    | 不等于，用于文本、数值、日期时间类型控件值的比较           |
 | H3.Data.ComparisonOperatorType.In           | 6                                       | A in (?, ?)               | 和列表中任意值匹配，用于文本、数值、日期时间类型控件值的比较     |
-| H3.Data.ComparisonOperatorType.IsNone       | 20                                      | A is null or A = ''       | 判断值为null 或者 为空字符串，用于文本、数值类型控件值的比较  |
-| H3.Data.ComparisonOperatorType.IsNull       | 18                                      | A is null                 | 判断值为null，可用于任意类型控件值的比较             |
-| H3.Data.ComparisonOperatorType.NotAbove     | 3                                       | A <= ?                    | 小于等于，用于数值、日期时间类型控件值的比较           |
-| H3.Data.ComparisonOperatorType.NotBelow     | 1                                       | A >= ?                    | 大于等于，用于数值、日期时间类型控件值的比较           |
-| H3.Data.ComparisonOperatorType.NotContains  | 24                                      | A not like '%?%'          | 文本不包含指定字符串，用于文本类型控件值的比较         |
-| H3.Data.ComparisonOperatorType.NotEndWith   | 23                                      | A not like '%?'           | 文本不以?结尾，用于文本类型控件值的比较               |
-| H3.Data.ComparisonOperatorType.NotEqual     | 5                                       | A != ?                    | 不等于，用于文本、数值、日期时间类型控件值的比较      |
 | H3.Data.ComparisonOperatorType.NotIn        | 7                                       | A not in (?, ?)           | 不和列表中任意值匹配，用于文本、数值、日期时间类型控件值的比较    |
+| H3.Data.ComparisonOperatorType.Contains     | 8                                       | A like '%?%'              | 文本包含指定字符串，用于文本类型控件值的比较             |
+| H3.Data.ComparisonOperatorType.StartWith    | 13                                      | A like '?%'               | 文本以?开始，用于文本类型控件值的比较                |
+| H3.Data.ComparisonOperatorType.EndWith      | 14                                      | A like '%?'               | 文本以?为结尾，用于文本类型控件值的比较               |
+| H3.Data.ComparisonOperatorType.IsNull       | 18                                      | A is null                 | 判断值为null，可用于任意类型控件值的比较             |
+| H3.Data.ComparisonOperatorType.NotNull      | 19                                      | A is not null             | 判断值不为null，可用于任意类型控件值的比较            |
+| H3.Data.ComparisonOperatorType.IsNone       | 20                                      | A is null or A = ''       | 判断值为null 或者 为空字符串，用于文本、数值类型控件值的比较  |
 | H3.Data.ComparisonOperatorType.NotNone      | 21                                      | A is not null and A != '' | 判断值不为null 且 不为空字符串，用于文本、数值类型控件值的比较 |
-| H3.Data.ComparisonOperatorType.NotNull      | 19                                      | A is not null             | 判断值不为null，可用于任意类型控件值的比较       |
 | H3.Data.ComparisonOperatorType.NotStartWith | 22                                      | A not like '?%'           | 文本不以?开始，用于文本类型控件值的比较               |
-| H3.Data.ComparisonOperatorType.StartWith    | 13                                      | A like '?%'               | 文本以?开始，用于文本类型控件值的比较                 |
+| H3.Data.ComparisonOperatorType.NotEndWith   | 23                                      | A not like '%?'           | 文本不以?结尾，用于文本类型控件值的比较               |
+| H3.Data.ComparisonOperatorType.NotContains  | 24                                      | A not like '%?%'          | 文本不包含指定字符串，用于文本类型控件值的比较            |
+
 
 
 
@@ -4134,6 +4145,16 @@ OnLoad: function() {
 ```
 
 
+## [通用]附件批量下载
+
+可用位置：✔表单 / ✔列表
+
+``` js
+//此函数是在表单/列表前端调用，而前端无法获得附件Id，所以此处附件Id需通过Post请求后端获取
+$.IDownloadAttachments( ["附件Id_1", "附件Id_2" ] );
+```
+
+!> 注意：此函数仅支持浏览器中使用，钉钉工作台、企微工作台不支持。
 
 # 后端代码示例
 
@@ -5406,7 +5427,7 @@ public void TestBtn_Post(string actionName, H3.SmartForm.ListViewRequest request
         filter.FromRowNum = 0;
         filter.ToRowNum = 1000;
         H3.DataModel.BizObject[] boArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId, schema, H3.DataModel.GetListScopeType.GlobalAll, filter);
-        if(boArray == null || boArray.Length != ids.Length)
+        if(boArray == null || boArray.Length != seIds.Length)
         {
             throw new Exception("数据加载失败！");
         }

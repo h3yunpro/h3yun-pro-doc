@@ -130,7 +130,7 @@ if(string.IsNullOrWhiteSpace(numStr))
 
 取值示例二：
 ``` cs
-//此示例跟一的区别在于，本示例不处理数字控件值为空的情况，为空时默认获取结果值为0
+//此示例跟一的区别在于，本示例不处理数字控件值为空的情况，为空时默认结果值为0
 string numStr = bo["控件编码"] + string.Empty;
 decimal num = 0m;
 if(!string.IsNullOrWhiteSpace(numStr))
@@ -183,15 +183,24 @@ if(!string.IsNullOrWhiteSpace(str))
 
 if(value == null || value.Length == 0)
 {
-    //结果无值
+    //未选择选项
 } else
 {
-    //结果有值
-    //循环获取每个选项值
+    //有选择选择，则循环获取每个选项值
     foreach(string item in value) 
     {
 
     }
+}
+```
+
+判断是否选择了某个选项：
+``` cs
+//如果需要判断是否选择了某个选项，可以用Contains方法判断
+string str = bo["控件编码"] + string.Empty;
+if(str.Contains("选项1"))
+{
+    //选择了选项1
 }
 ```
 

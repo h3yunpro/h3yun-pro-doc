@@ -216,14 +216,14 @@ function convertToString( v ) {
 
 ## [前端]Date Format
 
-由于氚云前端要给日期控件赋值，SetValue函数只接收 `yyyy-MM-dd` 和 `yyyy-MM-dd HH:mm:ss` 两种格式的字符串，所以要想把当前时间赋值给日期控件，就需要用到这个函数，将当前时间转换为符合要求的格式字符串。
+氚云前端要给日期控件赋值时，SetValue函数只接收 `yyyy-MM-dd` 和 `yyyy-MM-dd HH:mm:ss` 两种格式的字符串，所以要把当前时间赋值给日期控件，就需要用到这个函数，将当前时间转换为符合要求的格式字符串。
 
 ``` js
 /**
 /* 对Date的扩展，将 Date 转化为指定格式的String
 /* 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
 /* 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
-/* 例子：
+/* 使用例子：
 /* that.F0000001.SetValue((new Date()).Format("yyyy-MM-dd"));
 */
 Date.prototype.Format = function( fmt ) {
