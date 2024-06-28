@@ -633,11 +633,11 @@ if(this.Request.FormDataType == H3.SmartForm.SmartFormDataType.Workflow)
 
 <h2>表单页加载时的事件触发顺序图</h2>
 
-<p><img src="/img/form-events-1.png" alt="表单页加载时的事件触发顺序图" /></p>
+<p><img src="../img/form-events-1.png" alt="表单页加载时的事件触发顺序图" /></p>
 
 <h2>表单按钮点击时的事件触发顺序图</h2>
 
-<p><img src="/img/form-events-2.png" alt="表单按钮点击时的事件触发顺序图" /></p>
+<p><img src="../img/form-events-2.png" alt="表单按钮点击时的事件触发顺序图" /></p>
 
 <h1>列表事件</h1>
 
@@ -2207,9 +2207,9 @@ if(string.IsNullOrWhiteSpace(str))
 <h2>人员单选/部门单选/关联表单</h2>
 
 <p>此类控件值都是 <code>string</code> 类型，区别是：
-- 人员单选 值是氚云用户Id
-- 部门单选 值是氚云部门Id
-- 关联表单 值是关联的表单数据Id</p>
+- 人员单选 值是氚云用户Id，可通过SQL查询 <a href="/doc/database?id=系统-用户表-h_user">系统-用户表 H<em>User</a> 获得
+- 部门单选 值是氚云部门Id，可通过SQL查询 <a href="/doc/database?id=系统-部门表-h_organizationunit">系统-部门表 H</em>Organizationunit</a> 获得
+- 关联表单 值是关联的表单数据Id，可通过关联表单控件的值，或者通过业务对象或SQL查询表单数据获得</p>
 
 <p>取值：<code>string userId = bo["控件编码"] + string.Empty;</code></p>
 
@@ -2220,9 +2220,9 @@ if(string.IsNullOrWhiteSpace(str))
 <h2>人员多选/部门多选/关联表单多选</h2>
 
 <p>此类控件值都是 <code>string[]</code> 类型，区别是：
-- 人员多选 值是氚云用户Id数组
-- 部门多选 值是氚云部门Id数组
-- 关联表单多选 值是关联的表单数据Id数组</p>
+- 人员多选 值是氚云用户Id数组，可通过SQL查询 <a href="/doc/database?id=系统-用户表-h_user">系统-用户表 H<em>User</a> 获得
+- 部门多选 值是氚云部门Id数组，可通过SQL查询 <a href="/doc/database?id=系统-部门表-h_organizationunit">系统-部门表 H</em>Organizationunit</a> 获得
+- 关联表单多选 值是关联的表单数据Id数组，可通过关联表单控件的值，或者通过业务对象或SQL查询表单数据获得</p>
 
 <p>取值：</p>
 
@@ -2242,7 +2242,7 @@ if(userIdArray == null || userIdArray.Length == 0)
 
 <p>赋值：</p>
 
-<pre><code class="cs language-cs">//此处本应通过查询方式获得Id数组，篇幅原因此处隐去
+<pre><code class="cs language-cs">//此处本应通过查询方式获得Id数组，篇幅原因此处不贴代码
 string[] userIdArray = new string[]{ "44358530-a4cc-4e9c-9009-2c052f71c706", "c9afbea4-1800-4708-bb6a-90dd5a46e538" };
 bo["控件编码"] = userIdArray;
 </code></pre>
@@ -2283,7 +2283,7 @@ if(string.IsNullOrWhiteSpace(numStr))
 } else
 {
     //有值时转换成 decimal 类型
-    //因为氚云数字控件可配置最多16位小数，所以转成decimal类型（不管配置里小数位数多少，精度都足够）
+    //因为氚云数字控件可配置最多16位小数，所以为了不丢失精度，转成decimal类型较好
     decimal num = decimal.Parse(numStr);
 }
 </code></pre>
@@ -2296,12 +2296,17 @@ decimal num = 0m;
 if(!string.IsNullOrWhiteSpace(numStr))
 {
     //有值时转换成 decimal 类型
-    //因为氚云数字控件可配置最多16位小数，所以转成decimal类型（不管配置里小数位数多少，精度都足够）
+    //因为氚云数字控件可配置最多16位小数，所以为了不丢失精度，转成decimal类型较好
     num = decimal.Parse(numStr);
 }
 
 //上面已经获取到了数字控件的值，在此继续写对该值操作的业务代码
-//但是注意num值可能为0，所以把num作为除数（会抛异常）前，需要判断一下num值是否为0
+//但是注意num值可能为0，所以把num作为除数前（0作为除数会抛异常），需要判断一下num值是否为0
+decimal result = 0m;
+if(num != 0m)
+{
+    result = 100 / num;
+}
 </code></pre>
 
 <p>赋值：
@@ -2315,8 +2320,7 @@ bo["控件编码"] = num;
 <li>赋值一个小数</li>
 </ol>
 
-<pre><code class="cs language-cs">//赋值小数时不用double类型，是因为氚云数字控件可配置最多16位小数，而double类型精度不够
-//100.22 后面有个“m”，是C#的decimal值语法，因为直接写 100.22 表示的是double类型，而 100.22m 表示是一个decimal类型
+<pre><code class="cs language-cs">//100.22 后面有个“m”，是C#的decimal值语法，因为直接写 100.22 表示的是double类型，而 100.22m 表示是一个decimal类型
 decimal num = 100.22m;
 bo["控件编码"] = num;
 </code></pre>
@@ -2378,7 +2382,7 @@ if(str.Contains("选项1"))
 
 <p>取值：</p>
 
-<pre><code class="cs language-cs">//由于控件值可能为null，直接转bool类型有风险，先转成string类型判断一下是否是空值，比较保险
+<pre><code class="cs language-cs">//由于控件值可能为null，直接转bool类型有风险，先转成string类型判断一下是否是null
 string str = bo["控件编码"] + string.Empty;
 
 //定义一个bool类型的结果
@@ -8193,7 +8197,7 @@ int b = 0;
 
 <h2>新版列表后端调试器BUG如何处理？</h2>
 
-<p>在浏览器上登录氚云，地址栏切换到此地址（<strong>注意：不要直接复制Url就打开，表单编码、应用编码需要替换成想调试的表单的编码和应用编码</strong>）：</p>
+<p>在浏览器上登录氚云，地址栏切换到此地址（<strong>注意：不要复制Url直接打开，表单编码、应用编码需要替换成想调试的表单的编码和应用编码</strong>）：</p>
 
 <pre><code>https://www.h3yun.com/home.html#/app?id=表单编码&amp;code=应用编码
 </code></pre>

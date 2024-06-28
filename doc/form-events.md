@@ -308,9 +308,9 @@ protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 
 ## 表单页加载时的事件触发顺序图
 
-![表单页加载时的事件触发顺序图](/img/form-events-1.png)
+![表单页加载时的事件触发顺序图](../img/form-events-1.png)
 
 
 ## 表单按钮点击时的事件触发顺序图
 
-![表单按钮点击时的事件触发顺序图](/img/form-events-2.png)
+![表单按钮点击时的事件触发顺序图](../img/form-events-2.png)

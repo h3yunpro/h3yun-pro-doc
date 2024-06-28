@@ -167,6 +167,7 @@ protected override void OnWorkflowInstanceStateChanged(H3.Workflow.Instance.Work
 }
 ```
 
+
 ## 获取当前流程运行节点
 
 由于 ```this.Request.ActivityCode``` 方法，获取的只是当前登录人所在的流程节点，会导致审批流节点的错乱，故使用：```this.Request.WorkflowInstance.RunningActivties```，获取当前流程的活动节点。

@@ -538,12 +538,12 @@ protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 
 ## 表单页加载时的事件触发顺序图
 
-![表单页加载时的事件触发顺序图](/img/form-events-1.png)
+![表单页加载时的事件触发顺序图](../img/form-events-1.png)
 
 
 ## 表单按钮点击时的事件触发顺序图
 
-![表单按钮点击时的事件触发顺序图](/img/form-events-2.png)
+![表单按钮点击时的事件触发顺序图](../img/form-events-2.png)
 
 # 列表事件
 
@@ -2036,9 +2036,9 @@ if(string.IsNullOrWhiteSpace(str))
 ## 人员单选/部门单选/关联表单
 
 此类控件值都是 ```string``` 类型，区别是：
-- 人员单选 值是氚云用户Id
-- 部门单选 值是氚云部门Id
-- 关联表单 值是关联的表单数据Id
+- 人员单选 值是氚云用户Id，可通过SQL查询 [系统-用户表 H_User](/doc/database?id=系统-用户表-h_user) 获得
+- 部门单选 值是氚云部门Id，可通过SQL查询 [系统-部门表 H_Organizationunit](/doc/database?id=系统-部门表-h_organizationunit) 获得
+- 关联表单 值是关联的表单数据Id，可通过关联表单控件的值，或者通过业务对象或SQL查询表单数据获得
 
 取值：```string userId = bo["控件编码"] + string.Empty;```
 
@@ -2050,9 +2050,9 @@ if(string.IsNullOrWhiteSpace(str))
 ## 人员多选/部门多选/关联表单多选
 
 此类控件值都是 ```string[]``` 类型，区别是：
-- 人员多选 值是氚云用户Id数组
-- 部门多选 值是氚云部门Id数组
-- 关联表单多选 值是关联的表单数据Id数组
+- 人员多选 值是氚云用户Id数组，可通过SQL查询 [系统-用户表 H_User](/doc/database?id=系统-用户表-h_user) 获得
+- 部门多选 值是氚云部门Id数组，可通过SQL查询 [系统-部门表 H_Organizationunit](/doc/database?id=系统-部门表-h_organizationunit) 获得
+- 关联表单多选 值是关联的表单数据Id数组，可通过关联表单控件的值，或者通过业务对象或SQL查询表单数据获得
 
 取值：
 ``` cs
@@ -2072,7 +2072,7 @@ if(userIdArray == null || userIdArray.Length == 0)
 
 赋值：
 ``` cs
-//此处本应通过查询方式获得Id数组，篇幅原因此处隐去
+//此处本应通过查询方式获得Id数组，篇幅原因此处不贴代码
 string[] userIdArray = new string[]{ "44358530-a4cc-4e9c-9009-2c052f71c706", "c9afbea4-1800-4708-bb6a-90dd5a46e538" };
 bo["控件编码"] = userIdArray;
 ```
@@ -2115,7 +2115,7 @@ if(string.IsNullOrWhiteSpace(numStr))
 } else
 {
     //有值时转换成 decimal 类型
-    //因为氚云数字控件可配置最多16位小数，所以转成decimal类型（不管配置里小数位数多少，精度都足够）
+    //因为氚云数字控件可配置最多16位小数，所以为了不丢失精度，转成decimal类型较好
     decimal num = decimal.Parse(numStr);
 }
 ```
@@ -2128,12 +2128,17 @@ decimal num = 0m;
 if(!string.IsNullOrWhiteSpace(numStr))
 {
     //有值时转换成 decimal 类型
-    //因为氚云数字控件可配置最多16位小数，所以转成decimal类型（不管配置里小数位数多少，精度都足够）
+    //因为氚云数字控件可配置最多16位小数，所以为了不丢失精度，转成decimal类型较好
     num = decimal.Parse(numStr);
 }
 
 //上面已经获取到了数字控件的值，在此继续写对该值操作的业务代码
-//但是注意num值可能为0，所以把num作为除数（会抛异常）前，需要判断一下num值是否为0
+//但是注意num值可能为0，所以把num作为除数前（0作为除数会抛异常），需要判断一下num值是否为0
+decimal result = 0m;
+if(num != 0m)
+{
+    result = 100 / num;
+}
 ```
 
 赋值：
@@ -2145,7 +2150,6 @@ bo["控件编码"] = num;
 
 2. 赋值一个小数
 ``` cs
-//赋值小数时不用double类型，是因为氚云数字控件可配置最多16位小数，而double类型精度不够
 //100.22 后面有个“m”，是C#的decimal值语法，因为直接写 100.22 表示的是double类型，而 100.22m 表示是一个decimal类型
 decimal num = 100.22m;
 bo["控件编码"] = num;
@@ -2210,7 +2214,7 @@ bo["控件编码"] = "选项1;选项2";
 
 取值：
 ``` cs
-//由于控件值可能为null，直接转bool类型有风险，先转成string类型判断一下是否是空值，比较保险
+//由于控件值可能为null，直接转bool类型有风险，先转成string类型判断一下是否是null
 string str = bo["控件编码"] + string.Empty;
 
 //定义一个bool类型的结果
@@ -2762,6 +2766,7 @@ protected override void OnWorkflowInstanceStateChanged(H3.Workflow.Instance.Work
     base.OnWorkflowInstanceStateChanged(oldState, newState);
 }
 ```
+
 
 ## 获取当前流程运行节点
 
@@ -6111,7 +6116,7 @@ var ctData = this.子表编码.GetValue();//ctData是一个对象数组，数组
 
 
 ## 新版列表后端调试器BUG如何处理？
-在浏览器上登录氚云，地址栏切换到此地址（**注意：不要直接复制Url就打开，表单编码、应用编码需要替换成想调试的表单的编码和应用编码**）：
+在浏览器上登录氚云，地址栏切换到此地址（**注意：不要复制Url直接打开，表单编码、应用编码需要替换成想调试的表单的编码和应用编码**）：
 ```
 https://www.h3yun.com/home.html#/app?id=表单编码&code=应用编码
 ```
