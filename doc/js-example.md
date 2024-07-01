@@ -64,63 +64,36 @@ OnLoad: function() {
 },
 ```
 
-## [表单]前端按钮控件点击（触发）实例
+
+## [表单]提交前弹出确认框二次确认
 
 可用位置：✔表单 / ✘列表
 
-![logo](../img/js-example-1.png ':size=20%')
+!> 由于氚云的 `$.IConfirm` 非阻塞函数，所以不能用来作为提交前的二次确认，若确实需要做二次确认功能，需使用js自带的 `confirm` 函数。
 
-<!-- tabs:start -->
-#### **前端代码**
-
+表单前端代码：
 ``` js
-// 提交前事件
-BeforeSubmit: function( action, postValue ) {
-	//按钮编码F0000004点击后执行的
-	if( action == "F0000004" ) {
-		//访问后端
-		$.SmartForm.PostForm( "RequestServer_Post", {}, function(){
+// 提交校验
+OnValidate: function( actionControl ) {
 
-		}, function(){
-			
-		}, false );
+    var that = this;
 
-		$.IShowSuccess( "成功", "这是一条成功消息" );
-	}
-	//按钮编码F0000005点击后执行的
-	if( action == "F0000005" ) {
-		$.IShowWarn( "警告", "这是一条警告消息" )
-	}
-	//按钮编码F0000006点击后执行的
-	if( action == "F0000006" ) {
-		$.IShowError( "错误", "这是一条错误消息" );
-	}
+    //判断用户是否点击的是“提交”按钮
+    if( actionControl.Action == "Submit" ) {
+
+        //弹出确认弹窗，让用户再次确认提交动作
+        if( confirm( "这里是弹窗的内容，确认提交？" ) ) {
+            //用户点击了“确认”，则不做处理，正常执行后续代码
+
+        } else {
+            //用户点击了“取消”，则使用return false中止提交动作
+            return false;
+        }
+    }
+
+    return true;//注意：此句代码勿删，放在OnValidate事件最后，若删除会导致点击提交按钮无反应
 },
 ```
-
-#### **后端代码**
-``` cs
-protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
-{
-	if(actionName == "RequestServer_Post") 
-	{
-		//创建一条业务数据
-		H3.IEngine engine = this.Request.Engine;
-		string systemUserId = H3.Organization.User.SystemUserId;
-		string currentUserId = this.Request.UserContext.UserId;
-		H3.DataModel.BizObjectSchema aSchema = engine.BizObjectManager.GetPublishedSchema("表单编码");
-		H3.DataModel.BizObject aBo = new H3.DataModel.BizObject(engine, aSchema, systemUserId);
-		aBo.CreatedBy = currentUserId;
-		aBo.OwnerId = currentUserId;
-		aBo["F0000001"] = "https://www.h3yun.com/";
-		aBo["F0000002"] = "https://www.h3yun.com/";
-		aBo.Status = H3.DataModel.BizObjectStatus.Effective;
-		aBo.Create();
-	}
-	base.OnSubmit(actionName, postValue, response);
-}
-```
-<!-- tabs:end -->
 
 
 ## [表单]前端新增页面去除子表默认空白行

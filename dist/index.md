@@ -358,7 +358,28 @@ if(this.Request.FormDataType == H3.SmartForm.SmartFormDataType.Workflow)
 
 ## 表单后端常用状态判断组合
 
-1. 后端OnSubmit事件中判断流程发起时提交
+1. 后端OnSubmit事件中判断点击暂存按钮
+``` cs
+protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
+{
+    try
+    {
+        if(actionName == "Save")
+        {
+            // 业务代码
+        }
+    } catch(Exception ex)
+    {
+        response.Errors.Add(ex.Message);
+        base.OnSubmit(actionName, postValue, response);
+        return;
+    }
+
+    base.OnSubmit(actionName, postValue, response);
+}
+```
+
+2. 后端OnSubmit事件中判断流程发起时提交
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -386,7 +407,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-2. 后端OnSubmit事件中判断某个流程节点下点击同意
+3. 后端OnSubmit事件中判断某个流程节点下点击同意
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -408,7 +429,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-3. 后端OnSubmit事件中判断流程进行中点击撤回/不同意
+4. 后端OnSubmit事件中判断流程进行中点击撤回/不同意
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -432,7 +453,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-4. 后端OnSubmit事件中判断无流程表单的初始提交
+5. 后端OnSubmit事件中判断无流程表单的初始提交
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -440,7 +461,9 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
     {
         //由于提交和同意按钮的actionName都是Submit，所以判断提交时需要联合当前表单状态进行判断
         //并且加上表单为无流程表单的判断
-        if(actionName == "Submit" && this.Request.FormDataType == H3.SmartForm.SmartFormDataType.BizObject && (this.Request.IsCreateMode || this.Request.BizObject.Status == H3.DataModel.BizObjectStatus.Draft))
+        if(actionName == "Submit"
+            && this.Request.FormDataType == H3.SmartForm.SmartFormDataType.BizObject 
+            && (this.Request.IsCreateMode || this.Request.BizObject.Status == H3.DataModel.BizObjectStatus.Draft))
         {
             // 业务代码
         }
@@ -455,7 +478,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-5. 后端OnSubmit事件中判断编辑提交
+6. 后端OnSubmit事件中判断编辑提交
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -477,7 +500,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-6. 后端OnSubmit事件中判断删除生效数据
+7. 后端OnSubmit事件中判断删除生效数据
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -498,7 +521,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-7. 后端OnLoad事件中判断当前用户非管理员时，设置控件隐藏/只读
+8. 后端OnLoad事件中判断当前用户非管理员时，设置控件隐藏/只读
 ``` cs
 protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 {
@@ -516,7 +539,7 @@ protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 }
 ```
 
-8. 后端OnLoad事件中判断当前用户所属部门为某部门时，不允许查看数据
+9. 后端OnLoad事件中判断当前用户所属部门为某部门时，不允许查看数据
 ``` cs
 protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 {
@@ -3887,63 +3910,36 @@ OnLoad: function() {
 },
 ```
 
-## [表单]前端按钮控件点击（触发）实例
+
+## [表单]提交前弹出确认框二次确认
 
 可用位置：✔表单 / ✘列表
 
-![logo](../img/js-example-1.png ':size=20%')
+!> 由于氚云的 `$.IConfirm` 非阻塞函数，所以不能用来作为提交前的二次确认，若确实需要做二次确认功能，需使用js自带的 `confirm` 函数。
 
-<!-- tabs:start -->
-#### **前端代码**
-
+表单前端代码：
 ``` js
-// 提交前事件
-BeforeSubmit: function( action, postValue ) {
-	//按钮编码F0000004点击后执行的
-	if( action == "F0000004" ) {
-		//访问后端
-		$.SmartForm.PostForm( "RequestServer_Post", {}, function(){
+// 提交校验
+OnValidate: function( actionControl ) {
 
-		}, function(){
-			
-		}, false );
+    var that = this;
 
-		$.IShowSuccess( "成功", "这是一条成功消息" );
-	}
-	//按钮编码F0000005点击后执行的
-	if( action == "F0000005" ) {
-		$.IShowWarn( "警告", "这是一条警告消息" )
-	}
-	//按钮编码F0000006点击后执行的
-	if( action == "F0000006" ) {
-		$.IShowError( "错误", "这是一条错误消息" );
-	}
+    //判断用户是否点击的是“提交”按钮
+    if( actionControl.Action == "Submit" ) {
+
+        //弹出确认弹窗，让用户再次确认提交动作
+        if( confirm( "这里是弹窗的内容，确认提交？" ) ) {
+            //用户点击了“确认”，则不做处理，正常执行后续代码
+
+        } else {
+            //用户点击了“取消”，则使用return false中止提交动作
+            return false;
+        }
+    }
+
+    return true;//注意：此句代码勿删，放在OnValidate事件最后，若删除会导致点击提交按钮无反应
 },
 ```
-
-#### **后端代码**
-``` cs
-protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
-{
-	if(actionName == "RequestServer_Post") 
-	{
-		//创建一条业务数据
-		H3.IEngine engine = this.Request.Engine;
-		string systemUserId = H3.Organization.User.SystemUserId;
-		string currentUserId = this.Request.UserContext.UserId;
-		H3.DataModel.BizObjectSchema aSchema = engine.BizObjectManager.GetPublishedSchema("表单编码");
-		H3.DataModel.BizObject aBo = new H3.DataModel.BizObject(engine, aSchema, systemUserId);
-		aBo.CreatedBy = currentUserId;
-		aBo.OwnerId = currentUserId;
-		aBo["F0000001"] = "https://www.h3yun.com/";
-		aBo["F0000002"] = "https://www.h3yun.com/";
-		aBo.Status = H3.DataModel.BizObjectStatus.Effective;
-		aBo.Create();
-	}
-	base.OnSubmit(actionName, postValue, response);
-}
-```
-<!-- tabs:end -->
 
 
 ## [表单]前端新增页面去除子表默认空白行
@@ -5821,6 +5817,13 @@ void LoadBizObject()
 !> **```IsSubmit``` 参数具体说明：**<br/> 
 无流程表单，```IsSubmit``` 传 ```false ``` 创建草稿数据，传 ```true``` 创建生效数据。<br/> 
 有流程表单，```IsSubmit``` 传 ```false``` 创建进行中数据，但处于发起节点；传 ```true``` 创建进行中数据并流转到下一个节点（按请求数据中 ```OwnerId``` 为提交人自动提交，若未传 ```OwnerId```，则由管理员作为提交人）。
+
+
+
+## 文档及在线调试
+
+[文档及在线调试](https://apifox.com/apidoc/shared-8a3d34c1-5e41-48f0-8eb3-0344cedfde06 ':include :type=iframe width=100% height=800px')
+
 
 
 # 常见问题解答

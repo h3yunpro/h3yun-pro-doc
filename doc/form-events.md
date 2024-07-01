@@ -128,7 +128,28 @@ if(this.Request.FormDataType == H3.SmartForm.SmartFormDataType.Workflow)
 
 ## 表单后端常用状态判断组合
 
-1. 后端OnSubmit事件中判断流程发起时提交
+1. 后端OnSubmit事件中判断点击暂存按钮
+``` cs
+protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
+{
+    try
+    {
+        if(actionName == "Save")
+        {
+            // 业务代码
+        }
+    } catch(Exception ex)
+    {
+        response.Errors.Add(ex.Message);
+        base.OnSubmit(actionName, postValue, response);
+        return;
+    }
+
+    base.OnSubmit(actionName, postValue, response);
+}
+```
+
+2. 后端OnSubmit事件中判断流程发起时提交
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -156,7 +177,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-2. 后端OnSubmit事件中判断某个流程节点下点击同意
+3. 后端OnSubmit事件中判断某个流程节点下点击同意
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -178,7 +199,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-3. 后端OnSubmit事件中判断流程进行中点击撤回/不同意
+4. 后端OnSubmit事件中判断流程进行中点击撤回/不同意
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -202,7 +223,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-4. 后端OnSubmit事件中判断无流程表单的初始提交
+5. 后端OnSubmit事件中判断无流程表单的初始提交
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -210,7 +231,9 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
     {
         //由于提交和同意按钮的actionName都是Submit，所以判断提交时需要联合当前表单状态进行判断
         //并且加上表单为无流程表单的判断
-        if(actionName == "Submit" && this.Request.FormDataType == H3.SmartForm.SmartFormDataType.BizObject && (this.Request.IsCreateMode || this.Request.BizObject.Status == H3.DataModel.BizObjectStatus.Draft))
+        if(actionName == "Submit"
+            && this.Request.FormDataType == H3.SmartForm.SmartFormDataType.BizObject 
+            && (this.Request.IsCreateMode || this.Request.BizObject.Status == H3.DataModel.BizObjectStatus.Draft))
         {
             // 业务代码
         }
@@ -225,7 +248,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-5. 后端OnSubmit事件中判断编辑提交
+6. 后端OnSubmit事件中判断编辑提交
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -247,7 +270,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-6. 后端OnSubmit事件中判断删除生效数据
+7. 后端OnSubmit事件中判断删除生效数据
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -268,7 +291,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-7. 后端OnLoad事件中判断当前用户非管理员时，设置控件隐藏/只读
+8. 后端OnLoad事件中判断当前用户非管理员时，设置控件隐藏/只读
 ``` cs
 protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 {
@@ -286,7 +309,7 @@ protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 }
 ```
 
-8. 后端OnLoad事件中判断当前用户所属部门为某部门时，不允许查看数据
+9. 后端OnLoad事件中判断当前用户所属部门为某部门时，不允许查看数据
 ``` cs
 protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 {
