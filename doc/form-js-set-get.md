@@ -108,6 +108,33 @@ that.控件编码.SetValue(null);
 
 ## 关联表单
 
+此类控件值都是 ```string``` 类型，但是值是被关联表单的数据Id，即数据表中的ObjectId字段。
+
+取值：
+``` js
+var boId = that.控件编码.GetValue();
+
+//判断控件有值
+if( boId ) {
+    //符合这个条件的值为非空字符串，undefined、null、"" 都不会符合这个条件
+}
+
+//判断控件值为空
+if( boId === undefined || boId === null || boId === "" ) {
+
+}
+```
+
+赋值：
+``` js
+that.控件编码.SetValue("xxx-xxx-xxx-xxx");
+```
+
+清空控件值：
+``` js
+that.控件编码.SetValue("");
+```
+
 
 ## 关联表单多选
 
@@ -131,6 +158,7 @@ that.控件编码.SetValue(null);
 
 
 ## 附件/图片
+
 
 
 ## 子表

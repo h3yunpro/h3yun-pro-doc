@@ -54,7 +54,7 @@
 
   * [氚云调用WebService](/doc/req-ws)
   * [氚云调用WebAPI](/doc/req-api)
-  * [第三方调用氚云OpenApi](/doc/open-api)
+  * [第三方调用氚云OpenApi ↗](https://h3yun-pro-doc-openapi.apifox.cn/ ':target=_blank')
 
 
 * 其他

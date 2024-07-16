@@ -239,6 +239,7 @@ that.控件编码.OnKeyDown(function(event){
 支持的控件类型：子表
 
 ``` js
+// 注：此处的子表内控件编码是完整的控件编码，格式：子表编码.控件编码
 that.子表编码.AddRow($.IGuid(), {
     "子表内控件编码": "控件值"
 });
@@ -310,10 +311,11 @@ $.IShowWarn( "警告", "这是一条警告消息" );//弹出警告消息
 $.IShowError( "错误", "这是一条错误消息" );//弹出错误消息
 
 /*
-    注意：$.IConfirm弹窗是属于回调式的，而非阻塞式，调用完此函数，会立马执行后续代码，
+    注意：
+        * $.IConfirm弹窗是属于回调式的，而非阻塞式，调用完此函数，会立马执行后续代码，
         而不会等待用户点击按钮后再执行，所以请勿用在用户提交时
 
-        需要阻塞提交动作，请使用js自带的confirm：
+        * 需要阻塞提交动作，请使用js自带的confirm：
         var r=confirm("弹窗内容");
         if (r==true)
         {
@@ -373,7 +375,7 @@ $.IShowForm(schemaCode, objectId, params, checkIsChange, showlist, {
 
 ## 获取弹窗调用方传递的参数
 
-如果本表单是通过$.IShowForm打开的，并且有传递params，则可以通过 ```$.IGetParams``` 获取params中指定属性名对应的属性值。
+如果本表单是通过$.IShowForm打开的，并且有传递params，则可以通过 `$.IGetParams` 函数获取params中指定属性名对应的属性值。
 
 ``` js
 var param1 = $.IGetParams("param1");
@@ -382,18 +384,39 @@ var param1 = $.IGetParams("param1");
 
 ## 获取设备经纬度
 
-用于获取用户当前定位（其精度和位置控件一致），但是仅限移动端，所以使用前，需要判断一下当前表单所处环境。
+1、用于获取用户当前定位（其精度和位置控件一致），但是仅限钉钉移动端，所以使用前，需要判断一下当前表单所处环境。
 
 示例：
 ``` js
-if($.SmartForm.ResponseContext.IsMobile){
-    //此函数返回值为一个对象，对象格式和位置控件值一致，如下：
-    //{"Address":"深圳市南山区科技南十路航天科技研究院","Point":{"lat":"21.345","lng":"114.454"}}
-    var location = $.ILocation();
-    
-    //因为 $.ILocation 的返回值和位置控件值一致，所以可以直接赋值给位置控件
-    that.位置控件的控件编码.SetValue(location);
+if ($.SmartForm.ResponseContext.IsMobile) {
+    //这里是回调的，data是个对象，属性如下：lat,lng,address，分别表示：纬度，经度，地址信息
+    $.ILocation(true, function (data) {
+        if (data) {
+            alert(data.lat + "," + data.lng + "," + data.address);
+        }
+        else {
+            alert("获取位置错误");
+        }
+    });
 }
+```
+
+2、其他客户端（浏览器、钉钉工作台等），可以使用原生JS代码实现（需注意考虑兼容性）。
+示例：
+``` js
+if ($.SmartForm.ResponseContext.IsMobile) {
+    if (navigator && "geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+                alert("纬度:" + position.coords.latitude);
+                alert("经度:" + position.coords.longitude);
+            }, function (error) {
+                alert("经纬度获取失败：" + error.code + " - " + error.message);
+            }
+        );
+    } else {
+        alert("本设备不支持获取经纬度"); 
+    };
+};
 ```
 
 
@@ -494,7 +517,7 @@ LineType.Strikeline   删除线
 
 ``` js
 that.控件编码.SetFocus(true);//聚焦并自动滚动到指定控件处
-that.控件编码.SetFocus(true);//只聚焦，不自动滚动到指定控件处
+that.控件编码.SetFocus(false);//只聚焦，不自动滚动到指定控件处
 ```
 
 

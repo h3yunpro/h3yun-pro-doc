@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
-    <meta name="keywords" content="氚云,氚云专业版,氚云文档,氚云专业版文档,氚专开发者共创文档,氚云专业版扩展文档,氚专开发者文档" />
-    <meta name="description" content="氚专开发者共创文档" />
-    <title>氚专开发者共创文档</title>
+    <meta name="keywords" content="氚云,氚云专业版,氚云文档,氚云专业版文档,氚云专业版扩展文档,氚专开发者文档" />
+    <meta name="description" content="氚专开发者扩展文档" />
+    <title>氚专开发者扩展文档</title>
     
     
 
@@ -984,7 +984,8 @@ that.控件编码.BindChange( $.IGuid(), function() {
 
 <p>支持的控件类型：子表</p>
 
-<pre><code class="js language-js">that.子表编码.AddRow($.IGuid(), {
+<pre><code class="js language-js">// 注：此处的子表内控件编码是完整的控件编码，格式：子表编码.控件编码
+that.子表编码.AddRow($.IGuid(), {
     "子表内控件编码": "控件值"
 });
 </code></pre>
@@ -1043,10 +1044,11 @@ $.IShowWarn( "警告", "这是一条警告消息" );//弹出警告消息
 $.IShowError( "错误", "这是一条错误消息" );//弹出错误消息
 
 /*
-    注意：$.IConfirm弹窗是属于回调式的，而非阻塞式，调用完此函数，会立马执行后续代码，
+    注意：
+        * $.IConfirm弹窗是属于回调式的，而非阻塞式，调用完此函数，会立马执行后续代码，
         而不会等待用户点击按钮后再执行，所以请勿用在用户提交时
 
-        需要阻塞提交动作，请使用js自带的confirm：
+        * 需要阻塞提交动作，请使用js自带的confirm：
         var r=confirm("弹窗内容");
         if (r==true)
         {
@@ -1101,25 +1103,46 @@ $.IShowForm(schemaCode, objectId, params, checkIsChange, showlist, {
 
 <h2>获取弹窗调用方传递的参数</h2>
 
-<p>如果本表单是通过$.IShowForm打开的，并且有传递params，则可以通过 <code>$.IGetParams</code> 获取params中指定属性名对应的属性值。</p>
+<p>如果本表单是通过$.IShowForm打开的，并且有传递params，则可以通过 <code>$.IGetParams</code> 函数获取params中指定属性名对应的属性值。</p>
 
 <pre><code class="js language-js">var param1 = $.IGetParams("param1");
 </code></pre>
 
 <h2>获取设备经纬度</h2>
 
-<p>用于获取用户当前定位（其精度和位置控件一致），但是仅限移动端，所以使用前，需要判断一下当前表单所处环境。</p>
+<p>1、用于获取用户当前定位（其精度和位置控件一致），但是仅限钉钉移动端，所以使用前，需要判断一下当前表单所处环境。</p>
 
 <p>示例：</p>
 
-<pre><code class="js language-js">if($.SmartForm.ResponseContext.IsMobile){
-    //此函数返回值为一个对象，对象格式和位置控件值一致，如下：
-    //{"Address":"深圳市南山区科技南十路航天科技研究院","Point":{"lat":"21.345","lng":"114.454"}}
-    var location = $.ILocation();
-
-    //因为 $.ILocation 的返回值和位置控件值一致，所以可以直接赋值给位置控件
-    that.位置控件的控件编码.SetValue(location);
+<pre><code class="js language-js">if ($.SmartForm.ResponseContext.IsMobile) {
+    //这里是回调的，data是个对象，属性如下：lat,lng,address，分别表示：纬度，经度，地址信息
+    $.ILocation(true, function (data) {
+        if (data) {
+            alert(data.lat + "," + data.lng + "," + data.address);
+        }
+        else {
+            alert("获取位置错误");
+        }
+    });
 }
+</code></pre>
+
+<p>2、其他客户端（浏览器、钉钉工作台等），可以使用原生JS代码实现（需注意考虑兼容性）。
+示例：</p>
+
+<pre><code class="js language-js">if ($.SmartForm.ResponseContext.IsMobile) {
+    if (navigator &amp;&amp; "geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+                alert("纬度:" + position.coords.latitude);
+                alert("经度:" + position.coords.longitude);
+            }, function (error) {
+                alert("经纬度获取失败：" + error.code + " - " + error.message);
+            }
+        );
+    } else {
+        alert("本设备不支持获取经纬度"); 
+    };
+};
 </code></pre>
 
 <h2>关闭表单</h2>
@@ -1207,7 +1230,7 @@ LineType.Strikeline   删除线
 <p>支持的控件类型：单行文本、多行文本、数值</p>
 
 <pre><code class="js language-js">that.控件编码.SetFocus(true);//聚焦并自动滚动到指定控件处
-that.控件编码.SetFocus(true);//只聚焦，不自动滚动到指定控件处
+that.控件编码.SetFocus(false);//只聚焦，不自动滚动到指定控件处
 </code></pre>
 
 <h2>绑定控件聚焦事件</h2>
@@ -1328,6 +1351,33 @@ if( idArray === null || idArray.length === 0 ) {
 </code></pre>
 
 <h2>关联表单</h2>
+
+<p>此类控件值都是 <code>string</code> 类型，但是值是被关联表单的数据Id，即数据表中的ObjectId字段。</p>
+
+<p>取值：</p>
+
+<pre><code class="js language-js">var boId = that.控件编码.GetValue();
+
+//判断控件有值
+if( boId ) {
+    //符合这个条件的值为非空字符串，undefined、null、"" 都不会符合这个条件
+}
+
+//判断控件值为空
+if( boId === undefined || boId === null || boId === "" ) {
+
+}
+</code></pre>
+
+<p>赋值：</p>
+
+<pre><code class="js language-js">that.控件编码.SetValue("xxx-xxx-xxx-xxx");
+</code></pre>
+
+<p>清空控件值：</p>
+
+<pre><code class="js language-js">that.控件编码.SetValue("");
+</code></pre>
 
 <h2>关联表单多选</h2>
 
@@ -3967,8 +4017,8 @@ filter.Matcher = andMatcher;
 </tr>
 <tr>
   <td>...</td>
-  <td>子表中控件的编码</td>
-  <td>子表内控件的值</td>
+  <td>子表中自定义控件的编码</td>
+  <td>子表内自定义控件的值</td>
   <td>当自定义控件值未填，数据库存储null，查询null的字段值要用“is null”</td>
 </tr>
 </tbody>
@@ -7697,209 +7747,6 @@ if(data != null)
 
 <!-- tabs:end -->
 
-<h1>第三方调用氚云OpenApi</h1>
-
-<p>氚云默认对所有表单数据提供了 创建、修改、删除、查询 4类接口，开发者可以借助这些接口能力，实现企业系统与氚云的集成。
-<br/>并且也支持用户在氚云上编写自定义接口，提供给第三方调用，以实现个性化需求。</p>
-
-<h2>对接前必读</h2>
-
-<p>!> 调用氚云接口时，需使用 HTTPS 协议、JSON 数据格式、UTF-8 编码、POST请求、Content-Type: application/json。
-<br/><strong>调用频率：1-2 次/秒，请求超时时间：&lt;= 60 秒</strong></p>
-
-<p>并且需要在请求Headers中添加身份校验参数：<strong>EngineCode</strong>、<strong>EngineSecret</strong>，身份校验参数查看路径：<strong>头像</strong> -> <strong>系统管理</strong> -> <strong>系统集成</strong></p>
-
-<p><img src="../img/open-api-5.png" alt="" />
-<img src="../img/open-api-6.png" alt="" /></p>
-
-<h3>SDK</h3>
-
-<p><a href="/file/RequestH3yunAPI.cs" title=":ignore :target=_blank">【.NET Core】氚云OpenApi请求辅助类</a></p>
-
-<p><a href="/file/Java-调用氚云接口.zip" title=":ignore :target=_blank">【Java】氚云OpenApi请求示例</a></p>
-
-<h2>查询单条业务数据</h2>
-
-<p>LoadBizObject 为加载单个数据，请勿使用该接口来循环加载数据，可以使用LoadBizObjects 来批量加载数据。</p>
-
-<!-- tabs:start -->
-
-<h4><strong>Api说明</strong></h4>
-
-<p>请求方式：POST（HTTPS）</p>
-
-<p>请求地址：https://www.h3yun.com/OpenApi/Invoke</p>
-
-<p>请求包体：
-~~~ cs
-{
-    "ActionName": "LoadBizObject",
-    "SchemaCode": "D0015994821985e8b434394bc0737ffb22a0584",
-    "BizObjectId": "b1540570-d463-4325-8ca1-759ec3d7aa03"
-}
-~~~</p>
-
-<p>参数说明：</p>
-
-<table>
-<thead>
-<tr>
-  <th>参数</th>
-  <th>参数类型</th>
-  <th>必须</th>
-  <th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td>ActionName</td>
-  <td><code>String</code></td>
-  <td>是</td>
-  <td>调用的方法名</td>
-</tr>
-<tr>
-  <td>SchemaCode</td>
-  <td><code>String</code></td>
-  <td>是</td>
-  <td>需要查询的表单编码</td>
-</tr>
-<tr>
-  <td>BizObjectId</td>
-  <td><code>String</code></td>
-  <td>是</td>
-  <td>需要查询的数据ID，每个表单都有唯一的ObjectId</td>
-</tr>
-</tbody>
-</table>
-
-<p>工具Postman请求：</p>
-
-<p><img src="../img/open-api-1.png" alt="logo" title=":size=80%" /></p>
-
-<p><img src="../img/open-api-4.png" alt="logo" title=":size=80%" /></p>
-
-<p>返回结果：</p>
-
-<table>
-<thead>
-<tr>
-  <th>参数</th>
-  <th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td>Successful</td>
-  <td>返回结果是否成功true/false</td>
-</tr>
-<tr>
-  <td>ErrorMessage</td>
-  <td>错误信息</td>
-</tr>
-<tr>
-  <td>Logined</td>
-  <td>未使用，忽略</td>
-</tr>
-<tr>
-  <td>ReturnData</td>
-  <td>返回的数据</td>
-</tr>
-<tr>
-  <td>DataType</td>
-  <td>返回的数据类型，默认0</td>
-</tr>
-</tbody>
-</table>
-
-<h4><strong>代码示例（C#）</strong></h4>
-
-<p>~~~ cs
-using Newtonsoft.Json;
-using System.Net;
-using System.Text;</p>
-
-<p>//查询单条业务数据-第三方调用氚云OpenApi
-LoadBizObject();</p>
-
-<p>void LoadBizObject()
-{
-    //请求地址
-    string apiAddress = @"https://www.h3yun.com/OpenApi/Invoke";
-    HttpWebRequest request = (System.Net.HttpWebRequest)WebRequest.Create(apiAddress);
-    request.Method = "POST";//请求方式
-    request.ContentType = "application/json";
-    //身份认证参数
-    request.Headers.Add("EngineCode", "系统集成中的引擎编码");
-    request.Headers.Add("EngineSecret", "系统集成中EngineSecret");
-    //参数
-    Dictionary<string, object> dicParams = new Dictionary<string, object>();
-    dicParams.Add("ActionName", "LoadBizObject");
-    dicParams.Add("SchemaCode", "表单编码");
-    dicParams.Add("BizObjectId", "数据Id");
-    string jsonData = JsonConvert.SerializeObject(dicParams);//序列化参数
-    byte[] bytes = System.Text.Encoding.UTF8.GetBytes(jsonData);
-    request.ContentLength = bytes.Length;
-    //将请求数据写入请求数据流
-    using (Stream writer = request.GetRequestStream())
-    {
-        writer.Write(bytes, 0, bytes.Length);
-        writer.Close();
-    }
-    //定义用于接收响应数据的变量
-    string strValue = string.Empty;
-    //请求并获取响应数据
-    using (System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)request.GetResponse())
-    {
-        using (System.IO.Stream resStream = response.GetResponseStream())
-        {
-            string chuck = null;
-            using (StreamReader reader = new StreamReader(resStream, Encoding.UTF8))
-            {
-                while ((chuck = reader.ReadLine()) != null)
-                {
-                    strValue += chuck + "\r\n";
-                }
-            }
-        }
-    }
-    //输出返回结果
-    Console.WriteLine(strValue);
-}
-~~~</p>
-
-<!-- tabs:end -->
-
-<h2>创建单条业务数据</h2>
-
-<p>?> 通过本接口创建的数据，若生效，会触发生效的业务规则</p>
-
-<table>
-<thead>
-<tr>
-  <th>参数</th>
-  <th>数据类型</th>
-  <th>必填</th>
-  <th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td>IsSubmit</td>
-  <td><code>Bool</code></td>
-  <td>是</td>
-  <td>是否提交</td>
-</tr>
-</tbody>
-</table>
-
-<p>!> <strong><code>IsSubmit</code> 参数具体说明：</strong><br/> 
-无流程表单，<code>IsSubmit</code> 传 <code>false</code> 创建草稿数据，传 <code>true</code> 创建生效数据。<br/> 
-有流程表单，<code>IsSubmit</code> 传 <code>false</code> 创建进行中数据，但处于发起节点；传 <code>true</code> 创建进行中数据并流转到下一个节点（按请求数据中 <code>OwnerId</code> 为提交人自动提交，若未传 <code>OwnerId</code>，则由管理员作为提交人）。</p>
-
-<h2>文档及在线调试</h2>
-
-<p><a href="https://apifox.com/apidoc/shared-8a3d34c1-5e41-48f0-8eb3-0344cedfde06" title=":include :type=iframe width=100% height=800px">文档及在线调试</a></p>
-
 <h1>常见问题解答</h1>
 
 <h2>多选控件可以筛选(做为查询/分析条件)？</h2>
@@ -8196,6 +8043,8 @@ int b = 0;
 <p>会触发</p>
 
 <h2>新版列表后端调试器BUG如何处理？</h2>
+
+<p>目前新版列表的后端调试器可能会出现 调试器窗口空白、调试器大小不能拖动调整、表单控件空值 等问题，该BUG已反馈给研发进行修复，临时的解决方案是切到旧版列表页面（注：不会导致整个企业环境切换回旧版）：</p>
 
 <p>在浏览器上登录氚云，地址栏切换到此地址（<strong>注意：不要复制Url直接打开，表单编码、应用编码需要替换成想调试的表单的编码和应用编码</strong>）：</p>
 

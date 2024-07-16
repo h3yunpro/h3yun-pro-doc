@@ -2,7 +2,7 @@
 
 创建SQL高级数据源路径：`头像 -> 高级数据源 -> 新增 -> 新增SQL数据流`
 
-!> PS：如果点头像，发现菜单栏没有「高级数据源」，或者点新增没有「新增SQL数据流」，请联系售后经理进行开通。
+!> PS：如果点头像，发现菜单栏没有「高级数据源」，或者点新增没有「新增SQL数据流」，请联系客服进行开通。
 
 ![创建SQL高级数据源路径-1](../img/sql-dashboard-1.png)
 
@@ -48,4 +48,4 @@ SELECT ObjectId AS `dataId`, Name AS `dataName` FROM i_表单编码 WHERE Status
 
 2. 可否在高级数据源中执行 `INSERT`、`UPDATE`、`DELETE` 语句？
 
-不支持，因为SQL高级数据源是支持查询，不支持增删改。
+不支持，如有执行这些语句的需求，请使用后端代码去执行[后端执行SQL](/doc/exec-sql)。

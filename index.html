@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
-    <meta name="keywords" content="氚云,氚云专业版,氚云文档,氚云专业版文档,氚专开发者共创文档,氚云专业版扩展文档,氚专开发者文档" />
-    <meta name="description" content="氚专开发者共创文档" />
-    <title>氚专开发者共创文档</title>
+    <meta name="keywords" content="氚云,氚云专业版,氚云文档,氚云专业版文档,氚云专业版扩展文档,氚专开发者文档" />
+    <meta name="description" content="氚专开发者扩展文档" />
+    <title>氚专开发者扩展文档</title>
     <link rel="icon" href="./favicon.ico" />
     <link rel="stylesheet" href="./css/vue.css">
 
@@ -27,18 +27,15 @@
     <div id="app">文档加载中，先思考一下...</div>
     <script>
         var docName = "h3yun-pro-doc";
-        var repo = "https://gitee.com/h3yun-pro-public/h3yun-pro-doc";
-        var editUrl = "https://gitee.com/-/ide/project/h3yun-pro-public/h3yun-pro-doc/edit/quick/-/";
 
         //docsify配置
         window.$docsify = {
-            name: "氚专开发者共创文档",
+            name: "氚专开发者扩展文档",
             loadSidebar: true, // 开启侧边导航栏
             subMaxLevel: 3,
             nativeEmoji: false, // 使用GitHub-style emoji
             // autoHeader: true, // 自动为文档添加标题
             auto2top: true, // 切换文档自动跳转到顶部
-            repo: repo, //仓库地址，并会显示页面右上角github仓库标
             formatUpdated: "{YYYY}/{MM}/{DD} {HH}:{mm}",//{docsify-updated}占位符的日期格式
             alias: {
                 "/doc/_sidebar.md": "/_sidebar.md" //将doc目录下的sidebar导航回主sidebar
@@ -48,14 +45,7 @@
                     hook.beforeEach(function (content) {
                         content = fileUrlSupplement(content);
 
-                        var editDoc = `[📝 在线编辑](${editUrl}${vm.route.file}) - {docsify-updated} \n`;
-                        var powered = `\n\n----\n\n[![Fork me on Gitee](${repo}/widgets/widget_6.svg)](${repo})\n\n`;
-
-                        return (
-                            editDoc +
-                            content +
-                            powered
-                        );
+                        return content;
                     });
                 }
             ],

@@ -39,7 +39,7 @@
 | 2      | ParentObjectId      | 该数据所属主表的数据Id |  对应主表ObjectId字段 |
 | 3      | ParentPropertyName  | 子表编码         |                 |
 | 4      | ParentIndex         | 本条数据处在子表第几行  | 从0开始，第一行下标：0    |
-| ...    | 子表中控件的编码     | 子表内控件的值      | 当自定义控件值未填，数据库存储null，查询null的字段值要用“is null” |
+| ...    | 子表中自定义控件的编码     | 子表内自定义控件的值      | 当自定义控件值未填，数据库存储null，查询null的字段值要用“is null” |
 
 
 ## [系统-公司表] H_Company
