@@ -225,6 +225,7 @@ function convertToString( v ) {
 /* 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
 /* 使用例子：
 /* that.F0000001.SetValue((new Date()).Format("yyyy-MM-dd"));
+/* that.F0000001.SetValue((new Date()).Format("yyyy-MM-dd HH:mm:ss"));
 */
 Date.prototype.Format = function( fmt ) {
     var o = {
@@ -241,4 +242,28 @@ Date.prototype.Format = function( fmt ) {
         if( new RegExp( "(" + k + ")" ).test( fmt ) ) fmt = fmt.replace( RegExp.$1, ( RegExp.$1.length == 1 ) ? ( o[ k ] ) : ( ( "00" + o[ k ] ).substr(( "" + o[ k ] ).length ) ) );
     return fmt;
 }
+```
+
+此代码定义在前端代码最上面，例：
+``` js
+//把此函数定义在表单默认代码之上
+Date.prototype.Format = function( fmt ) {
+    ......省略
+}
+
+// 这里是表单默认代码
+$.extend($.JForm,{
+    // 加载事件
+    OnLoad:function(){
+        var that = this;
+
+        //注意：在OnLoad里给控件赋值，一定要记得判断当前是新增模式
+        if( $.SmartForm.ResponseContext.IsCreateMode ) {
+            that.F0000001.SetValue((new Date()).Format("yyyy-MM-dd"));
+            that.F0000001.SetValue((new Date()).Format("yyyy-MM-dd HH:mm:ss"));
+        }
+    },
+
+    ......省略
+});
 ```

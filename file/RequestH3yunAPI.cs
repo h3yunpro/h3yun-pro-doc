@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System.Text;
+﻿using System.Text;
+using System.Text.Json.Nodes;
+using System.Text.Json;
 using System.Net;
 
 namespace Util
@@ -25,16 +25,16 @@ namespace Util
         /// <exception cref="Exception">参数不符合要求时，抛出异常</exception>
         public RequestH3yunAPI(IHttpClientFactory httpClientFactory, string engineCode, string engineSecret, int timeoutSeconds = 300)
         {
-            _httpClientFactory = httpClientFactory ?? throw new Exception("httpClientFactory is null！");
+            _httpClientFactory = httpClientFactory ?? throw new Exception($"参数{nameof(httpClientFactory)}不能为空！");
             _timeout = TimeSpan.FromSeconds(timeoutSeconds);
 
             if (string.IsNullOrWhiteSpace(engineCode))
             {
-                throw new Exception("企业认证EngineCode不能为空！");
+                throw new Exception($"参数{nameof(engineCode)}不能为空！");
             }
             if (string.IsNullOrWhiteSpace(engineSecret))
             {
-                throw new Exception("企业认证EngineSecret不能为空！");
+                throw new Exception($"参数{nameof(engineSecret)}不能为空！");
             }
 
             _engineCode = engineCode;
@@ -52,11 +52,11 @@ namespace Util
         {
             if (string.IsNullOrWhiteSpace(schemaCode))
             {
-                throw new Exception("参数SchemaCode不能为空！");
+                throw new Exception($"参数{nameof(schemaCode)}不能为空！");
             }
             if (string.IsNullOrWhiteSpace(bizObjectId))
             {
-                throw new Exception("参数BizObjectId不能为空！");
+                throw new Exception($"参数{nameof(bizObjectId)}不能为空！");
             }
             Dictionary<string, object> reqParam = new()
             {
@@ -78,11 +78,11 @@ namespace Util
         {
             if (string.IsNullOrWhiteSpace(schemaCode))
             {
-                throw new Exception("参数SchemaCode不能为空！");
+                throw new Exception($"参数{nameof(schemaCode)}不能为空！");
             }
             if (string.IsNullOrWhiteSpace(filter))
             {
-                throw new Exception("参数Filter不能为空！");
+                throw new Exception($"参数{nameof(filter)}不能为空！");
             }
             Dictionary<string, object> reqParam = new()
             {
@@ -105,15 +105,15 @@ namespace Util
         {
             if (string.IsNullOrWhiteSpace(schemaCode))
             {
-                throw new Exception("参数SchemaCode不能为空！");
+                throw new Exception($"参数{nameof(schemaCode)}不能为空！");
             }
             if (string.IsNullOrWhiteSpace(bizObjectId))
             {
-                throw new Exception("参数BizObjectId不能为空！");
+                throw new Exception($"参数{nameof(bizObjectId)}不能为空！");
             }
             if (string.IsNullOrWhiteSpace(bizObject))
             {
-                throw new Exception("参数BizObject不能为空！");
+                throw new Exception($"参数{nameof(bizObject)}不能为空！");
             }
             Dictionary<string, object> reqParam = new()
             {
@@ -138,15 +138,15 @@ namespace Util
         {
             if (string.IsNullOrWhiteSpace(actionName))
             {
-                throw new Exception("参数ActionName不能为空！");
+                throw new Exception($"参数{nameof(actionName)}不能为空！");
             }
             if (string.IsNullOrWhiteSpace(controller))
             {
-                throw new Exception("参数Controller不能为空！");
+                throw new Exception($"参数{nameof(controller)}不能为空！");
             }
             if (string.IsNullOrWhiteSpace(appCode))
             {
-                throw new Exception("参数AppCode不能为空！");
+                throw new Exception($"参数{nameof(appCode)}不能为空！");
             }
             Dictionary<string, object> reqParam = new()
             {
@@ -191,26 +191,22 @@ namespace Util
             }
 
             string apiAddress = @"https://www.h3yun.com/OpenApi/Invoke";
+            HttpClient client = GetHttpClient();
 
-            string strValue = string.Empty;
+            using HttpRequestMessage req = new(HttpMethod.Post, apiAddress);
+            req.Headers.Add("EngineCode", _engineCode);
+            req.Headers.Add("EngineSecret", _engineSecret);
 
-            using (HttpClient client = GetHttpClient())
+            string jsonData = JsonSerializer.Serialize(reqParam);
+            using StringContent content = new(jsonData, Encoding.UTF8, "application/json");
+            req.Content = content;
+            using HttpResponseMessage res = client.SendAsync(req).Result;
+            using Stream s = res.Content.ReadAsStream();
+            using StreamReader sr = new(s);
+            string strValue = sr.ReadToEnd();
+            if (!res.IsSuccessStatusCode)
             {
-                using HttpRequestMessage req = new(HttpMethod.Post, apiAddress);
-                req.Headers.Add("EngineCode", _engineCode);
-                req.Headers.Add("EngineSecret", _engineSecret);
-
-                string jsonData = JsonConvert.SerializeObject(reqParam);
-                using StringContent content = new(jsonData, Encoding.UTF8, "application/json");
-                req.Content = content;
-                using HttpResponseMessage res = client.SendAsync(req).Result;
-                using Stream s = res.Content.ReadAsStream();
-                using StreamReader sr = new(s);
-                strValue = sr.ReadToEnd();
-                if (!res.IsSuccessStatusCode)
-                {
-                    throw new Exception("请求氚云Api失败：" + strValue);
-                }
+                throw new Exception("请求氚云Api失败：" + strValue);
             }
 
             return ProcessGeneralResponseContent(strValue);
@@ -228,10 +224,11 @@ namespace Util
             {
                 throw new Exception("氚云OpenApi无响应数据！");
             }
-            JObject obj;
+
+            JsonNode? obj;
             try
             {
-                obj = JObject.Parse(content);
+                obj = JsonNode.Parse(content);
             }
             catch (Exception)
             {
@@ -241,15 +238,15 @@ namespace Util
             {
                 throw new Exception("氚云OpenApi响应数据无内容！");
             }
-            bool Successful = obj.Value<bool>("Successful");
-            if (Successful)
+            bool? Successful = obj["Successful"]?.GetValue<bool>();
+            if (Successful != null && Successful.Value)
             {
                 string ReturnData = obj["ReturnData"] + string.Empty;
                 if (string.IsNullOrWhiteSpace(ReturnData))
                 {
                     return new Dictionary<string, object>();
                 }
-                Dictionary<string, object>? data = JsonConvert.DeserializeObject<Dictionary<string, object>>(ReturnData);
+                Dictionary<string, object>? data = JsonSerializer.Deserialize<Dictionary<string, object>>(ReturnData);
                 if (data == null)
                 {
                     return new Dictionary<string, object>();
@@ -282,27 +279,27 @@ namespace Util
         {
             if (string.IsNullOrWhiteSpace(schemaCode))
             {
-                throw new Exception("参数SchemaCode不能为空！");
+                throw new Exception("参数" + nameof(schemaCode) + "不能为空！");
             }
             if (string.IsNullOrWhiteSpace(filePropertyName))
             {
-                throw new Exception("参数FilePropertyName不能为空！");
+                throw new Exception("参数" + nameof(filePropertyName) + "不能为空！");
             }
             if (string.IsNullOrWhiteSpace(bizObjectId))
             {
-                throw new Exception("参数BizObjectId不能为空！");
+                throw new Exception("参数" + nameof(bizObjectId) + "不能为空！");
             }
             if (string.IsNullOrWhiteSpace(fileName))
             {
-                throw new Exception("参数FileName不能为空！");
+                throw new Exception("参数" + nameof(fileName) + "不能为空！");
             }
             if (fileStream == null || fileStream.Length == 0)
             {
-                throw new Exception("参数FileStream不能为空！");
+                throw new Exception("参数" + nameof(fileStream) + "不能为空！");
             }
             if (fileStream.Length > 3 * 1024 * 1024)//文件大于3M，无法上传到氚云
             {
-                throw new Exception("氚云UploadAttachment接口要求文件不能大于3MB！");
+                throw new Exception(nameof(this.UploadAttachment) + "接口要求文件不能大于3MB！");
             }
 
             string url = string.Format("https://www.h3yun.com/OpenApi/UploadAttachment?SchemaCode={0}&FilePropertyName={1}&BizObjectId={2}", schemaCode, filePropertyName, bizObjectId);
@@ -329,8 +326,8 @@ namespace Util
             req.Headers.Set(HttpRequestHeader.Connection, "close");
             req.ContentType = "multipart/form-data; boundary=" + strBoundary;
             req.Method = "POST";
-            req.Headers.Add("EngineCode", this._engineCode);
-            req.Headers.Add("EngineSecret", this._engineSecret);
+            req.Headers.Add("EngineCode", _engineCode);
+            req.Headers.Add("EngineSecret", _engineSecret);
             req.AllowWriteStreamBuffering = false;
             using Stream s = req.GetRequestStream();
             s.Write(postHeaderBytes, 0, postHeaderBytes.Length);
@@ -340,6 +337,9 @@ namespace Util
             {
                 s.Write(buff, 0, buff.Length);
             }
+            //重置回流开头
+            fileStream.Seek(0, SeekOrigin.Begin);
+
             s.Write(boundaryBytes, 0, boundaryBytes.Length);
 
             using WebResponse res = req.GetResponse();
@@ -364,7 +364,13 @@ namespace Util
         /// <exception cref="Exception"></exception>
         public Stream DownloadBizObjectFile(string fileId, out string fileName)
         {
-            using HttpClient client = GetHttpClient();
+            if (string.IsNullOrWhiteSpace(fileId))
+            {
+                throw new Exception("参数" + nameof(fileId) + "不能为空！");
+            }
+
+            HttpClient client = GetHttpClient();
+
             //身份认证参数
             FormUrlEncodedContent content = new(
                 new Dictionary<string, string>
@@ -399,4 +405,3 @@ namespace Util
         }
     }
 }
-
