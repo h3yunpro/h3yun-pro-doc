@@ -1067,3 +1067,11 @@ code .token {
     position: absolute;
     left: -25px;
 }
+
+/* 氚小丫头像 */
+.ai-agent {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: inline;
+}
