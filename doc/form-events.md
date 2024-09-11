@@ -48,7 +48,7 @@
 
 以下状态判断，可用于表单后端的 ```OnLoad```、```OnSubmit``` 两个事件中。
 
-1. 判断当前表单数据的数据状态
+### 判断当前表单数据的数据状态
 ``` cs
 H3.DataModel.BizObjectStatus boStatus = this.Request.BizObject.Status;
 if(boStatus == H3.DataModel.BizObjectStatus.Draft)
@@ -69,7 +69,7 @@ if(boStatus == H3.DataModel.BizObjectStatus.Canceled)
 }
 ```
 
-2. 判断当前流程节点编码
+### 判断当前流程节点编码
 ``` cs
 string activityCode = this.Request.ActivityCode;
 if(activityCode == "流程节点编码")
@@ -78,7 +78,7 @@ if(activityCode == "流程节点编码")
 }
 ```
 
-3. 判断表单模式（只用于OnLoad事件中）
+### 判断表单模式（只用于OnLoad事件中）
 ``` cs
 H3.SmartForm.SmartFormMode formMode = this.Request.FormMode;
 if(formMode == H3.SmartForm.SmartFormMode.Create) 
@@ -97,7 +97,7 @@ if(formMode == H3.SmartForm.SmartFormMode.View)
 }
 ```
 
-4. 判断表单是否处于新增模式下
+### 判断表单是否处于新增模式下
 ``` cs
 if(this.Request.IsCreateMode)
 {
@@ -105,7 +105,7 @@ if(this.Request.IsCreateMode)
 }
 ```
 
-5. 判断表单是否在移动端打开
+### 判断表单是否在移动端打开
 ``` cs
 if(this.Request.IsMobile)
 {
@@ -113,7 +113,7 @@ if(this.Request.IsMobile)
 }
 ```
 
-6. 判断当前表单是否开启了流程审批
+### 判断当前表单是否开启了流程审批
 ``` cs
 if(this.Request.FormDataType == H3.SmartForm.SmartFormDataType.BizObject)
 {
@@ -128,7 +128,7 @@ if(this.Request.FormDataType == H3.SmartForm.SmartFormDataType.Workflow)
 
 ## 表单后端常用状态判断组合
 
-1. 后端OnSubmit事件中判断点击暂存按钮
+### 后端OnSubmit事件中判断点击暂存按钮
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -149,7 +149,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-2. 后端OnSubmit事件中判断流程发起时提交
+### 后端OnSubmit事件中判断流程发起时提交
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -177,7 +177,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-3. 后端OnSubmit事件中判断某个流程节点下点击同意
+### 后端OnSubmit事件中判断某个流程节点下点击同意
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -199,7 +199,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-4. 后端OnSubmit事件中判断流程进行中点击撤回/不同意
+### 后端OnSubmit事件中判断流程进行中点击撤回/不同意
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -223,7 +223,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-5. 后端OnSubmit事件中判断无流程表单的初始提交
+### 后端OnSubmit事件中判断无流程表单的初始提交
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -248,7 +248,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-6. 后端OnSubmit事件中判断编辑提交
+### 后端OnSubmit事件中判断编辑提交
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -270,7 +270,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-7. 后端OnSubmit事件中判断删除生效数据
+### 后端OnSubmit事件中判断删除生效数据
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -278,7 +278,15 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
     {
         if(actionName == "Remove" && this.Request.BizObject.Status == H3.DataModel.BizObjectStatus.Effective)
         {
+            /*
+                注意：
+                删除时this.Request.BizObject只有系统字段数据，所以一般来说这里需要先通过Load加载完整的表单数据，
+                否则通过this.Request.BizObject["控件编码"]取不到值
+            */
+            this.Request.BizObject.Load();
+
             // 业务代码
+
         }
     } catch(Exception ex)
     {
@@ -291,7 +299,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-8. 后端OnLoad事件中判断当前用户非管理员时，设置控件隐藏/只读
+### 后端OnLoad事件中判断当前用户非管理员时，设置控件隐藏/只读
 ``` cs
 protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 {
@@ -309,7 +317,7 @@ protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 }
 ```
 
-9. 后端OnLoad事件中判断当前用户所属部门为某部门时，不允许查看数据
+### 后端OnLoad事件中判断当前用户所属部门为某部门时，不允许查看数据
 ``` cs
 protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 {

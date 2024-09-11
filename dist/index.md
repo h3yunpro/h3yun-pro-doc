@@ -37,11 +37,11 @@
 
 ## 代码编辑器
 
-在表单设计、列表设计中，都分别有后端代码、前端代码两个编辑器。
+氚云一共有4个代码编辑器界面，分别是：表单设计页面的前端代码、后端代码，列表设计页面的前端代码、后端代码。前端代码中统一使用 ```JavaScript``` 语言开发，后端代码中统一使用 ```C#``` 语言开发。
 
-前端代码中使用 ```JavaScript``` 语言开发，后端代码中使用 ```C#``` 语言开发。
-
-表单设计页中编写表单详情页面相关的逻辑代码，列表设计页中编写列表页面相关的逻辑代码。
+不清楚代码该写哪里，就看代码执行的时机是在表单页面中，还是在列表页面中。表单设计页中编写表单页面相关的逻辑代码，列表设计页中编写列表页面相关的逻辑代码。例如：
+- 表单打开时、点击表单提交按钮、点击表单删除按钮、流程事件 的代码写表单设计页里
+- 列表打开时、点击列表删除按钮 的代码写列表设计页里
 
 注意：
 
@@ -282,7 +282,7 @@ $.ListView.ActionPreDo = function( actionCode ) {
 
 以下状态判断，可用于表单后端的 ```OnLoad```、```OnSubmit``` 两个事件中。
 
-1. 判断当前表单数据的数据状态
+### 判断当前表单数据的数据状态
 ``` cs
 H3.DataModel.BizObjectStatus boStatus = this.Request.BizObject.Status;
 if(boStatus == H3.DataModel.BizObjectStatus.Draft)
@@ -303,7 +303,7 @@ if(boStatus == H3.DataModel.BizObjectStatus.Canceled)
 }
 ```
 
-2. 判断当前流程节点编码
+### 判断当前流程节点编码
 ``` cs
 string activityCode = this.Request.ActivityCode;
 if(activityCode == "流程节点编码")
@@ -312,7 +312,7 @@ if(activityCode == "流程节点编码")
 }
 ```
 
-3. 判断表单模式（只用于OnLoad事件中）
+### 判断表单模式（只用于OnLoad事件中）
 ``` cs
 H3.SmartForm.SmartFormMode formMode = this.Request.FormMode;
 if(formMode == H3.SmartForm.SmartFormMode.Create) 
@@ -331,7 +331,7 @@ if(formMode == H3.SmartForm.SmartFormMode.View)
 }
 ```
 
-4. 判断表单是否处于新增模式下
+### 判断表单是否处于新增模式下
 ``` cs
 if(this.Request.IsCreateMode)
 {
@@ -339,7 +339,7 @@ if(this.Request.IsCreateMode)
 }
 ```
 
-5. 判断表单是否在移动端打开
+### 判断表单是否在移动端打开
 ``` cs
 if(this.Request.IsMobile)
 {
@@ -347,7 +347,7 @@ if(this.Request.IsMobile)
 }
 ```
 
-6. 判断当前表单是否开启了流程审批
+### 判断当前表单是否开启了流程审批
 ``` cs
 if(this.Request.FormDataType == H3.SmartForm.SmartFormDataType.BizObject)
 {
@@ -362,7 +362,7 @@ if(this.Request.FormDataType == H3.SmartForm.SmartFormDataType.Workflow)
 
 ## 表单后端常用状态判断组合
 
-1. 后端OnSubmit事件中判断点击暂存按钮
+### 后端OnSubmit事件中判断点击暂存按钮
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -383,7 +383,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-2. 后端OnSubmit事件中判断流程发起时提交
+### 后端OnSubmit事件中判断流程发起时提交
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -411,7 +411,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-3. 后端OnSubmit事件中判断某个流程节点下点击同意
+### 后端OnSubmit事件中判断某个流程节点下点击同意
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -433,7 +433,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-4. 后端OnSubmit事件中判断流程进行中点击撤回/不同意
+### 后端OnSubmit事件中判断流程进行中点击撤回/不同意
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -457,7 +457,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-5. 后端OnSubmit事件中判断无流程表单的初始提交
+### 后端OnSubmit事件中判断无流程表单的初始提交
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -482,7 +482,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-6. 后端OnSubmit事件中判断编辑提交
+### 后端OnSubmit事件中判断编辑提交
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -504,7 +504,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-7. 后端OnSubmit事件中判断删除生效数据
+### 后端OnSubmit事件中判断删除生效数据
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostValue postValue, H3.SmartForm.SubmitSmartFormResponse response)
 {
@@ -512,7 +512,15 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
     {
         if(actionName == "Remove" && this.Request.BizObject.Status == H3.DataModel.BizObjectStatus.Effective)
         {
+            /*
+                注意：
+                删除时this.Request.BizObject只有系统字段数据，所以一般来说这里需要先通过Load加载完整的表单数据，
+                否则通过this.Request.BizObject["控件编码"]取不到值
+            */
+            this.Request.BizObject.Load();
+
             // 业务代码
+
         }
     } catch(Exception ex)
     {
@@ -525,7 +533,7 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 }
 ```
 
-8. 后端OnLoad事件中判断当前用户非管理员时，设置控件隐藏/只读
+### 后端OnLoad事件中判断当前用户非管理员时，设置控件隐藏/只读
 ``` cs
 protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 {
@@ -543,7 +551,7 @@ protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 }
 ```
 
-9. 后端OnLoad事件中判断当前用户所属部门为某部门时，不允许查看数据
+### 后端OnLoad事件中判断当前用户所属部门为某部门时，不允许查看数据
 ``` cs
 protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 {
@@ -574,6 +582,8 @@ protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 
 # 列表事件
 
+列表页面中的所有操作，都需要在列表设计页面中编写代码，代码需要编写在各种事件内，当对应操作产生时，系统会自动触发事件，以执行用户的自定义代码。
+
 
 ## 列表前端事件
 
@@ -581,15 +591,11 @@ protected override void OnLoad(H3.SmartForm.LoadSmartFormResponse response)
 
 ### 平台默认按钮
 
-* Create：新增
-
-* Import：导入
-
-* Export：导出
-
-* Remove：删除
-
-* PrintQrCode：打印二维码
+- Create：新增
+- Import：导入
+- Export：导出
+- Remove：删除
+- PrintQrCode：打印二维码
 
 ### 配置自定义按钮：
 ![](../img/list-events-1.png)
@@ -3128,6 +3134,7 @@ engine.WorkflowInstanceManager.SendMessage(cancelMessage);
 
 * 事件会在业务规则执行后触发
 * 当表单配置了流程，在**导入生效数据**时，由于导入时会创建流程并结束流程，所以也会触发 ```OnWorkflowInstanceStateChanged``` 事件
+* 这里只是提醒开发者在用这个事件时要考虑导入触发的情况，但是并不推荐开发者利用这个事件去做导入执行代码的需求，具体原因请看：[为何不推荐利用OnWorkflowInstanceStateChanged事件做导入触发代码的需求](/doc/faq?id=为何不推荐利用OnWorkflowInstanceStateChanged事件做导入触发代码的需求)
 * 本事件无需用户进行调用，将事件写在**表单设计-后端代码**的 ```OnSubmit``` 方法之下即可。当流程状态发生改变时，流程引擎会自动调用 ```OnWorkflowInstanceStateChanged```
 
 代码示例：
@@ -4015,7 +4022,7 @@ filter.Matcher = andMatcher;
 
 数据库表名：H_WorkItem
 
-> 流程每激活一个流程节点，节点上每个审批人，对应此表一条数据
+> 流程每激活一个流程节点，节点上每个审批人，对应此表一条数据，若要查询流程日志，查询本表即可。
 
 | **序号** | **字段编码**            | **字段释义**            | **备注**                          |
 |--------|---------------------|---------------------|---------------------------------|
@@ -4166,7 +4173,7 @@ filter.Matcher = andMatcher;
 | 2      | SchemaCode               | 表单编码       |              |
 | 3      | DisplayName              | 表单展示名称     |              |
 | 4      | JavaScript               | 表单设计旧版前端代码 |              |
-| 5      | NewJsCode                | 表单设计新版前端代码 |              |
+| 5      | NewJsCode                | 表单设计新版前端代码 | 目前大部分企业都处于新版表单了，所以用此字段             |
 | 6      | BehindCode               | 表单设计后端代码   |              |
 | 7      | ModifiedTime             | 表单配置最后修改时间 |              |
 | 8      | DesignModeContent        |            |              |
@@ -4198,7 +4205,7 @@ filter.Matcher = andMatcher;
 |--------|--------------------------|------------|--------------|
 | 1      | ObjectId                 | 列表配置Id     | 主键，列表配置的唯一标识 |
 | 2      | SchemaCode               | 表单编码       |              |
-| 3      | JavaScript               | 列表设计前端代码   |              |
+| 3      | JavaScript               | 列表设计前端代码   | 列表前端代码并没有新旧版之分，所以用此字段      |
 | 4      | NewJsCode                | 列表设计新版前端代码 | 暂未使用         |
 | 5      | BehindCode               | 列表设计后端代码   |              |
 | 6      | ModifiedTime             | 列表配置最后修改时间 |              |
@@ -4600,6 +4607,8 @@ H3.Workflow.Messages.WorkflowInstanceChangeSet OriginateInstance(
 
 可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
 
+!> 下面这个示例只演示批量创建，批量更新用```bo.Update(commit);```，批量删除用```bo.Remove(commit);```。
+
 ``` cs
 H3.IEngine engine = this.Engine;
 H3.DataModel.BizObjectSchema schema = engine.BizObjectManager.GetPublishedSchema("表单编码");//获取表单实例
@@ -4740,7 +4749,7 @@ public static List < H3.DataModel.BizObject > GetAllBizObject(H3.IEngine engine,
 ```
 
 
-## [通用]CopyFiles图片到目标数据，图片在移动端列表显示
+## [通用]CopyFiles图片到目标数据，图片在移动端列表中显示
 
 可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
 
@@ -4988,6 +4997,8 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 
 可用位置：✘表单 / ✔列表 / ✘定时器 / ✘自定义接口
 
+!> 注意：这里的代码是写在【列表设计】页面的后端代码中。
+
 ``` cs
 protected override void OnInit(H3.SmartForm.LoadListViewResponse response)
 {
@@ -5029,6 +5040,8 @@ protected override void OnInit(H3.SmartForm.LoadListViewResponse response)
 ## [列表]删除时获得用户选择的数据
 
 可用位置：✘表单 / ✔列表 / ✘定时器 / ✘自定义接口
+
+!> 注意：这里的代码是写在【列表设计】页面的后端代码中。
 
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.ListViewPostValue postValue, H3.SmartForm.SubmitListViewResponse response)
@@ -5515,10 +5528,10 @@ FROM (
 ?> 编码有可能是表单编码，也可能是子表控件编码，所以此处 ```schemacode``` 和 ```childschemas``` 两个都判断一遍。
 
 ``` sql
-SELECT schemacode AS `主表编码`, childschemas AS `子表编码`, displayname AS `主表名称` 
+SELECT SchemaCode AS `主表编码`, ChildSchemas AS `子表编码`, DisplayName AS `主表名称` 
 FROM H_PublishedBizObjectSchema 
-WHERE schemacode = '表单编码' 
-OR childschemas LIKE '%表单编码%'
+WHERE SchemaCode = '表单编码' 
+OR ChildSchemas LIKE '%表单编码%'
 ```
 
 
@@ -5526,25 +5539,44 @@ OR childschemas LIKE '%表单编码%'
 
 表单设计中的自定义代码：
 ``` sql
-SELECT javascript AS `旧版前端代码`, newjscode AS `新版前端代码`, behindcode AS `后端代码` 
+SELECT Javascript AS `旧版前端代码`, NewJsCode AS `新版前端代码`, BehindCode AS `后端代码` 
 FROM H_PublishedFormSetting
-WHERE schemacode = '表单编码'
+WHERE SchemaCode = '表单编码'
 ```
 
 列表设计中的自定义代码：
 ``` sql
-SELECT javascript AS `前端代码`, behindcode AS `后端代码` 
+SELECT Javascript AS `前端代码`, BehindCode AS `后端代码` 
 FROM H_PublishedListViewSetting
-WHERE schemacode = '表单编码'
+WHERE SchemaCode = '表单编码'
+```
+
+
+## 根据代码片段查询所在的表单
+
+!> 此处代码片段可以是类名、方法名等，当不知道类定义在哪个表单中，可通过此方式来查询。
+
+以表单设计中后端代码片段来查询所在表单：
+``` sql
+SELECT SchemaCode AS `表单编码`, BehindCode AS `后端代码` 
+FROM H_PublishedFormSetting
+WHERE BehindCode LIKE '%代码片段%'
+```
+
+以列表设计中后端代码片段来查询所在表单：
+``` sql
+SELECT SchemaCode AS `表单编码`, BehindCode AS `后端代码` 
+FROM H_PublishedListViewSetting
+WHERE BehindCode LIKE '%代码片段%'
 ```
 
 
 ## 获取氚云应用在钉钉中的appId
 
 ``` sql
-SELECT corpid, 
-extractvalue(agents, '/ArrayOfDingTalkISVAgent/DingTalkISVAgent/AppId') AS `appId`
-FROM h_dingtalkisv
+SELECT CorpId, 
+extractvalue(Agents, '/ArrayOfDingTalkISVAgent/DingTalkISVAgent/AppId') AS `appId`
+FROM H_DingtalkIsv
 ```
 
 
@@ -5552,11 +5584,11 @@ FROM h_dingtalkisv
 
 ``` sql
 SELECT
-    date_format(b.finishtime, '%Y-%m-%d %H:%i:%s') AS `审批通过时间`,
+    date_format(b.FinishTime, '%Y-%m-%d %H:%i:%s') AS `审批通过时间`,
     Approval `是否最终审批通过`
 FROM
     i_表单编码 a
-    LEFT JOIN H_WorkflowInstance b ON a.workflowinstanceid = b.ObjectId
+    LEFT JOIN H_WorkflowInstance b ON a.WorkflowInstanceId = b.ObjectId
 WHERE
     b.Approval = 1
 ```
@@ -6097,8 +6129,27 @@ int b = 0;
 在前端调试器的network工具下，从上往下查看所有OnAction请求，会在某个请求的响应数据中，有具体的报错信息，以及异常代码所在表单。
 
 
-## 多选控件可以筛选(做为查询/分析条件)？
-不可以
+## 氚云的页面在钉钉工作台中字体模糊/重影/错位
+
+![氚云的页面在钉钉工作台中字体模糊/重影/错位-1](/img/faq-9.png)
+
+目前的解决方案：在钉钉中点头像->设置与隐私->高级->开启钉钉容器WebGL特性。
+
+此方式无法解决时，请在浏览器中使用氚云，等待后续研发与钉钉协同解决该问题。
+
+
+## 为何不推荐利用OnWorkflowInstanceStateChanged事件做导入触发代码的需求
+风险点：
+1. 导入时，```OnWorkflowInstanceStateChanged``` 事件中代码执行异常不会有任何错误提示及日志记录（注意：正常审批使流程结束时会触发```OnWorkflowInstanceStateChanged``` 事件，并且代码执行异常会弹窗提示）
+2. ```OnWorkflowInstanceStateChanged``` 事件完全由流程引擎控制触发，没有设置流程，流程配置有误，或者不是导入生效数据，都不会触发事件。这样对流程设计人员和导入人员都不友好
+3. 根据已使用该方案的用户反馈，导入时有小概率未触发 ```OnWorkflowInstanceStateChanged``` 事件，或者导入的一批数据里一部分数据触发了，所以该方案稳定性不够
+4. 当导入大量数据时，由于每条数据都会触发 ```OnWorkflowInstanceStateChanged``` 事件，就会导致运行效率很差，易造成超时，这个问题也是导致第3点稳定性差的一个诱因
+
+替代的推荐方案：
+1. 在表单中增加2个字段：**执行状态**、**执行结果**
+2. 在列表上增加一个【导入数据处理】按钮，并书写列表后端代码，代码中批量查询出 **执行状态** 为“待处理”的数据
+3. 执行好业务逻辑后，批量将 **执行状态** 改为“已处理”（注意：最好每次按钮点击只处理一部分数据，推荐限定每次处理前100条待处理数据，以防用户等待时间过久，导致执行超时和按钮的点击请求超时）；若数据有误或者有提示信息，可以将提示信息更新至 **执行结果** 控件中
+4. 用户导入数据后，先通过列表筛选出“待处理”的数据，然后点击【导入数据处理】按钮触发代码，直至所有数据处理完成
 
 
 ## 怎样可以通过输入出生日期，计算出年龄？
@@ -6123,7 +6174,8 @@ int b = 0;
 
 
 ## 删错的数据有办法恢复吗?
-可以做数据恢复，可以联系一下渠道经理
+可以做数据恢复，可以联系一下客服
+
 
 ## 出现Connection must be valid and open to rollback transaction报错问题？
  ![logo](../img/faq-2.png ':size=20%')</br>

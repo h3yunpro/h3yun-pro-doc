@@ -37,10 +37,10 @@ FROM (
 ?> 编码有可能是表单编码，也可能是子表控件编码，所以此处 ```schemacode``` 和 ```childschemas``` 两个都判断一遍。
 
 ``` sql
-SELECT schemacode AS `主表编码`, childschemas AS `子表编码`, displayname AS `主表名称` 
+SELECT SchemaCode AS `主表编码`, ChildSchemas AS `子表编码`, DisplayName AS `主表名称` 
 FROM H_PublishedBizObjectSchema 
-WHERE schemacode = '表单编码' 
-OR childschemas LIKE '%表单编码%'
+WHERE SchemaCode = '表单编码' 
+OR ChildSchemas LIKE '%表单编码%'
 ```
 
 
@@ -48,25 +48,44 @@ OR childschemas LIKE '%表单编码%'
 
 表单设计中的自定义代码：
 ``` sql
-SELECT javascript AS `旧版前端代码`, newjscode AS `新版前端代码`, behindcode AS `后端代码` 
+SELECT Javascript AS `旧版前端代码`, NewJsCode AS `新版前端代码`, BehindCode AS `后端代码` 
 FROM H_PublishedFormSetting
-WHERE schemacode = '表单编码'
+WHERE SchemaCode = '表单编码'
 ```
 
 列表设计中的自定义代码：
 ``` sql
-SELECT javascript AS `前端代码`, behindcode AS `后端代码` 
+SELECT Javascript AS `前端代码`, BehindCode AS `后端代码` 
 FROM H_PublishedListViewSetting
-WHERE schemacode = '表单编码'
+WHERE SchemaCode = '表单编码'
+```
+
+
+## 根据代码片段查询所在的表单
+
+!> 此处代码片段可以是类名、方法名等，当不知道类定义在哪个表单中，可通过此方式来查询。
+
+以表单设计中后端代码片段来查询所在表单：
+``` sql
+SELECT SchemaCode AS `表单编码`, BehindCode AS `后端代码` 
+FROM H_PublishedFormSetting
+WHERE BehindCode LIKE '%代码片段%'
+```
+
+以列表设计中后端代码片段来查询所在表单：
+``` sql
+SELECT SchemaCode AS `表单编码`, BehindCode AS `后端代码` 
+FROM H_PublishedListViewSetting
+WHERE BehindCode LIKE '%代码片段%'
 ```
 
 
 ## 获取氚云应用在钉钉中的appId
 
 ``` sql
-SELECT corpid, 
-extractvalue(agents, '/ArrayOfDingTalkISVAgent/DingTalkISVAgent/AppId') AS `appId`
-FROM h_dingtalkisv
+SELECT CorpId, 
+extractvalue(Agents, '/ArrayOfDingTalkISVAgent/DingTalkISVAgent/AppId') AS `appId`
+FROM H_DingtalkIsv
 ```
 
 
@@ -74,11 +93,11 @@ FROM h_dingtalkisv
 
 ``` sql
 SELECT
-    date_format(b.finishtime, '%Y-%m-%d %H:%i:%s') AS `审批通过时间`,
+    date_format(b.FinishTime, '%Y-%m-%d %H:%i:%s') AS `审批通过时间`,
     Approval `是否最终审批通过`
 FROM
     i_表单编码 a
-    LEFT JOIN H_WorkflowInstance b ON a.workflowinstanceid = b.ObjectId
+    LEFT JOIN H_WorkflowInstance b ON a.WorkflowInstanceId = b.ObjectId
 WHERE
     b.Approval = 1
 ```

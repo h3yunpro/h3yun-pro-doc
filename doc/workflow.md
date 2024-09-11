@@ -126,6 +126,7 @@ engine.WorkflowInstanceManager.SendMessage(cancelMessage);
 
 * 事件会在业务规则执行后触发
 * 当表单配置了流程，在**导入生效数据**时，由于导入时会创建流程并结束流程，所以也会触发 ```OnWorkflowInstanceStateChanged``` 事件
+* 这里只是提醒开发者在用这个事件时要考虑导入触发的情况，但是并不推荐开发者利用这个事件去做导入执行代码的需求，具体原因请看：[为何不推荐利用OnWorkflowInstanceStateChanged事件做导入触发代码的需求](/doc/faq?id=为何不推荐利用OnWorkflowInstanceStateChanged事件做导入触发代码的需求)
 * 本事件无需用户进行调用，将事件写在**表单设计-后端代码**的 ```OnSubmit``` 方法之下即可。当流程状态发生改变时，流程引擎会自动调用 ```OnWorkflowInstanceStateChanged```
 
 代码示例：

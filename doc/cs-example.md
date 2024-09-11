@@ -62,6 +62,8 @@ H3.Workflow.Messages.WorkflowInstanceChangeSet OriginateInstance(
 
 可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
 
+!> 下面这个示例只演示批量创建，批量更新用```bo.Update(commit);```，批量删除用```bo.Remove(commit);```。
+
 ``` cs
 H3.IEngine engine = this.Engine;
 H3.DataModel.BizObjectSchema schema = engine.BizObjectManager.GetPublishedSchema("表单编码");//获取表单实例
@@ -202,7 +204,7 @@ public static List < H3.DataModel.BizObject > GetAllBizObject(H3.IEngine engine,
 ```
 
 
-## [通用]CopyFiles图片到目标数据，图片在移动端列表显示
+## [通用]CopyFiles图片到目标数据，图片在移动端列表中显示
 
 可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
 
@@ -450,6 +452,8 @@ protected override void OnSubmit(string actionName, H3.SmartForm.SmartFormPostVa
 
 可用位置：✘表单 / ✔列表 / ✘定时器 / ✘自定义接口
 
+!> 注意：这里的代码是写在【列表设计】页面的后端代码中。
+
 ``` cs
 protected override void OnInit(H3.SmartForm.LoadListViewResponse response)
 {
@@ -491,6 +495,8 @@ protected override void OnInit(H3.SmartForm.LoadListViewResponse response)
 ## [列表]删除时获得用户选择的数据
 
 可用位置：✘表单 / ✔列表 / ✘定时器 / ✘自定义接口
+
+!> 注意：这里的代码是写在【列表设计】页面的后端代码中。
 
 ``` cs
 protected override void OnSubmit(string actionName, H3.SmartForm.ListViewPostValue postValue, H3.SmartForm.SubmitListViewResponse response)
