@@ -1709,10 +1709,7 @@ if( ctData === null || ctData.length === 0 ) {
 
 <h1>列表前端API</h1>
 
-<h2>列表前端事件</h2>
-
-<p>列表前端只有一个事件（本节的API都是用在按钮点击时的处理上）：
-- <code>$.ListView.ActionPreDo</code>：列表按钮点击事件</p>
+<p>列表前端只有一个列表按钮点击事件：<code>$.ListView.ActionPreDo</code>，所以本篇的API都是用在按钮点击时的处理上。</p>
 
 <h2>列表前端获取选中的数据</h2>
 
@@ -6750,59 +6747,6 @@ foreach(System.Text.RegularExpressions.Match match in System.Text.RegularExpress
 }
 </code></pre>
 
-<h2>[通用]通过筛选器分页获取某表单全部业务对象</h2>
-
-<p>可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口</p>
-
-<pre><code class="cs language-cs">//分页轮询查询出所有数据
-public static List &lt; H3.DataModel.BizObject &gt; GetAllBizObject(H3.IEngine engine, H3.DataModel.BizObjectSchema schema)
-{
-    List &lt; H3.DataModel.BizObject &gt; boList = new List&lt;H3.DataModel.BizObject&gt;();
-    int pageIndex = 0;
-    int pageSize = 1000; //由于H3.DataModel.BizObject.GetList每次最多只返回1000条，所以每页数据量最大只能设置1000
-    while(true)
-    {
-        H3.Data.Filter.Filter filter = new H3.Data.Filter.Filter();
-        H3.Data.Filter.And andMatcher = new H3.Data.Filter.And();
-
-        //此处演示只查询所有生效数据，如想查询其他状态，可自行调整
-        andMatcher.Add(new H3.Data.Filter.ItemMatcher("Status", H3.Data.ComparisonOperatorType.Equal, H3.DataModel.BizObjectStatus.Effective));
-
-        filter.FromRowNum = pageIndex * pageSize;
-        filter.ToRowNum = (pageIndex + 1) * pageSize;
-
-        //由于是分页查询，所以加上按创建时间排序，可以避免某些页中有重复数据
-        filter.AddSortBy("CreatedTime", H3.Data.Filter.SortDirection.Ascending);
-
-        filter.Matcher = andMatcher;
-        H3.DataModel.BizObject[] boArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId, schema, H3.DataModel.GetListScopeType.GlobalAll, filter);
-        if(boArray == null || boArray.Length == 0)
-        {
-            break;
-        }
-
-        foreach(H3.DataModel.BizObject bo in boArray) 
-        {
-            if(bo == null)
-            {
-                continue;
-            }
-            boList.Add(bo);
-        }
-
-        // 当本次返回数据量已不足每页大小，说明已无需再查下一页了，直接终止轮询
-        if(boArray.Length &lt; pageSize)
-        {
-            break;
-        }
-
-        pageIndex++;
-    }
-
-    return boList;
-}
-</code></pre>
-
 <h2>[通用]CopyFiles图片到目标数据，图片在移动端列表中显示</h2>
 
 <p>可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口</p>
@@ -7011,7 +6955,7 @@ string fieldLabelName = property.DisplayName;
             System.Data.DataTable dt = engine.Query.QueryTable("SELECT ObjectId, Name, Status, CreatedTime FROM i_当前表单编码 WHERE Status IN (1, 2) AND CreatedTime &gt;= @startTime AND CreatedTime &lt;= @endTime AND ObjectId != @thisId", new H3.Data.Database.Parameter[]{
                 new H3.Data.Database.Parameter("@startTime", System.Data.DbType.DateTime, startTime),
                 new H3.Data.Database.Parameter("@endTime", System.Data.DbType.DateTime, endTime),
-                new H3.Data.Database.Parameter("@thisId", System.Data.DbType.String, thisBo.ObjectId)//避免先暂存后提交时，SQL查到本条数据
+                new H3.Data.Database.Parameter("@thisId", System.Data.DbType.String, thisBo.ObjectId)//加上当前提交的数据Id，是为了避免先暂存后提交的情况导致也提示不允许提交
             });
 
             //若有查出数据，则代表今天已提交数据
@@ -7090,6 +7034,12 @@ string fieldLabelName = property.DisplayName;
             string[] selectedIds = (string[]) postValue.Data["ObjectIds"];
             if(selectedIds != null &amp;&amp; selectedIds.Length &gt; 0)
             {
+                int maxCount = 100;
+                if(selectedIds.Length &gt; maxCount)
+                {
+                    throw new Exception("单次最多处理" + maxCount + "条数据！");
+                }
+
                 H3.IEngine engine = this.Engine;
                 H3.DataModel.BizObjectSchema schema = this.Request.Schema;
                 H3.Data.Filter.Filter filter = new H3.Data.Filter.Filter();
@@ -7105,11 +7055,6 @@ string fieldLabelName = property.DisplayName;
                     if(boArray.Length != selectedIds.Length)
                     {
                         throw new Exception(schema.DisplayName + "数据查询失败！");
-                    }
-                    int maxCount = 100;
-                    if(boArray.Length &gt; maxCount)
-                    {
-                        throw new Exception("单次最多处理" + maxCount + "条数据！");
                     }
                     foreach(H3.DataModel.BizObject bo in boArray)
                     {

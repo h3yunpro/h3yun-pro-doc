@@ -163,13 +163,113 @@ public static void BatchCommitData(H3.IEngine engine, List < H3.DataModel.BizObj
                 throw new Exception("批量" + mode + "数据失败：" + errorMsg);
             }
             commit = new H3.DataModel.BulkCommit();
+            count = 0;
         }
     }
-    commit.Commit(engine.BizObjectManager, out errorMsg);
-    if(!string.IsNullOrEmpty(errorMsg))
+    if(count > 0)
     {
-        throw new Exception("批量" + mode + "数据失败：" + errorMsg);
+        commit.Commit(engine.BizObjectManager, out errorMsg);
+        if(!string.IsNullOrEmpty(errorMsg))
+        {
+            throw new Exception("批量" + mode + "数据失败：" + errorMsg);
+        }
     }
+}
+```
+
+
+## [后端]通过筛选器分页获取某表单全部业务对象
+
+可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
+
+``` cs
+//分页轮询查询出所有数据
+public static List < H3.DataModel.BizObject > GetAllBizObject(H3.IEngine engine, H3.DataModel.BizObjectSchema schema)
+{
+    List < H3.DataModel.BizObject > boList = new List<H3.DataModel.BizObject>();
+    int pageIndex = 0;
+    int pageSize = 1000; //由于H3.DataModel.BizObject.GetList每次最多只返回1000条，所以每页数据量最大只能设置1000
+    while(true)
+    {
+        H3.Data.Filter.Filter filter = new H3.Data.Filter.Filter();
+        H3.Data.Filter.And andMatcher = new H3.Data.Filter.And();
+
+        //此处演示只查询所有生效数据，如想查询其他状态，可自行调整
+        andMatcher.Add(new H3.Data.Filter.ItemMatcher("Status", H3.Data.ComparisonOperatorType.Equal, H3.DataModel.BizObjectStatus.Effective));
+
+        filter.FromRowNum = pageIndex * pageSize;
+        filter.ToRowNum = (pageIndex + 1) * pageSize;
+
+        //由于是分页查询，所以要加上按创建时间排序，可以避免查出重复数据
+        filter.AddSortBy("CreatedTime", H3.Data.Filter.SortDirection.Ascending);
+
+        filter.Matcher = andMatcher;
+        H3.DataModel.BizObject[] boArray = H3.DataModel.BizObject.GetList(engine, H3.Organization.User.SystemUserId, schema, H3.DataModel.GetListScopeType.GlobalAll, filter);
+        if(boArray == null || boArray.Length == 0)
+        {
+            break;
+        }
+
+        foreach(H3.DataModel.BizObject bo in boArray) 
+        {
+            if(bo == null)
+            {
+                continue;
+            }
+            boList.Add(bo);
+        }
+
+        // 当本次返回数据量已不足每页大小，说明已无需再查下一页了，直接终止轮询
+        if(boArray.Length < pageSize)
+        {
+            break;
+        }
+
+        pageIndex++;
+    }
+
+    return boList;
+}
+```
+
+
+## [后端]将对象数组JSON转成List<Dictionary<string,object>>
+
+可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
+
+``` cs
+//json转List，json格式必须是：[{ "k1": "v1", "k2": "v2" }, { "k1": "v3", "k2": "v4" }]
+public List < Dictionary < string, object >> JsonToObjectList(string jsonStr)
+{
+    if(string.IsNullOrWhiteSpace(jsonStr)) 
+    {
+        return null;
+    }
+
+    object[] objArray = this.Deserialize<object[]>(jsonStr);
+    if(objArray == null || objArray.Length == 0) 
+    {
+        return null;
+    }
+
+    List < Dictionary < string, object >> dataList = new List<Dictionary<string, object>>();
+    foreach(object obj in objArray) 
+    {
+        string dataStr = obj + string.Empty;
+        if(string.IsNullOrWhiteSpace(dataStr))
+        {
+            continue;
+        }
+        Dictionary < string, object > data = this.Deserialize<Dictionary<string, object>>(dataStr);
+        if(data == null || data.Count == 0) 
+        {
+            continue;
+        }
+
+        dataList.Add(data);
+    }
+
+    return dataList;
 }
 ```
 
