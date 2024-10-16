@@ -26,7 +26,7 @@
 
 <!-- tabs:start -->
 
-#### **响应数据示例**
+#### **第三方接口响应数据格式示例**
 
 氚云的接口请求，响应数据一定要为JSON对象格式，下面是调用代码示例中对应响应数据：
 
@@ -91,11 +91,11 @@
 3. 文件格式（氚云二次代码开发层面已禁止IO操作相关功能，响应文件给氚云没有意义，若需要传文件给氚云请通过氚云OpenApi上传附件）
 
 
-#### **调用代码示例**
+#### **氚云调用第三方接口代码示例**
 
 ``` cs
 /*
-    参照示例的响应JSON结构，会发现响应的JSON有多层（$层、$.data参数层、$.data.neighbors参数层），所以这里需要定义3个H3.BizBus.BizStructureSchema
+    参照 “第三方接口响应数据格式示例” 中的JSON结构，会发现响应的JSON有多层（$层、$.data参数层、$.data.neighbors参数层），所以这里需要定义3个H3.BizBus.BizStructureSchema
 */
 
 //定义响应数据最外层的结构体，后续以 $ 表示该层
@@ -124,7 +124,7 @@ neighborsSchema.Add(new H3.BizBus.ItemSchema("LevelType", "层级类型", H3.Dat
 //将 $.data.neighbors 属性的结构体添加进 $.data 的响应数据结构体（注意：neighbors 属性是对象数组格式，类型是H3.Data.BizDataType.BizStructureArray）
 dataSchema.Add(new H3.BizBus.ItemSchema("neighbors", "邻村信息数组", H3.Data.BizDataType.BizStructureArray, neighborsSchema));
 
-//将 $.data.infos 属性添加进 $.data 的响应数据结构体（注意：infos 是个字符串数组，但氚云没有对应接收的类型，不过可以用string类型来接收）
+//将 $.data.infos 属性添加进 $.data 的响应数据结构体（注意：infos 是个字符串数组，但氚云没有对应接收的类型，所以用string类型来接收，这样会接收到一个字符串数组JSON）
 dataSchema.Add(new H3.BizBus.ItemSchema("infos", "重要信息数组", H3.Data.BizDataType.String, null));
 
 //将 $.data 属性的结构体添加进最外层的响应数据结构体（注意：data 属性是对象格式，类型是H3.Data.BizDataType.BizStructure）
@@ -194,7 +194,8 @@ if(data != null)
         }
     }
 
-    //获取响应数据中的 $.data.infos 属性值（由于 $.data.infos 用string类型来接收的，所以这里会得到infos的JSON字符串）
+    //获取响应数据中的 $.data.infos 属性值
+    //由于 $.data.infos 用string类型来接收的，所以这里会得到infos的JSON字符串，只要做下反序列化即可得到字符串数组
     string infos_Str = data["infos"] + string.Empty;
     if(!string.IsNullOrWhiteSpace(infos_Str)) 
     {

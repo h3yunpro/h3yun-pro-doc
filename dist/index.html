@@ -3369,23 +3369,23 @@ protected override void OnWorkflowInstanceStateChanged(H3.Workflow.Instance.Work
 
 <h2>后端代码发送短信</h2>
 
-<p>代码发送短信和配置发送短信效果一样，不支持自定义前缀，并且消耗短信条数余量。</p>
+<p>代码发送短信和配置发送短信效果一样，不支持自定义签名，并且消耗短信条数余量。</p>
 
 <p>可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口</p>
 
 <pre><code class="cs language-cs">//在表单提交时发送短信
-H3.IEngine engine = /* 此处省略引擎获取方式 */
+H3.IEngine engine = ... /* 此处省略引擎获取方式 */
 
 //定义一个待发送消息的集合
 List &lt; H3.Notification.UserMessage &gt; umList = new List&lt;H3.Notification.UserMessage&gt;();
 
-string sendUserId = H3.Organization.User.SystemUserId;//消息发送人氚云用户Id
+string sendUserId = H3.Organization.User.SystemUserId;//消息发送人氚云用户Id，固定为系统用户
 string receivePhone = "12345678901";//接收短信的手机号
-string prefix = "氚云";//短信前缀（由于运营商管控，目前已不支持自定义短信前缀，统一前缀为“氚云”）
+string sign = "氚云";//短信签名（由于运营商管控，目前已不支持自定义短信签名，统一签名为“氚云”）
 string sendContent = "短信内容";
 
 //将本次发送的消息添加到集合
-umList.Add(new H3.Notification.UserMessage(sendUserId, receivePhone, prefix, sendContent));
+umList.Add(new H3.Notification.UserMessage(sendUserId, receivePhone, sign, sendContent));
 
 //通过消息通知引擎发送
 engine.Notifier.Send(umList.ToArray());
@@ -7839,7 +7839,7 @@ public void TestBtn_Post(string actionName, H3.SmartForm.ListViewRequest request
 
 <!-- tabs:start -->
 
-<h4><strong>响应数据示例</strong></h4>
+<h4><strong>第三方接口响应数据格式示例</strong></h4>
 
 <p>氚云的接口请求，响应数据一定要为JSON对象格式，下面是调用代码示例中对应响应数据：</p>
 
@@ -7907,10 +7907,10 @@ public void TestBtn_Post(string actionName, H3.SmartForm.ListViewRequest request
 <li>文件格式（氚云二次代码开发层面已禁止IO操作相关功能，响应文件给氚云没有意义，若需要传文件给氚云请通过氚云OpenApi上传附件）</li>
 </ol>
 
-<h4><strong>调用代码示例</strong></h4>
+<h4><strong>氚云调用第三方接口代码示例</strong></h4>
 
 <pre><code class="cs language-cs">/*
-    参照示例的响应JSON结构，会发现响应的JSON有多层（$层、$.data参数层、$.data.neighbors参数层），所以这里需要定义3个H3.BizBus.BizStructureSchema
+    参照 “第三方接口响应数据格式示例” 中的JSON结构，会发现响应的JSON有多层（$层、$.data参数层、$.data.neighbors参数层），所以这里需要定义3个H3.BizBus.BizStructureSchema
 */
 
 //定义响应数据最外层的结构体，后续以 $ 表示该层
@@ -7939,7 +7939,7 @@ neighborsSchema.Add(new H3.BizBus.ItemSchema("LevelType", "层级类型", H3.Dat
 //将 $.data.neighbors 属性的结构体添加进 $.data 的响应数据结构体（注意：neighbors 属性是对象数组格式，类型是H3.Data.BizDataType.BizStructureArray）
 dataSchema.Add(new H3.BizBus.ItemSchema("neighbors", "邻村信息数组", H3.Data.BizDataType.BizStructureArray, neighborsSchema));
 
-//将 $.data.infos 属性添加进 $.data 的响应数据结构体（注意：infos 是个字符串数组，但氚云没有对应接收的类型，不过可以用string类型来接收）
+//将 $.data.infos 属性添加进 $.data 的响应数据结构体（注意：infos 是个字符串数组，但氚云没有对应接收的类型，所以用string类型来接收，这样会接收到一个字符串数组JSON）
 dataSchema.Add(new H3.BizBus.ItemSchema("infos", "重要信息数组", H3.Data.BizDataType.String, null));
 
 //将 $.data 属性的结构体添加进最外层的响应数据结构体（注意：data 属性是对象格式，类型是H3.Data.BizDataType.BizStructure）
@@ -8009,7 +8009,8 @@ if(data != null)
         }
     }
 
-    //获取响应数据中的 $.data.infos 属性值（由于 $.data.infos 用string类型来接收的，所以这里会得到infos的JSON字符串）
+    //获取响应数据中的 $.data.infos 属性值
+    //由于 $.data.infos 用string类型来接收的，所以这里会得到infos的JSON字符串，只要做下反序列化即可得到字符串数组
     string infos_Str = data["infos"] + string.Empty;
     if(!string.IsNullOrWhiteSpace(infos_Str)) 
     {

@@ -1,24 +1,25 @@
 # 消息通知/提醒
 
+
 ## 后端代码发送短信
 
-代码发送短信和配置发送短信效果一样，不支持自定义前缀，并且消耗短信条数余量。
+代码发送短信和配置发送短信效果一样，不支持自定义签名，并且消耗短信条数余量。
 
 可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
 ``` cs
 //在表单提交时发送短信
-H3.IEngine engine = /* 此处省略引擎获取方式 */
+H3.IEngine engine = ... /* 此处省略引擎获取方式 */
 
 //定义一个待发送消息的集合
 List < H3.Notification.UserMessage > umList = new List<H3.Notification.UserMessage>();
 
-string sendUserId = H3.Organization.User.SystemUserId;//消息发送人氚云用户Id
+string sendUserId = H3.Organization.User.SystemUserId;//消息发送人氚云用户Id，固定为系统用户
 string receivePhone = "12345678901";//接收短信的手机号
-string prefix = "氚云";//短信前缀（由于运营商管控，目前已不支持自定义短信前缀，统一前缀为“氚云”）
+string sign = "氚云";//短信签名（由于运营商管控，目前已不支持自定义短信签名，统一签名为“氚云”）
 string sendContent = "短信内容";
 
 //将本次发送的消息添加到集合
-umList.Add(new H3.Notification.UserMessage(sendUserId, receivePhone, prefix, sendContent));
+umList.Add(new H3.Notification.UserMessage(sendUserId, receivePhone, sign, sendContent));
 
 //通过消息通知引擎发送
 engine.Notifier.Send(umList.ToArray());
