@@ -1,5 +1,7 @@
 # 工具方法合集
 
+本文档的方法只是在开发实践中，常用的方法封装，并非氚云自带方法，需要时需将代码复制到氚云类代码块中。
+
 
 ## [后端]获取业务对象字段值
 
@@ -111,7 +113,7 @@ public static string g2000Str(string str)
     return str;
 }
 
-//中国式四舍五入，num参数为金额，digits为需要保留的小数位
+//中国式四舍五入，num参数为待取舍数值，digits为需要保留的小数位
 //用法：decimal val = gRound(123.456m, 2);
 public static decimal gRound(decimal num, int digits)
 {
@@ -344,7 +346,7 @@ Date.prototype.Format = function( fmt ) {
 }
 ```
 
-此代码定义在前端代码最上面，例：
+用法示例：
 ``` js
 //把此函数定义在表单默认代码之上
 Date.prototype.Format = function( fmt ) {
@@ -357,7 +359,7 @@ $.extend($.JForm,{
     OnLoad:function(){
         var that = this;
 
-        //注意：在OnLoad里给控件赋值，一定要记得判断当前是新增模式
+        //注意：在OnLoad里给控件赋值，一定要记得判断当前是新增模式，否则只要表单打开，控件值会一直变化
         if( $.SmartForm.ResponseContext.IsCreateMode ) {
             that.F0000001.SetValue((new Date()).Format("yyyy-MM-dd"));
             that.F0000001.SetValue((new Date()).Format("yyyy-MM-dd HH:mm:ss"));

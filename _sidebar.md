@@ -3,7 +3,6 @@
 
 * 基础
 
-  * [产品架构](/doc/arch)
   * [技术栈](/doc/language)
   * [开发工具](/doc/dev-tools)
   * [常见名词](/doc/noun)

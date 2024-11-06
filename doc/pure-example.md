@@ -1,6 +1,7 @@
 # 纯净代码示例
 
-给氚专老玩家准备，无注释，方便复制粘贴，快速使用
+给快速开发准备，无注释，方便复制粘贴，直接按标准组合方式使用。
+
 
 ## 定时器
 
@@ -170,33 +171,35 @@ $.ListView.ActionPreDo = function( actionCode ) {
         var maxSelectedCount = 10;//最大选择数量
 
         var seDatas = $.ListView.GetSelected();
-        if( seDatas && seDatas.length ) {
-            if( seDatas.length <= maxSelectedCount ) {
-                var seIds = [];
-                for( var i = 0;i < seDatas.length;i++ ) {
-                    seIds.push( seDatas[ i ][ "ObjectId" ] );
-                }
-
-                $.IShowSuccess( "成功", "系统处理中，请稍候..." );
-                var seIdsJson = JSON.stringify( seIds );
-                $.ListView.Post( actionCode + "_Post", {
-                    "seIds": seIdsJson
-                }, function( data ) {
-                    if( data.Errors && data.Errors.length ) {
-                        $.IShowError( "错误", JSON.stringify( data.Errors ) );
-                    } else {
-                        $.IShowSuccess( "成功", "系统处理完成！" );
-                        $.ListView.RefreshView();
-                    }
-                }, function( error ) {
-                    $.IShowError( "错误", JSON.stringify( error ) );
-                }, false );
-            } else {
-                $.IShowWarn( "警告", "一次批量处理最多" + maxSelectedCount + "条！" );
-            }
-        } else {
+        if( !seDatas || !seDatas.length ) {
             $.IShowWarn( "警告", "没有选中任何行" );
+            return false;
         }
+        if( seDatas.length > maxSelectedCount ) {
+            $.IShowWarn( "警告", "一次批量处理最多" + maxSelectedCount + "条！" );
+            return false;
+        }
+
+        var seIds = [];
+        for( var i = 0;i < seDatas.length;i++ ) {
+            seIds.push( seDatas[ i ][ "ObjectId" ] );
+        }
+
+        $.IShowSuccess( "成功", "系统处理中，请稍候..." );
+        var seIdsJson = JSON.stringify( seIds );
+        $.ListView.Post( actionCode + "_Post", {
+            "seIds": seIdsJson
+        }, function( data ) {
+            if( data.Errors && data.Errors.length ) {
+                $.IShowError( "错误", JSON.stringify( data.Errors ) );
+            } else {
+                $.IShowSuccess( "成功", "系统处理完成！" );
+                $.ListView.RefreshView();
+            }
+        }, function( error ) {
+            $.IShowError( "错误", JSON.stringify( error ) );
+        }, false );
+
         return false;
     }
     
