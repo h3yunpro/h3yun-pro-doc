@@ -1,24 +1,18 @@
 
 # 技术栈
 
-氚云是一款Web端的 ```SaaS```、```aPaaS``` 平台，通过 ```.NET core```、```MySQL```、```JavaScript``` 开发实现。
+氚云是一款Web端的 ```SaaS```、```aPaaS``` 平台，底层架构通过 ```.NET core```、```MySQL```、```JavaScript``` 开发实现。专业版相对于标准版，解锁了 在线编程、OpenAPI、第三方连接 模块，提供给用户进行二次开发，与第三方平台集成的能力，以满足用户个性化的需求。
 
-专业版相对于标准版，通过解锁 在线编程、OpenAPI、第三方连接 模块，提供给用户进行二次开发、与第三方平台集成的能力，以满足用户非标化的业务。
+因此，在氚云上进行二次开发也需遵循该技术栈。如果你已经是一名 .NET Web 方向的开发者，你可以直接上手氚云，只需要了解氚云特有的api。对于其他技术栈的开发者，氚云特有的api并不多，需学习该技术栈的基本语法后，再上手氚云。
 
-一般而言，大部分用户业务需求，是单纯在氚云平台上进行二次开发实现业务。小部分用户有集成第三方的需求，会通过暴露自定义接口或主动请求第三方接口去集成第三方。
-
-以上业务需求，都是需要用户掌握 ```.NET``` + ```MySQL``` + ```JavaScript``` 技术栈。
-
-如果您已经是一名 .NET Web 方向的开发者，您可以直接上手氚云，只需要了解氚云特有的api。对于其他技术栈的开发者，氚云特有的api并不多，学习该技术栈的基本语法后，再上手氚云。
-
-?> PS：如果您的集成第三方需求可以只通过标准接口或者配置连接实现，则不要求技术栈。
+?> PS：如果你的集成第三方需求可以只通过标准OpenApi接口或者配置第三方连接实现，因无需在氚云上写代码，则不要求技术栈。
 
 
 ## 氚云二开语言版本
 
 - 后端 .NET Framework 版本：```.NET Framework 4.6.2```
 - 前端 JavaScript 版本：```ECMAScript 5 / ECMAScript 2009```
-- MySQL 数据库不同用户有不同版本，请自行根据此语句查询：```SELECT VERSION()```
+- MySQL 数据库大部分已升级至8.0版本，但最好是自行执行此语句来验证版本：```SELECT VERSION()```
 
 
 
@@ -1872,6 +1866,12 @@ if( rows && rows.length ) {
     //循环子表每行的数据
     for( var i = 0;i < rows.length;i++ ) {
         var currRowData = rows[ i ];
+
+        //获取子表当前行的ObjectId
+        var currRowId = currRowData.ObjectId;
+
+        //获取子表当前行的数据 D000726F0001.F0000002 控件的实例
+        var currCellCon = that.D000726F0001.GetCellManager( currRowId, "D000726F0001.F0000002" );
     }
 }
 ```
@@ -3781,6 +3781,7 @@ filter.Matcher = andMatcher;
 2. [SQL报表](/doc/sql-report)
 3. [SQL高级数据源](/doc/sql-dashboard)
 
+
 ## [表单]主表
 
 数据库表名：i_表单编码
@@ -3870,7 +3871,7 @@ filter.Matcher = andMatcher;
 | 3      | Name                | 用户姓名           |                                  |
 | 4      | ParentId            | 主部门Id           | 对应H_Organizationunit表ObjectId字段  |
 | 5      | ManagerId           | 部门经理用户Id     | 对应H_User表ObjectId字段              |
-| 6      | DingTalkAccount     | 对应钉钉用户Id     | 跟钉钉对接时可用，字段值格式：```钉钉userId.钉钉corpId```（注意：对接时需截取出点号之前的钉钉userId）   |
+| 6      | DingTalkAccount     | 对应钉钉用户Id     | 跟钉钉对接时可用，字段值格式：```钉钉userId.钉钉corpId```（注意：使用时需截取出点号之前的钉钉userId）   |
 | 7      | WechatUserId        | 对应企微用户Id     |                                  |
 | 8      | Position            | 职位             |                                  |
 | 9      | Mobile              | 手机号            |                                  |
@@ -4145,10 +4146,10 @@ filter.Matcher = andMatcher;
 |--------|--------------------|----------|------------------------------------|
 | 1      | ObjectId           | 表单信息Id   | 主键，表单信息的唯一标识                       |
 | 2      | SchemaCode         | 表单编码     |                                    |
-| 3      | DisplayName        | 表单展示名称   |                                    |
+| 3      | DisplayName        | 表单展示名称   | 该字段新版已废弃，后续表单名称需从 `Content` 字段中解析获取             |
 | 4      | ChildSchemas       | 子表编码     | 一个表单内可能会有多个子表，所以此字段为xml格式的子表编码数组   |
 | 5      | ReferenceSchemas   | 关联表单编码   | 一个表单内可能会有关联表单，所以此字段为xml格式的关联表单编码数组 |
-| 6      | Content            | 表单结构文档   |                                    |
+| 6      | Content            | 表单结构文档   | 表单结构XML字符串                          |
 | 7      | CreatedTime        | 表单创建时间   |                                    |
 | 8      | ModifiedTime       | 表单最后修改时间 |                                    |
 | 9      | ParentObjectId     | 父对象Id    | 暂未使用                               |
@@ -4164,9 +4165,9 @@ filter.Matcher = andMatcher;
 |--------|--------------------------|------------|--------------|
 | 1      | ObjectId                 | 表单配置Id     | 主键，表单配置的唯一标识 |
 | 2      | SchemaCode               | 表单编码       |              |
-| 3      | DisplayName              | 表单展示名称     |              |
-| 4      | JavaScript               | 表单设计旧版前端代码 |              |
-| 5      | NewJsCode                | 表单设计新版前端代码 | 目前大部分企业都处于新版表单了，所以用此字段             |
+| 3      | DisplayName              | 表单展示名称     |   该字段新版已废弃，请勿使用           |
+| 4      | JavaScript               | 表单设计旧版前端代码  |  目前旧版表单基本已完成升级，后续勿再使用此字段     |
+| 5      | NewJsCode                | 表单设计新版前端代码 | 目前企业基本都处于新版表单了，所以后续用此字段             |
 | 6      | BehindCode               | 表单设计后端代码   |              |
 | 7      | ModifiedTime             | 表单配置最后修改时间 |              |
 | 8      | DesignModeContent        |            |              |
@@ -4198,7 +4199,7 @@ filter.Matcher = andMatcher;
 |--------|--------------------------|------------|--------------|
 | 1      | ObjectId                 | 列表配置Id     | 主键，列表配置的唯一标识 |
 | 2      | SchemaCode               | 表单编码       |              |
-| 3      | JavaScript               | 列表设计前端代码   | 列表前端代码并没有新旧版之分，所以用此字段      |
+| 3      | JavaScript               | 列表设计前端代码   | 目前列表前端代码并没有新旧版之分，所以用此字段      |
 | 4      | NewJsCode                | 列表设计新版前端代码 | 暂未使用         |
 | 5      | BehindCode               | 列表设计后端代码   |              |
 | 6      | ModifiedTime             | 列表配置最后修改时间 |              |
@@ -4530,11 +4531,11 @@ OnLoad: function() {
 可用位置：✔表单 / ✔列表
 
 ``` js
-//此函数是在表单/列表前端调用，而前端无法获得附件Id，所以此处附件Id需通过Post请求后端获取
+//此函数是在表单/列表前端调用
 $.IDownloadAttachments( ["附件Id_1", "附件Id_2" ] );
 ```
 
-!> 注意：此函数仅支持浏览器中使用，钉钉工作台、企微工作台不支持。
+!> 注意：此函数仅支持浏览器中使用，钉钉工作台、企微工作台不支持。调用后会下载一个zip压缩包，里面包含所有附件。
 
 # 后端代码示例
 
@@ -5535,7 +5536,7 @@ WHERE
 
 # 纯净代码示例
 
-给快速开发准备，无注释，方便复制粘贴，直接按标准组合方式使用。
+为快速开发准备，无注释，方便复制后直接粘贴使用。
 
 
 ## 定时器
@@ -5811,19 +5812,26 @@ public void TestBtn_Post(string actionName, H3.SmartForm.ListViewRequest request
 
 !> PS：本文档将不会对氚云调用 ```WebService``` 做出详细说明，如有需要，请前往[官方文档](https://help.h3yun.com/contents/1126/2234.html)。
 
-
 # 氚云调用WebAPI
 
-第三方Api要求：http/https协议，请求参数和响应数据不支持文件类型，且响应数据必须是JSON格式
+第三方连接支持调用的Api要求：
+1. 协议：`http` / `https`
+2. 请求方式：`GET` / `POST`
+3. 请求参数和响应数据不能是传输/接收文件，且响应数据必须是JSON对象格式。
 
-## 通过非代码的连接调试接口
+!> PS：第三方Api的URL最好使用域名方式，如果条件受限只能使用 IP:Port 方式，端口号可能处于氚云防火墙黑名单中，若配置上后，连接请求一直卡死无响应，可以切换到 200-300 范围内的端口再试试。
+
+**若你是第一次使用氚云的第三方连接，建议你按照以下步骤进行↓↓↓**
+
+
+## 1、通过非代码的连接调试接口
 
 通过非代码的连接调试一下接口，可以确定接口连通性、响应数据的结构，也可以大概判断一下氚云支不支持直接连接该服务（若不支持可以通过在外部服务器开发并部署一个中间服务来做转接）
 
 ![](../img/req-api-3.png)
 
 
-## 新建一个第三方连接（代码）
+## 2、新建一个第三方连接（代码）
 
 在 **插件中心** 新建连接（注意：编码框内自定义一个该连接的Code，不是填UTF-8、ASCII等数据编码）
 
@@ -5831,11 +5839,8 @@ public void TestBtn_Post(string actionName, H3.SmartForm.ListViewRequest request
 
 ![](../img/req-api-2.png)
 
-!> PS：连接URL最好使用域名的方式，如果使用 IP:Port 方式，端口号可能处于氚云防火墙黑名单中。
-如条件受限，只能使用 IP:Port 方式，配置上后，连接请求一直卡死无响应，可以切换到 200-300 范围内的端口试试。
 
-
-## 代码调用第三方连接示例
+## 3、代码调用第三方连接示例
 
 <!-- tabs:start -->
 
@@ -6380,20 +6385,4 @@ var ctData = this.子表编码.GetValue();//ctData是一个对象数组，数组
 ## 仪表盘明细表目前能够支持显示的列？
 25列
 
-
-# 学习视频
-
-此项文档收集了老师们产出的一些视频，用于帮助刚开始学习氚云专业版代码开发，无从下手的开发者，有一个学习的思路。讲解内容可能已经过时，主要是了解思路，了解氚云文档如何使用。
-
-
-## 0基础突破代码，助企业员工建立IT能力
-
-> 老师：吴登杰
-
-由于跨域原因，暂不支持在线播放，请通过此地址下载：
-``` 
-http://mediavideo.h3yun.net/0%E5%9F%BA%E7%A1%80%E7%AA%81%E7%A0%B4%E4%BB%A3%E7%A0%81%EF%BC%8C%E5%8A%A9%E4%BC%81%E4%B8%9A%E5%91%98%E5%B7%A5%E5%BB%BA%E7%AB%8BIT%E8%83%BD%E5%8A%9B.mp4?spm=a2c6h.12873639.article-detail.145.655b68b5Y1tIw3&file=0%E5%9F%BA%E7%A1%80%E7%AA%81%E7%A0%B4%E4%BB%A3%E7%A0%81%EF%BC%8C%E5%8A%A9%E4%BC%81%E4%B8%9A%E5%91%98%E5%B7%A5%E5%BB%BA%E7%AB%8BIT%E8%83%BD%E5%8A%9B.mp4
-```
-
-[0基础突破代码，助企业员工建立IT能力](http://mediavideo.h3yun.net/0%E5%9F%BA%E7%A1%80%E7%AA%81%E7%A0%B4%E4%BB%A3%E7%A0%81%EF%BC%8C%E5%8A%A9%E4%BC%81%E4%B8%9A%E5%91%98%E5%B7%A5%E5%BB%BA%E7%AB%8BIT%E8%83%BD%E5%8A%9B.mp4?spm=a2c6h.12873639.article-detail.145.655b68b5Y1tIw3&file=0%E5%9F%BA%E7%A1%80%E7%AA%81%E7%A0%B4%E4%BB%A3%E7%A0%81%EF%BC%8C%E5%8A%A9%E4%BC%81%E4%B8%9A%E5%91%98%E5%B7%A5%E5%BB%BA%E7%AB%8BIT%E8%83%BD%E5%8A%9B.mp4 ':include :type=video width=600px height=500px')
 

@@ -92,6 +92,12 @@ if( rows && rows.length ) {
     //循环子表每行的数据
     for( var i = 0;i < rows.length;i++ ) {
         var currRowData = rows[ i ];
+
+        //获取子表当前行的ObjectId
+        var currRowId = currRowData.ObjectId;
+
+        //获取子表当前行的数据 D000726F0001.F0000002 控件的实例
+        var currCellCon = that.D000726F0001.GetCellManager( currRowId, "D000726F0001.F0000002" );
     }
 }
 ```

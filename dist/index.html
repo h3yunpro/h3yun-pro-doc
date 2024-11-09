@@ -21,24 +21,18 @@
 
 <div id='app' style='text-align: left;'><h1>技术栈</h1>
 
-<p>氚云是一款Web端的 <code>SaaS</code>、<code>aPaaS</code> 平台，通过 <code>.NET core</code>、<code>MySQL</code>、<code>JavaScript</code> 开发实现。</p>
+<p>氚云是一款Web端的 <code>SaaS</code>、<code>aPaaS</code> 平台，底层架构通过 <code>.NET core</code>、<code>MySQL</code>、<code>JavaScript</code> 开发实现。专业版相对于标准版，解锁了 在线编程、OpenAPI、第三方连接 模块，提供给用户进行二次开发，与第三方平台集成的能力，以满足用户个性化的需求。</p>
 
-<p>专业版相对于标准版，通过解锁 在线编程、OpenAPI、第三方连接 模块，提供给用户进行二次开发、与第三方平台集成的能力，以满足用户非标化的业务。</p>
+<p>因此，在氚云上进行二次开发也需遵循该技术栈。如果你已经是一名 .NET Web 方向的开发者，你可以直接上手氚云，只需要了解氚云特有的api。对于其他技术栈的开发者，氚云特有的api并不多，需学习该技术栈的基本语法后，再上手氚云。</p>
 
-<p>一般而言，大部分用户业务需求，是单纯在氚云平台上进行二次开发实现业务。小部分用户有集成第三方的需求，会通过暴露自定义接口或主动请求第三方接口去集成第三方。</p>
-
-<p>以上业务需求，都是需要用户掌握 <code>.NET</code> + <code>MySQL</code> + <code>JavaScript</code> 技术栈。</p>
-
-<p>如果您已经是一名 .NET Web 方向的开发者，您可以直接上手氚云，只需要了解氚云特有的api。对于其他技术栈的开发者，氚云特有的api并不多，学习该技术栈的基本语法后，再上手氚云。</p>
-
-<p>?> PS：如果您的集成第三方需求可以只通过标准接口或者配置连接实现，则不要求技术栈。</p>
+<p>?> PS：如果你的集成第三方需求可以只通过标准OpenApi接口或者配置第三方连接实现，因无需在氚云上写代码，则不要求技术栈。</p>
 
 <h2>氚云二开语言版本</h2>
 
 <ul>
 <li>后端 .NET Framework 版本：<code>.NET Framework 4.6.2</code></li>
 <li>前端 JavaScript 版本：<code>ECMAScript 5 / ECMAScript 2009</code></li>
-<li>MySQL 数据库不同用户有不同版本，请自行根据此语句查询：<code>SELECT VERSION()</code></li>
+<li>MySQL 数据库大部分已升级至8.0版本，但最好是自行执行此语句来验证版本：<code>SELECT VERSION()</code></li>
 </ul>
 
 <h1>开发工具</h1>
@@ -1951,6 +1945,12 @@ if( rows &amp;&amp; rows.length ) {
     //循环子表每行的数据
     for( var i = 0;i &lt; rows.length;i++ ) {
         var currRowData = rows[ i ];
+
+        //获取子表当前行的ObjectId
+        var currRowId = currRowData.ObjectId;
+
+        //获取子表当前行的数据 D000726F0001.F0000002 控件的实例
+        var currCellCon = that.D000726F0001.GetCellManager( currRowId, "D000726F0001.F0000002" );
     }
 }
 </code></pre>
@@ -4564,7 +4564,7 @@ filter.Matcher = andMatcher;
   <td>6</td>
   <td>DingTalkAccount</td>
   <td>对应钉钉用户Id</td>
-  <td>跟钉钉对接时可用，字段值格式：<code>钉钉userId.钉钉corpId</code>（注意：对接时需截取出点号之前的钉钉userId）</td>
+  <td>跟钉钉对接时可用，字段值格式：<code>钉钉userId.钉钉corpId</code>（注意：使用时需截取出点号之前的钉钉userId）</td>
 </tr>
 <tr>
   <td>7</td>
@@ -5911,7 +5911,7 @@ filter.Matcher = andMatcher;
   <td>3</td>
   <td>DisplayName</td>
   <td>表单展示名称</td>
-  <td></td>
+  <td>该字段新版已废弃，后续表单名称需从 <code>Content</code> 字段中解析获取</td>
 </tr>
 <tr>
   <td>4</td>
@@ -5929,7 +5929,7 @@ filter.Matcher = andMatcher;
   <td>6</td>
   <td>Content</td>
   <td>表单结构文档</td>
-  <td></td>
+  <td>表单结构XML字符串</td>
 </tr>
 <tr>
   <td>7</td>
@@ -5994,19 +5994,19 @@ filter.Matcher = andMatcher;
   <td>3</td>
   <td>DisplayName</td>
   <td>表单展示名称</td>
-  <td></td>
+  <td>该字段新版已废弃，请勿使用</td>
 </tr>
 <tr>
   <td>4</td>
   <td>JavaScript</td>
   <td>表单设计旧版前端代码</td>
-  <td></td>
+  <td>目前旧版表单基本已完成升级，后续勿再使用此字段</td>
 </tr>
 <tr>
   <td>5</td>
   <td>NewJsCode</td>
   <td>表单设计新版前端代码</td>
-  <td>目前大部分企业都处于新版表单了，所以用此字段</td>
+  <td>目前企业基本都处于新版表单了，所以后续用此字段</td>
 </tr>
 <tr>
   <td>6</td>
@@ -6167,7 +6167,7 @@ filter.Matcher = andMatcher;
   <td>3</td>
   <td>JavaScript</td>
   <td>列表设计前端代码</td>
-  <td>列表前端代码并没有新旧版之分，所以用此字段</td>
+  <td>目前列表前端代码并没有新旧版之分，所以用此字段</td>
 </tr>
 <tr>
   <td>4</td>
@@ -6593,11 +6593,11 @@ OnLoad: function() {
 
 <p>可用位置：✔表单 / ✔列表</p>
 
-<pre><code class="js language-js">//此函数是在表单/列表前端调用，而前端无法获得附件Id，所以此处附件Id需通过Post请求后端获取
+<pre><code class="js language-js">//此函数是在表单/列表前端调用
 $.IDownloadAttachments( ["附件Id_1", "附件Id_2" ] );
 </code></pre>
 
-<p>!> 注意：此函数仅支持浏览器中使用，钉钉工作台、企微工作台不支持。</p>
+<p>!> 注意：此函数仅支持浏览器中使用，钉钉工作台、企微工作台不支持。调用后会下载一个zip压缩包，里面包含所有附件。</p>
 
 <h1>后端代码示例</h1>
 
@@ -7550,7 +7550,7 @@ WHERE
 
 <h1>纯净代码示例</h1>
 
-<p>给快速开发准备，无注释，方便复制粘贴，直接按标准组合方式使用。</p>
+<p>为快速开发准备，无注释，方便复制后直接粘贴使用。</p>
 
 <h2>定时器</h2>
 
@@ -7812,15 +7812,22 @@ public void TestBtn_Post(string actionName, H3.SmartForm.ListViewRequest request
 
 <h1>氚云调用WebAPI</h1>
 
-<p>第三方Api要求：http/https协议，请求参数和响应数据不支持文件类型，且响应数据必须是JSON格式</p>
+<p>第三方连接支持调用的Api要求：
+1. 协议：<code>http</code> / <code>https</code>
+2. 请求方式：<code>GET</code> / <code>POST</code>
+3. 请求参数和响应数据不能是传输/接收文件，且响应数据必须是JSON对象格式。</p>
 
-<h2>通过非代码的连接调试接口</h2>
+<p>!> PS：第三方Api的URL最好使用域名方式，如果条件受限只能使用 IP:Port 方式，端口号可能处于氚云防火墙黑名单中，若配置上后，连接请求一直卡死无响应，可以切换到 200-300 范围内的端口再试试。</p>
+
+<p><strong>若你是第一次使用氚云的第三方连接，建议你按照以下步骤进行↓↓↓</strong></p>
+
+<h2>1、通过非代码的连接调试接口</h2>
 
 <p>通过非代码的连接调试一下接口，可以确定接口连通性、响应数据的结构，也可以大概判断一下氚云支不支持直接连接该服务（若不支持可以通过在外部服务器开发并部署一个中间服务来做转接）</p>
 
 <p><img src="../img/req-api-3.png" alt="" /></p>
 
-<h2>新建一个第三方连接（代码）</h2>
+<h2>2、新建一个第三方连接（代码）</h2>
 
 <p>在 <strong>插件中心</strong> 新建连接（注意：编码框内自定义一个该连接的Code，不是填UTF-8、ASCII等数据编码）</p>
 
@@ -7828,10 +7835,7 @@ public void TestBtn_Post(string actionName, H3.SmartForm.ListViewRequest request
 
 <p><img src="../img/req-api-2.png" alt="" /></p>
 
-<p>!> PS：连接URL最好使用域名的方式，如果使用 IP:Port 方式，端口号可能处于氚云防火墙黑名单中。
-如条件受限，只能使用 IP:Port 方式，配置上后，连接请求一直卡死无响应，可以切换到 200-300 范围内的端口试试。</p>
-
-<h2>代码调用第三方连接示例</h2>
+<h2>3、代码调用第三方连接示例</h2>
 
 <!-- tabs:start -->
 
@@ -8376,23 +8380,6 @@ this.Request.BizObject.Status;
 <h2>仪表盘明细表目前能够支持显示的列？</h2>
 
 <p>25列</p>
-
-<h1>学习视频</h1>
-
-<p>此项文档收集了老师们产出的一些视频，用于帮助刚开始学习氚云专业版代码开发，无从下手的开发者，有一个学习的思路。讲解内容可能已经过时，主要是了解思路，了解氚云文档如何使用。</p>
-
-<h2>0基础突破代码，助企业员工建立IT能力</h2>
-
-<blockquote>
-  <p>老师：吴登杰</p>
-</blockquote>
-
-<p>由于跨域原因，暂不支持在线播放，请通过此地址下载：</p>
-
-<pre><code>http://mediavideo.h3yun.net/0%E5%9F%BA%E7%A1%80%E7%AA%81%E7%A0%B4%E4%BB%A3%E7%A0%81%EF%BC%8C%E5%8A%A9%E4%BC%81%E4%B8%9A%E5%91%98%E5%B7%A5%E5%BB%BA%E7%AB%8BIT%E8%83%BD%E5%8A%9B.mp4?spm=a2c6h.12873639.article-detail.145.655b68b5Y1tIw3&amp;file=0%E5%9F%BA%E7%A1%80%E7%AA%81%E7%A0%B4%E4%BB%A3%E7%A0%81%EF%BC%8C%E5%8A%A9%E4%BC%81%E4%B8%9A%E5%91%98%E5%B7%A5%E5%BB%BA%E7%AB%8BIT%E8%83%BD%E5%8A%9B.mp4
-</code></pre>
-
-<p><a href="http://mediavideo.h3yun.net/0%E5%9F%BA%E7%A1%80%E7%AA%81%E7%A0%B4%E4%BB%A3%E7%A0%81%EF%BC%8C%E5%8A%A9%E4%BC%81%E4%B8%9A%E5%91%98%E5%B7%A5%E5%BB%BA%E7%AB%8BIT%E8%83%BD%E5%8A%9B.mp4?spm=a2c6h.12873639.article-detail.145.655b68b5Y1tIw3&file=0%E5%9F%BA%E7%A1%80%E7%AA%81%E7%A0%B4%E4%BB%A3%E7%A0%81%EF%BC%8C%E5%8A%A9%E4%BC%81%E4%B8%9A%E5%91%98%E5%B7%A5%E5%BB%BA%E7%AB%8BIT%E8%83%BD%E5%8A%9B.mp4" title=":include :type=video width=600px height=500px">0基础突破代码，助企业员工建立IT能力</a></p>
 
 
 </div></body></html>

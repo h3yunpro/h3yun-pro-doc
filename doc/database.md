@@ -5,6 +5,7 @@
 2. [SQL报表](/doc/sql-report)
 3. [SQL高级数据源](/doc/sql-dashboard)
 
+
 ## [表单]主表
 
 数据库表名：i_表单编码
@@ -94,7 +95,7 @@
 | 3      | Name                | 用户姓名           |                                  |
 | 4      | ParentId            | 主部门Id           | 对应H_Organizationunit表ObjectId字段  |
 | 5      | ManagerId           | 部门经理用户Id     | 对应H_User表ObjectId字段              |
-| 6      | DingTalkAccount     | 对应钉钉用户Id     | 跟钉钉对接时可用，字段值格式：```钉钉userId.钉钉corpId```（注意：对接时需截取出点号之前的钉钉userId）   |
+| 6      | DingTalkAccount     | 对应钉钉用户Id     | 跟钉钉对接时可用，字段值格式：```钉钉userId.钉钉corpId```（注意：使用时需截取出点号之前的钉钉userId）   |
 | 7      | WechatUserId        | 对应企微用户Id     |                                  |
 | 8      | Position            | 职位             |                                  |
 | 9      | Mobile              | 手机号            |                                  |
@@ -369,10 +370,10 @@
 |--------|--------------------|----------|------------------------------------|
 | 1      | ObjectId           | 表单信息Id   | 主键，表单信息的唯一标识                       |
 | 2      | SchemaCode         | 表单编码     |                                    |
-| 3      | DisplayName        | 表单展示名称   |                                    |
+| 3      | DisplayName        | 表单展示名称   | 该字段新版已废弃，后续表单名称需从 `Content` 字段中解析获取             |
 | 4      | ChildSchemas       | 子表编码     | 一个表单内可能会有多个子表，所以此字段为xml格式的子表编码数组   |
 | 5      | ReferenceSchemas   | 关联表单编码   | 一个表单内可能会有关联表单，所以此字段为xml格式的关联表单编码数组 |
-| 6      | Content            | 表单结构文档   |                                    |
+| 6      | Content            | 表单结构文档   | 表单结构XML字符串                          |
 | 7      | CreatedTime        | 表单创建时间   |                                    |
 | 8      | ModifiedTime       | 表单最后修改时间 |                                    |
 | 9      | ParentObjectId     | 父对象Id    | 暂未使用                               |
@@ -388,9 +389,9 @@
 |--------|--------------------------|------------|--------------|
 | 1      | ObjectId                 | 表单配置Id     | 主键，表单配置的唯一标识 |
 | 2      | SchemaCode               | 表单编码       |              |
-| 3      | DisplayName              | 表单展示名称     |              |
-| 4      | JavaScript               | 表单设计旧版前端代码 |              |
-| 5      | NewJsCode                | 表单设计新版前端代码 | 目前大部分企业都处于新版表单了，所以用此字段             |
+| 3      | DisplayName              | 表单展示名称     |   该字段新版已废弃，请勿使用           |
+| 4      | JavaScript               | 表单设计旧版前端代码  |  目前旧版表单基本已完成升级，后续勿再使用此字段     |
+| 5      | NewJsCode                | 表单设计新版前端代码 | 目前企业基本都处于新版表单了，所以后续用此字段             |
 | 6      | BehindCode               | 表单设计后端代码   |              |
 | 7      | ModifiedTime             | 表单配置最后修改时间 |              |
 | 8      | DesignModeContent        |            |              |
@@ -422,7 +423,7 @@
 |--------|--------------------------|------------|--------------|
 | 1      | ObjectId                 | 列表配置Id     | 主键，列表配置的唯一标识 |
 | 2      | SchemaCode               | 表单编码       |              |
-| 3      | JavaScript               | 列表设计前端代码   | 列表前端代码并没有新旧版之分，所以用此字段      |
+| 3      | JavaScript               | 列表设计前端代码   | 目前列表前端代码并没有新旧版之分，所以用此字段      |
 | 4      | NewJsCode                | 列表设计新版前端代码 | 暂未使用         |
 | 5      | BehindCode               | 列表设计后端代码   |              |
 | 6      | ModifiedTime             | 列表配置最后修改时间 |              |

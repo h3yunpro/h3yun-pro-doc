@@ -60,4 +60,3 @@
   
   * [代码跟自动化混用](/doc/automation)
   * [常见问答](/doc/faq)
-  * [学习视频](/doc/video)
