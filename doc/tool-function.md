@@ -316,30 +316,30 @@ function convertToString( v ) {
 ```
 
 
-## [前端]Date Format
+## [前端]Date对象转字符串
 
 氚云前端要给日期控件赋值时，SetValue函数只接收 `yyyy-MM-dd` 和 `yyyy-MM-dd HH:mm:ss` 两种格式的字符串，所以要把当前时间赋值给日期控件，就需要用到这个函数，将当前时间转换为符合要求的格式字符串。
 
 ``` js
 /**
-/* 对Date的扩展，将 Date 转化为指定格式的String
+/* 将 Date 转化为指定格式的String
 /* 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
 /* 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
 /* 使用例子：
-/* that.F0000001.SetValue((new Date()).Format("yyyy-MM-dd"));
-/* that.F0000001.SetValue((new Date()).Format("yyyy-MM-dd HH:mm:ss"));
+/* that.F0000001.SetValue(MyDateFormat(new Date(), "yyyy-MM-dd"));
+/* that.F0000001.SetValue(MyDateFormat(new Date(), "yyyy-MM-dd HH:mm:ss"));
 */
-Date.prototype.Format = function( fmt ) {
+function MyDateFormat( d, fmt ) {
     var o = {
-        "M+": this.getMonth() + 1, //月份
-        "d+": this.getDate(), //日
-        "H+": this.getHours(), //小时
-        "m+": this.getMinutes(), //分
-        "s+": this.getSeconds(), //秒
-        "q+": Math.floor(( this.getMonth() + 3 ) / 3 ), //季度
-        "S": this.getMilliseconds() //毫秒
+        "M+": d.getMonth() + 1, //月份
+        "d+": d.getDate(), //日
+        "H+": d.getHours(), //小时
+        "m+": d.getMinutes(), //分
+        "s+": d.getSeconds(), //秒
+        "q+": Math.floor(( d.getMonth() + 3 ) / 3 ), //季度
+        "S": d.getMilliseconds() //毫秒
     };
-    if( /(y+)/.test( fmt ) ) fmt = fmt.replace( RegExp.$1, ( this.getFullYear() + "" ).substr( 4 - RegExp.$1.length ) );
+    if( /(y+)/.test( fmt ) ) fmt = fmt.replace( RegExp.$1, ( d.getFullYear() + "" ).substr( 4 - RegExp.$1.length ) );
     for( var k in o )
         if( new RegExp( "(" + k + ")" ).test( fmt ) ) fmt = fmt.replace( RegExp.$1, ( RegExp.$1.length == 1 ) ? ( o[ k ] ) : ( ( "00" + o[ k ] ).substr(( "" + o[ k ] ).length ) ) );
     return fmt;
@@ -349,7 +349,7 @@ Date.prototype.Format = function( fmt ) {
 用法示例：
 ``` js
 //把此函数定义在表单默认代码之上
-Date.prototype.Format = function( fmt ) {
+function MyDateFormat( d, fmt ) {
     ......省略
 }
 
@@ -361,8 +361,8 @@ $.extend($.JForm,{
 
         //注意：在OnLoad里给控件赋值，一定要记得判断当前是新增模式，否则只要表单打开，控件值会一直变化
         if( $.SmartForm.ResponseContext.IsCreateMode ) {
-            that.F0000001.SetValue((new Date()).Format("yyyy-MM-dd"));
-            that.F0000001.SetValue((new Date()).Format("yyyy-MM-dd HH:mm:ss"));
+            that.F0000001.SetValue(MyDateFormat(new Date(), "yyyy-MM-dd"));
+            that.F0000001.SetValue(MyDateFormat(new Date(), "yyyy-MM-dd HH:mm:ss"));
         }
     },
 
