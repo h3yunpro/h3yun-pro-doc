@@ -58,5 +58,6 @@
 
 * 其他
   
+  * [插件](/doc/plug)
   * [代码跟自动化混用](/doc/automation)
   * [常见问答](/doc/faq)

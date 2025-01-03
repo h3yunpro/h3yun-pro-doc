@@ -4332,6 +4332,43 @@ filter.Matcher = andMatcher;
 </tbody>
 </table>
 
+<h2>[表单]关联表单多选中间表</h2>
+
+<p>数据库表名：
+- 控件在主表：i<em>表单编码</em>关联表单多选控件编码
+- 控件在子表：i<em>子表控件编码</em>关联表单多选控件编码</p>
+
+<table>
+<thead>
+<tr>
+  <th><strong>序号</strong></th>
+  <th><strong>字段编码</strong></th>
+  <th><strong>字段释义</strong></th>
+  <th><strong>备注</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td>ObjectId</td>
+  <td>主表数据Id/子表数据Id</td>
+  <td>对应控件所在的主表ObjectId字段/子表ObjectId字段</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>ValueIndex</td>
+  <td>本选项是第几个，从0开始</td>
+  <td></td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>PropertyValue</td>
+  <td>描述表单多选控件的其中1个选项值（若此关联表单控件有多个值，会在此表有多行数据）</td>
+  <td>对应所关联的表单数据的ObjectId字段</td>
+</tr>
+</tbody>
+</table>
+
 <h2>[系统-公司表] H_Company</h2>
 
 <p>数据库表名：H_Company</p>
@@ -4758,31 +4795,31 @@ filter.Matcher = andMatcher;
   <td>主键，角色分组的唯一标识</td>
 </tr>
 <tr>
-  <td>6</td>
+  <td>2</td>
   <td>Name</td>
   <td>角色分组名称</td>
   <td></td>
 </tr>
 <tr>
-  <td>2</td>
+  <td>3</td>
   <td>EntryroleGroupId</td>
   <td>来源Id</td>
   <td>暂未使用</td>
 </tr>
 <tr>
-  <td>3</td>
+  <td>4</td>
   <td>ParentId</td>
   <td>公司Id</td>
   <td>对应H_Company表ObjectId字段</td>
 </tr>
 <tr>
-  <td>4</td>
+  <td>5</td>
   <td>Visibility</td>
   <td>可见类型</td>
   <td></td>
 </tr>
 <tr>
-  <td>5</td>
+  <td>6</td>
   <td>State</td>
   <td>状态</td>
   <td>取值：0：有效，1：无效</td>
@@ -8033,6 +8070,14 @@ if(data != null)
 </code></pre>
 
 <!-- tabs:end -->
+
+<h1>插件</h1>
+
+<p>!> 开发与验证中，请勿使用...</p>
+
+<h2>SQL转LoadBizObjects请求JSON</h2>
+
+<p><a href="../plug/sql2api/index.html" title=":include :type=iframe width=100% height=800px">cinwell website</a></p>
 
 <h1>代码跟自动化混用</h1>
 
