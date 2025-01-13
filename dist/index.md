@@ -4584,7 +4584,7 @@ string errorMsg = string.Empty;
 //获取流程模板
 H3.Workflow.Template.WorkflowTemplate wfTemp = engine.WorkflowTemplateManager.GetDefaultWorkflow(schema.SchemaCode);
 //发起流程（注意：第1个参数是流程发起人，此参数必须传真实用户Id，不可以是H3.Organization.User.SystemUserId，否则系统会随机选取一名用户作为发起人）
-engine.Interactor.OriginateInstance(newBo.OwnerId, schema.SchemaCode, wfTemp.WorkflowVersion, newBo.ObjectId, newBo.WorkflowInstanceId, H3.Workflow.WorkItem.AccessMethod.Web, true, string.Empty, true, out workItemID, out errorMsg);
+engine.WorkflowInstanceManager.OriginateInstance(newBo.OwnerId, schema.SchemaCode, wfTemp.WorkflowVersion, newBo.ObjectId, newBo.WorkflowInstanceId, H3.Workflow.WorkItem.AccessMethod.Web, true, string.Empty, true, out workItemID, out errorMsg);
 if(!string.IsNullOrEmpty(errorMsg))
 {
     throw new Exception("流程实例创建失败：" + errorMsg);
