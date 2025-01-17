@@ -1075,3 +1075,9 @@ code .token {
     height: 60px;
     display: inline;
 }
+
+/* 插件iframe 样式 */
+iframe {
+    border: none !important;
+    margin: 0;
+}

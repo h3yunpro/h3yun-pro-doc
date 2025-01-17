@@ -3118,6 +3118,61 @@ engine.WorkflowInstanceManager.SendMessage(cancelMessage);
 ```
 
 
+## 创建表单数据并发起流程
+
+``` cs
+H3.IEngine engine = this.Engine;
+//获取表单实例
+H3.DataModel.BizObjectSchema schema = engine.BizObjectManager.GetPublishedSchema("表单编码");
+//获取当前登录人
+string createdBy = this.Request.UserContext.UserId;
+
+H3.DataModel.BizObject newBo = new H3.DataModel.BizObject(engine, schema, H3.Organization.User.SystemUserId);
+//将业务对象创建者设置为 当前登录人
+newBo.CreatedBy = createdBy;
+//将业务对象归属人设置为 当前登录人，注：流程将由归属人发起
+newBo.OwnerId = createdBy;
+
+//设置业务对象控件值
+newBo["IssueReportName"] = "关于****的整改报告";
+
+//设置业务对象流程实例Id
+newBo.WorkflowInstanceId = System.Guid.NewGuid().ToString();
+//创建业务对象
+newBo.Create();
+
+//启动流程
+string workItemID = string.Empty;
+string errorMsg = string.Empty;
+//获取流程模板
+H3.Workflow.Template.WorkflowTemplate wfTemp = engine.WorkflowTemplateManager.GetDefaultWorkflow(schema.SchemaCode);
+//发起流程（注意：第1个参数是流程发起人，此参数必须传真实用户Id，不可以是H3.Organization.User.SystemUserId，否则系统会随机选取一名用户作为发起人）
+engine.WorkflowInstanceManager.OriginateInstance(newBo.OwnerId, schema.SchemaCode, wfTemp.WorkflowVersion, newBo.ObjectId, newBo.WorkflowInstanceId, H3.Workflow.WorkItem.AccessMethod.Web, true, string.Empty, true, out workItemID, out errorMsg);
+if(!string.IsNullOrEmpty(errorMsg))
+{
+    throw new Exception("流程实例创建失败：" + errorMsg);
+}
+```
+
+OriginateInstance方法说明：
+
+``` cs
+H3.Workflow.Messages.WorkflowInstanceChangeSet OriginateInstance(
+    string userId, //流程发起人，此参数请传业务对象的归属人，传其他用户Id无效
+    string schemaCode, //表单编码
+    int workflowVersion, //流程版本，此示例中固定从流程模板中获取
+    string bizObjectId, //业务对象数据ObjectId
+    string instanceId, //流程实例Id
+    H3.Workflow.WorkItem.AccessMethod accessPoint, //操作终端，固定值：H3.Workflow.WorkItem.AccessMethod.Web
+    bool finishStartActivity, //是否发起时自动提交，true：提交，会自动跳过发起节点，到达下一审批节点；false：仅创建流程但不提交
+    string destActivityCode, //目标审批节点编码，固定值：string.Empty
+    bool returnWorkItem, //是否返回流程项，固定值：true
+    out string workItemId, //返回的流程项Id
+    out string errorMessage //创建流程实例失败的异常信息
+)
+```
+
+
 ## 流程结束/重新激活 事件
 
 当流程状态发生改变时，会触发 ```OnWorkflowInstanceStateChanged``` 事件，该事件有两个传入参数：```oldState```、```newState```，所以就能用来判断当前为结束时触发，还是重新激活时触发。
@@ -3915,6 +3970,17 @@ filter.Matcher = andMatcher;
 | 34     | ParentIndex         | 父对象索引          | 暂未使用                             |
 
 
+## [系统-用户&部门关系表] H_User_ViceparentIds
+
+数据库表名：H_User_ViceparentIds
+
+| **序号** | **字段编码**             | **字段释义**    | **备注**                           |
+|--------|----------------------|-------------|----------------------------------|
+| 1      | ObjectId             | 用户Id        | 对应H_User表ObjectId字段             |
+| 2      | ValueIndex           | 第几个，从0开始 |                                  |
+| 3      | PropertyValue        | 部门Id          | 对应H_Organizationunit表ObjectId字段    |
+
+
 ## [系统-角色分组表] H_OrgRoleGroup
 
 数据库表名：H_OrgRoleGroup
@@ -3963,7 +4029,7 @@ filter.Matcher = andMatcher;
 | 17     | ParentIndex        | 父对象索引    | 暂未使用                    |
 
 
-## [系统-角色用户关系表] H_Orgpost
+## [系统-角色&用户关系表] H_Orgpost
 
 数据库表名：H_Orgpost
 
@@ -4551,63 +4617,6 @@ $.IDownloadAttachments( ["附件Id_1", "附件Id_2" ] );
 !> 注意：此函数仅支持浏览器中使用，钉钉工作台、企微工作台不支持。调用后会下载一个zip压缩包，里面包含所有附件。
 
 # 后端代码示例
-
-
-## [通用]创建带流程的表单数据
-
-可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
-
-``` cs
-H3.IEngine engine = this.Engine;
-//获取表单实例
-H3.DataModel.BizObjectSchema schema = engine.BizObjectManager.GetPublishedSchema("表单编码");
-//获取当前登录人
-string createdBy = this.Request.UserContext.UserId;
-
-H3.DataModel.BizObject newBo = new H3.DataModel.BizObject(engine, schema, H3.Organization.User.SystemUserId);
-//将业务对象创建者设置为 当前登录人
-newBo.CreatedBy = createdBy;
-//将业务对象归属人设置为 当前登录人，注：流程将由归属人发起
-newBo.OwnerId = createdBy;
-
-//设置业务对象控件值
-newBo["IssueReportName"] = "关于****的整改报告";
-
-//设置业务对象流程实例Id
-newBo.WorkflowInstanceId = System.Guid.NewGuid().ToString();
-//创建业务对象
-newBo.Create();
-
-//启动流程
-string workItemID = string.Empty;
-string errorMsg = string.Empty;
-//获取流程模板
-H3.Workflow.Template.WorkflowTemplate wfTemp = engine.WorkflowTemplateManager.GetDefaultWorkflow(schema.SchemaCode);
-//发起流程（注意：第1个参数是流程发起人，此参数必须传真实用户Id，不可以是H3.Organization.User.SystemUserId，否则系统会随机选取一名用户作为发起人）
-engine.WorkflowInstanceManager.OriginateInstance(newBo.OwnerId, schema.SchemaCode, wfTemp.WorkflowVersion, newBo.ObjectId, newBo.WorkflowInstanceId, H3.Workflow.WorkItem.AccessMethod.Web, true, string.Empty, true, out workItemID, out errorMsg);
-if(!string.IsNullOrEmpty(errorMsg))
-{
-    throw new Exception("流程实例创建失败：" + errorMsg);
-}
-```
-
-OriginateInstance方法说明：
-
-``` cs
-H3.Workflow.Messages.WorkflowInstanceChangeSet OriginateInstance(
-    string userId, //流程发起人，此参数请传业务对象的归属人，传其他用户Id无效
-    string schemaCode, //表单编码
-    int workflowVersion, //流程版本，此示例中固定从流程模板中获取
-    string bizObjectId, //业务对象数据ObjectId
-    string instanceId, //流程实例Id
-    H3.Workflow.WorkItem.AccessMethod accessPoint, //操作终端，固定值：H3.Workflow.WorkItem.AccessMethod.Web
-    bool finishStartActivity, //是否发起时自动提交，true：提交，会自动跳过发起节点，到达下一审批节点；false：仅创建流程但不提交
-    string destActivityCode, //目标审批节点编码，固定值：string.Empty
-    bool returnWorkItem, //是否返回流程项，固定值：true
-    out string workItemId, //返回的流程项Id
-    out string errorMessage //创建流程实例失败的异常信息
-)
-```
 
 
 ## [通用]批量创建/更新/删除业务对象
@@ -6049,14 +6058,6 @@ if(data != null)
 ```
 
 <!-- tabs:end -->
-
-# 插件
-
-!> 开发与验证中，请勿使用...
-
-## SQL转LoadBizObjects请求JSON
-[cinwell website](../plug/sql2api/index.html ':include :type=iframe width=100% height=800px')
-
 
 # 代码跟自动化混用
 

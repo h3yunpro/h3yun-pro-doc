@@ -1,23 +1,20 @@
 /* 全局样式 */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa;
     margin: 0;
     padding: 0;
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    align-items: center; 
+    min-height: 100vh;*/
 }
 
 .container {
-    background: white;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px;
-    padding: 24px;
-    margin: 20px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    width: calc(100% - 62px);
+    padding: 25px;
+    margin: 5px;
 }
 
 h1 {
@@ -31,7 +28,6 @@ h1 {
 textarea {
     width: 100%;
     height: 150px;
-    padding: 12px;
     font-family: 'Courier New', monospace;
     font-size: 14px;
     border: 1px solid #ddd;
@@ -39,6 +35,7 @@ textarea {
     resize: vertical;
     outline: none;
     transition: border-color 0.3s ease;
+    min-height: 150px;
 }
 
 textarea:focus {
@@ -48,11 +45,11 @@ textarea:focus {
 
 button {
     width: 100%;
-    padding: 12px;
+    padding: 8px;
     margin-top: 16px;
     background-color: #007bff;
     color: white;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     border: none;
     border-radius: 8px;
@@ -86,6 +83,7 @@ button:active {
 }
 
 .copy-btn {
+    width: 120px;
     padding: 6px 12px;
     background-color: #28a745;
     color: white;

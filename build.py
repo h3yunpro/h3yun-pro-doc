@@ -28,10 +28,11 @@ def writeContent(path, content):
         file.write(content)
 
 
-def mergeContent(buildDir):
+def mergeContent(buildDir, skipMenu=[]):
     """
     合并所有md文件
     :param buildDir: 构建目录
+    :param skipMenu: 跳过的菜单
     :return: 合并后的内容
     """
     sidebar = readContent("./_sidebar.md")
@@ -41,6 +42,8 @@ def mergeContent(buildDir):
     if pathList is not None and len(pathList) > 0:
         for filePath in pathList:
             filePath = filePath.replace("(", "").replace(")", "")
+            if skipMenu is not None and filePath in skipMenu:
+                continue
             filePath = "." + filePath + ".md"
             content += readContent(filePath) + "\n\n"
 
@@ -97,7 +100,7 @@ if __name__ == "__main__":
             "html-classes",
         ]
     )
-    content = mergeContent(buildDir)
+    content = mergeContent(buildDir, ["/doc/plug"])
 
     chinese_count, english_count = count_words_and_chars(content)
     print(

@@ -139,6 +139,17 @@
 | 34     | ParentIndex         | 父对象索引          | 暂未使用                             |
 
 
+## [系统-用户&部门关系表] H_User_ViceparentIds
+
+数据库表名：H_User_ViceparentIds
+
+| **序号** | **字段编码**             | **字段释义**    | **备注**                           |
+|--------|----------------------|-------------|----------------------------------|
+| 1      | ObjectId             | 用户Id        | 对应H_User表ObjectId字段             |
+| 2      | ValueIndex           | 第几个，从0开始 |                                  |
+| 3      | PropertyValue        | 部门Id          | 对应H_Organizationunit表ObjectId字段    |
+
+
 ## [系统-角色分组表] H_OrgRoleGroup
 
 数据库表名：H_OrgRoleGroup
@@ -187,7 +198,7 @@
 | 17     | ParentIndex        | 父对象索引    | 暂未使用                    |
 
 
-## [系统-角色用户关系表] H_Orgpost
+## [系统-角色&用户关系表] H_Orgpost
 
 数据库表名：H_Orgpost
 
