@@ -33,7 +33,7 @@ genBtn.addEventListener('click', () => {
             throw new Error('请先输入要转换的SELECT语句');
         }
         if (sql.toUpperCase().indexOf('BETWEEN') >= 0) {
-            throw new Error('GetList不支持BETWEEN查询');
+            throw new Error('LoadBizObjects不支持BETWEEN查询');
         }
 
         const ast = parser.astify(sql); // 解析SQL为AST
@@ -55,13 +55,13 @@ function generateApiRequest(ast) {
     const where = getWhere(ast);
 
     if (ast.distinct) {
-        throw new Error('GetList不支持distinct查询');
+        throw new Error('LoadBizObjects不支持distinct查询');
     }
     if (ast.groupby) {
-        throw new Error('GetList不支持group by查询');
+        throw new Error('LoadBizObjects不支持group by查询');
     }
     if (ast.having) {
-        throw new Error('GetList不支持having查询');
+        throw new Error('LoadBizObjects不支持having查询');
     }
 
     const filter = {
@@ -100,7 +100,7 @@ function getTableName(ast) {
     }
     //正则判断表名是否以H_或h_开头
     if (/^(H_|h_)/.test(table)) {
-        throw new Error('h_开头的是系统表, GetList不支持查询系统表');
+        throw new Error('h_开头的是系统表, LoadBizObjects不支持查询系统表');
     }
     //正则判断表名是否以I_或i_开头
     if (!/^(I_|i_)/.test(table)) {
@@ -127,7 +127,7 @@ function getLimit(ast) {
     }
 
     if (pageSize <= 0 || pageSize > 500) {
-        throw new Error('limit语句转换失败, GetList每次查询数据量范围应是[0-500]');
+        throw new Error('limit语句转换失败, LoadBizObjects每次查询数据量范围应是[0-500]');
     }
 
     return {
@@ -145,7 +145,7 @@ function getOrderBy(ast) {
     const sortByCollection = [];
     for (const item of ast.orderby) {
         if (typeof item.expr.type !== 'string' || item.expr.type !== 'column_ref') {
-            throw new Error('order by语句转换失败, GetList只支持按列名排序');
+            throw new Error('order by语句转换失败, LoadBizObjects只支持按列名排序');
         }
         const orderByType = item.type && item.type === 'DESC' ? 'Descending' : 'Ascending';
         sortByCollection.push({
@@ -166,7 +166,7 @@ function getReturnItems(ast) {
     var isQueryAllColumns = false;
     for (const item of ast.columns) {
         if (typeof item.expr.type !== 'string' || item.expr.type !== 'column_ref') {
-            throw new Error('查询列语句转换失败, GetList只支持按列名查询');
+            throw new Error('查询列语句转换失败, LoadBizObjects只支持按列名查询');
         }
         if (item.expr.column === '*') {
             isQueryAllColumns = true;
@@ -192,7 +192,7 @@ function getWhere(ast) {
         return matcher;
     }
     if (typeof ast.where.type !== 'string' || ast.where.type !== 'binary_expr') {
-        throw new Error('where语句转换失败, GetList只支持二元表达式');
+        throw new Error('where语句转换失败, LoadBizObjects只支持二元表达式');
     }
     convertToMatcher(ast.where, matcher);
     return matcher;
@@ -205,7 +205,7 @@ function convertToMatcher(item, matcher) {
 
     if (typeof item.operator === 'string') {
         if (item.type !== 'binary_expr') {
-            throw new Error('where语句转换失败, GetList只支持二元表达式');
+            throw new Error('where语句转换失败, LoadBizObjects只支持二元表达式');
         }
 
         //条件连接
@@ -236,10 +236,10 @@ function convertToMatcher(item, matcher) {
         operator = convertToInOperator(operator, item);
         if (operator in operatorType) {
             if (item.left.type !== 'column_ref' || item.right.type === 'function') {
-                throw new Error('where语句转换失败, GetList筛选条件不支持函数和子查询');
+                throw new Error('where语句转换失败, LoadBizObjects筛选条件不支持函数和子查询');
             }
             if (typeof item.right.value === 'undefined') {
-                throw new Error('where语句转换失败, GetList筛选条件值不能为空');
+                throw new Error('where语句转换失败, LoadBizObjects筛选条件值不能为空');
             }
             matcher.Matchers.push({
                 'Type': 'Item',
@@ -249,7 +249,7 @@ function convertToMatcher(item, matcher) {
             });
             return;
         } else {
-            throw new Error('where语句转换失败, GetList不支持该操作符:' + operator);
+            throw new Error('where语句转换失败, LoadBizObjects不支持该操作符:' + operator);
         }
     }
 
@@ -261,7 +261,7 @@ function convertToLikeOperator(operator, item) {
         return operator;
     }
     if (!item.right || !item.right.type || item.right.type !== 'single_quote_string') {
-        throw new Error('where语句转换失败, GetList要求' + operator + '操作符右边必须是字符串');
+        throw new Error('where语句转换失败, LoadBizObjects要求' + operator + '操作符右边必须是字符串');
     }
     const v = item.right.value;
     if (v.startsWith('%') && v.endsWith('%')) {
