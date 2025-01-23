@@ -7,120 +7,37 @@
 
 可用位置：✔表单 / ✔列表 / ✔定时器 / ✔自定义接口
 
-请勿参考此示例中的代码，由于研发近期在收回接口，暂时不可用，视后续情况更新本示例。
-
 ``` cs
-//业务对象["字段名"] 转string
-//用法：string val = gStr(业务对象["控件编码"])
-public static string gStr(object val)
-{
-    return val + string.Empty;
-}
+//业务对象["字段名"] 转string, 用法: string val = gStr(业务对象["控件编码"]);
+//业务对象["字段名"] 转bool, 用法: bool val = gBool(业务对象["控件编码"]);
+//业务对象["字段名"] 转数值, 用法: decimal val = gNum(业务对象["控件编码"], 0m);
+//                               double val = gNum(业务对象["控件编码"], 0.0);
+//                               int val = gNum(业务对象["控件编码"], 0);
+//汇总子表内某个控件值, 用法: decimal val = gSum(业务对象["子表编码"],"子表内控件编码", 0m);
+//                          int val = gSum(业务对象["子表编码"],"子表内控件编码", 0);
+//                          double val = gSum(业务对象["子表编码"],"子表内控件编码", 0.0);
+//业务对象["字段名"] 转DateTime, 用法: DateTime val = DateTime.MinValue;  if(tTime(业务对象["控件编码"], out val)){ }
+//业务对象["字段名"] 转DateTime, 用法: DateTime val = gTime(业务对象["控件编码"], DateTime.MinValue);
+//当字符串长度超过200, 截取前200字符, 适用于给单行文本控件赋值时, 用法: string val = g200Str("很长的字符串");
+//当字符串长度超过2000, 截取前2000字符, 适用于给多行文本控件赋值时, 用法: string val = g2000Str("很长的字符串");
+//中国式四舍五入, num参数为待取舍数值, digits为需要保留的小数位, 用法: decimal val = gRound(123.456m, 2);
 
-//业务对象["字段名"] 转bool
-//用法：bool val = gBool(业务对象["控件编码"])
-public static bool gBool(object val)
-{
-    string valStr = gStr(val).ToLower();
-    if(valStr == "true" || valStr == "1")
-    {
-        return true;
-    }
-
-    return false;
+public static string gStr(object val) { return val + string.Empty; }
+public static bool gBool(object val) { string valStr = (val + string.Empty).ToLower(); return (valStr == "true" || valStr == "1"); }
+public static decimal gNum(object val, decimal defVal) { string valStr = val + string.Empty; valStr = string.IsNullOrWhiteSpace(valStr) ? "0" : valStr; decimal n = defVal; return decimal.TryParse(valStr, out n) ? n : defVal; }
+public static double gNum(object val, double defVal) { string valStr = val + string.Empty; valStr = string.IsNullOrWhiteSpace(valStr) ? "0" : valStr; double n = defVal; return double.TryParse(valStr, out n) ? n : defVal; }
+public static int gNum(object val, int defVal) { string valStr = val + string.Empty; valStr = string.IsNullOrWhiteSpace(valStr) ? "0" : valStr; int n = defVal; return int.TryParse(valStr, out n) ? n : defVal; }
+public static decimal gSum(object objArray, string field, decimal defVal) {
+    if(objArray == null || string.IsNullOrWhiteSpace(field)) { return defVal; } H3.DataModel.BizObject[] bObjArray = (H3.DataModel.BizObject[]) objArray; if(bObjArray == null || bObjArray.Length == 0) { return defVal; }
+    decimal sVal = defVal; foreach(H3.DataModel.BizObject bObj in bObjArray) { sVal += gNum(bObj[field], defVal); } return sVal;
 }
-
-//业务对象["字段名"] 转数值
-//用法：decimal val = gNum<decimal>(业务对象["控件编码"])
-public static T gNum<T>(object val) where T: struct
-{
-    string valStr = gStr(val);
-    if(string.IsNullOrWhiteSpace(valStr))
-    {
-        val = 0;
-    }
-    return (T) Convert.ChangeType(val, typeof (T));
-}
-
-//将子表内某个控件值相加得到数值
-//用法：decimal val = gSum<decimal>(业务对象["子表编码"], "子表内控件编码")
-public static T gSum<T>(object objArray, string field) where T: struct
-{
-    object val = 0;
-    if(objArray == null)
-    {
-        return (T) Convert.ChangeType(val, typeof (T));
-    }
-    H3.DataModel.BizObject[] bObjArray = (H3.DataModel.BizObject[]) objArray;
-    if(bObjArray == null || bObjArray.Length == 0)
-    {
-        return (T) Convert.ChangeType(val, typeof (T));
-    }
-    decimal sVal = 0;
-    foreach(H3.DataModel.BizObject bObj in bObjArray) 
-    {
-        decimal v = gNum<decimal>(bObj[field]);
-        sVal += v;
-    }
-    val = sVal;
-    return (T) Convert.ChangeType(val, typeof (T));
-}
-
-//业务对象["字段名"] 转DateTime，返回true代表转换成功
-//用法：DateTime val = DateTime.MinValue;  if(tTime(业务对象["子表编码"], out val)){ }
-public static bool tTime(object val, out DateTime time)
-{
-    string valStr = gStr(val);
-    return DateTime.TryParse(valStr, out time);
-}
-
-//业务对象["字段名"] 转DateTime，转换成功返回日期，转换失败返回传入的默认值
-//用法：DateTime val = gTime(业务对象["子表编码"], DateTime.MinValue);
-public static DateTime gTime(object val, DateTime defaultTime)
-{
-    string valStr = gStr(val);
-    if(string.IsNullOrWhiteSpace(valStr))
-    {
-        return defaultTime;
-    }
-    DateTime outTime = defaultTime;
-    if(DateTime.TryParse(valStr, out outTime)) 
-    {
-        return outTime;
-    } else
-    {
-        return defaultTime;
-    }
-}
-
-//当字符串长度超过200，截取前200字符，适用于给单行文本控件赋值时
-//用法：string val = g200Str("很长的字符串");
-public static string g200Str(string str)
-{
-    if(!string.IsNullOrWhiteSpace(str) && str.Length > 200)
-    {
-        return str.Substring(0, 200);
-    }
-    return str;
-}
-
-//当字符串长度超过2000，截取前2000字符，适用于给多行文本控件赋值时
-//用法：string val = g2000Str("很长的字符串");
-public static string g2000Str(string str)
-{
-    if(!string.IsNullOrWhiteSpace(str) && str.Length > 2000)
-    {
-        return str.Substring(0, 2000);
-    }
-    return str;
-}
-
-//中国式四舍五入，num参数为待取舍数值，digits为需要保留的小数位
-//用法：decimal val = gRound(123.456m, 2);
-public static decimal gRound(decimal num, int digits)
-{
-    return System.Math.Round(num, digits, System.MidpointRounding.AwayFromZero);
-}
+public static double gSum(object objArray, string field, double defVal) { return Convert.ToDouble(gSum(objArray, field, 0m)); }
+public static int gSum(object objArray, string field, int defVal) { return Convert.ToInt32(gSum(objArray, field, 0m)); }
+public static bool tTime(object val, out DateTime time) { return DateTime.TryParse(val + string.Empty, out time); }
+public static DateTime gTime(object val, DateTime defaultTime) { string valStr = val + string.Empty; if(string.IsNullOrWhiteSpace(valStr)) { return defaultTime; } DateTime outTime = defaultTime; return DateTime.TryParse(valStr, out outTime) ? outTime : defaultTime; }
+public static string g200Str(string str) { return (!string.IsNullOrWhiteSpace(str) && str.Length > 200 ? str.Substring(0, 200) : str); }
+public static string g2000Str(string str) { return (!string.IsNullOrWhiteSpace(str) && str.Length > 2000 ? str.Substring(0, 2000) : str); }
+public static decimal gRound(decimal num, int digits) { return System.Math.Round(num, digits); }
 ```
 
 
