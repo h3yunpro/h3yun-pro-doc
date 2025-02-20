@@ -84,7 +84,6 @@ function generateApiRequest(ast) {
 
 //获取表名
 function getTableName(ast) {
-    debugger
 
     if (ast.type !== 'select') {
         throw new Error('只支持SELECT语句');
