@@ -11,6 +11,50 @@
     <link rel="icon" href="./favicon.ico" />
     <link rel="stylesheet" href="./css/vue.css">
 
+    <script>
+        (function () {
+            // 跳转生效时间（2025-04-01 00:00:00 GMT+8）
+            const CUTOFF_DATE = new Date(2025, 3, 1);
+            if (new Date() < CUTOFF_DATE) {
+                return;
+            }
+
+            // 新站基础路径
+            const NEW_BASE_URL = 'https://h3yunpro.github.io/docs/';
+            /* 核心转换逻辑 */
+            let newPath = '';
+            const urlHash = window.location.hash;
+
+            if (urlHash === undefined || urlHash === null || urlHash === '' || urlHash === '#' || urlHash === '#/') {
+                window.location.replace(NEW_BASE_URL);
+            }
+
+            // 处理主路径转换：/#/doc/check-code → /check-code/
+            const OLD_PATH_REGEX = /^#\/doc\/([^/?]+)/;
+            if (OLD_PATH_REGEX.test(urlHash)) {
+                const pathMatch = urlHash.match(OLD_PATH_REGEX);
+                newPath = pathMatch[1].toLowerCase() + '/';
+            }
+
+            // 拿到ID参数 ?id=xxx → #xxx
+            let newHash = '';
+            if (urlHash.includes('?id=')) {
+                const match = urlHash.match(/\?id=([^&]+)/i);
+                newHash = '#' + match[1];
+            }
+
+            // 构建新URL
+            const newUrl = new URL(newPath + newHash, NEW_BASE_URL);
+
+            // 执行跳转（保留其他参数）
+            window.location.replace(newUrl.toString());
+        })();
+    </script>
+
+    <noscript>
+        <meta http-equiv="refresh" content="0; url=https://h3yunpro.github.io">
+    </noscript>
+
     <!-- 百度统计 -->
     <script>
         var _hmt = _hmt || [];
