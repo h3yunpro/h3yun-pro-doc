@@ -16,7 +16,7 @@
             window.__testGotoNewUrl__ = false;
             // 跳转生效时间（2025-04-01 00:00:00 GMT+8）
             const CUTOFF_DATE = new Date(2025, 3, 1);
-            if (window.__testGotoNewUrl__ || new Date() < CUTOFF_DATE) {
+            if (!window.__testGotoNewUrl__ && new Date() < CUTOFF_DATE) {
                 return;
             }
 
