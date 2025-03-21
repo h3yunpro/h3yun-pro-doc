@@ -28,6 +28,7 @@
 
             if (urlHash === undefined || urlHash === null || urlHash === '' || urlHash === '#' || urlHash === '#/') {
                 window.location.replace('https://h3yunpro.github.io/docs/language/');
+                return;
             }
 
             // 处理主路径转换：/#/doc/check-code → /check-code/
